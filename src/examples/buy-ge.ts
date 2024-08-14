@@ -6,20 +6,21 @@ const token = process.env.API_TOKEN;
 const character = process.env.CHARACTER;
 
 async function buyGE() {
-	const url = server + "/my/" + character + "/action/ge/buy ";
+	const url = `${server}/my/${character}/action/ge/buy`;
 	const options = {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 			Accept: "application/json",
-			Authorization: "Bearer " + token,
+			Authorization: `Bearer ${token}`,
 		},
 		body: '{"code":"string","quantity":1,"price":1}', //change the code and the quantity
 	};
 
 	try {
 		const response = await fetch(url, options);
-		const { data } = await response.json();
+		// biome-ignore lint/suspicious/noExplicitAny: type forthcoming
+		const { data } = (await response.json()) as any;
 		console.log(data);
 	} catch (error) {
 		console.log(error);

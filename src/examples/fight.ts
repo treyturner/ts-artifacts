@@ -1,29 +1,30 @@
-//Use node equip.js in the terminal for execute the script.
+//Use node fight.js in the terminal for execute the script.
 const server = process.env.API_BASEURL;
 //Your token is automatically set
 const token = process.env.API_TOKEN;
 //Put your character name here
 const character = process.env.CHARACTER;
 
-async function equip() {
-	const url = server + "/my/" + character + "/action/equip";
+async function fight() {
+	const url = `${server}/my/${character}/action/fight`;
 	const options = {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 			Accept: "application/json",
-			Authorization: "Bearer " + token,
+			Authorization: `Bearer ${token}`,
 		},
-		body: '{"code":"string","slot":"weapon"}', //change the item code and the slot here
+		body: undefined,
 	};
 
 	try {
 		const response = await fetch(url, options);
-		const { data } = await response.json();
+		// biome-ignore lint/suspicious/noExplicitAny: type forthcoming
+		const { data } = (await response.json()) as any;
 		console.log(data);
 	} catch (error) {
 		console.log(error);
 	}
 }
 
-equip();
+fight();

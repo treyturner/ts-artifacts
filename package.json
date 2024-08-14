@@ -2,6 +2,9 @@
 	"name": "ts-artifacts-mmo-sandbox",
 	"module": "index.ts",
 	"type": "module",
+	"scripts": {
+		"lint": "biome lint --error-on-warnings ./src"
+	},
 	"devDependencies": {
 		"@biomejs/biome": "1.8.3",
 		"@types/bun": "latest",
