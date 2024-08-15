@@ -1,31 +1,31 @@
-import { type SupportedMethod, call } from "../util";
+import { type SupportedMethod, call, getCallerName } from "../util";
 
-export async function depositGold(quantity: number) {
+export function depositGold(quantity: number) {
   const path = "my/:character/action/bank/deposit/gold";
   const method: SupportedMethod = "POST";
   const body = { quantity };
-  return call({ method, path, body });
+  return call(getCallerName(), { method, path, body });
 }
 
-export async function withdrawGold(quantity: number) {
+export function withdrawGold(quantity: number) {
   const path = "my/:character/action/bank/withdraw/gold";
   const method: SupportedMethod = "POST";
   const body = { quantity };
-  return call({ method, path, body });
+  return call(getCallerName(), { method, path, body });
 }
 
-export async function depositItem(code: string, quantity: number) {
+export function depositItem(code: string, quantity: number) {
   const path = "my/:character/action/bank/deposit";
   const method: SupportedMethod = "POST";
   const body = { code, quantity };
-  return call({ method, path, body });
+  return call(getCallerName(), { method, path, body });
 }
 
-export async function withdrawItem(code: string, quantity: number) {
+export function withdrawItem(code: string, quantity: number) {
   const path = "my/:character/action/bank/withdraw";
   const method: SupportedMethod = "POST";
   const body = { code, quantity };
-  return call({ method, path, body });
+  return call(getCallerName(), { method, path, body });
 }
 
 export default { depositGold, depositItem, withdrawGold, withdrawItem };

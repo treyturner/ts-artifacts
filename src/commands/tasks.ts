@@ -1,21 +1,21 @@
-import { call } from "../util";
+import { call, getCallerName } from "../util";
 
-export function complete() {
+export function accept() {
   const method = "POST";
-  const path = "my/:character/action/task/complete";
-  return call({ method, path });
+  const path = "my/:character/action/task/exchange";
+  return call(getCallerName(), { method, path });
 }
 
 export function exchange() {
   const method = "POST";
   const path = "my/:character/action/task/exchange";
-  return call({ method, path });
+  return call(getCallerName(), { method, path });
 }
 
-export function accept() {
+export function complete() {
   const method = "POST";
-  const path = "my/:character/action/task/exchange";
-  return call({ method, path });
+  const path = "my/:character/action/task/complete";
+  return call(getCallerName(), { method, path });
 }
 
 export default { accept, exchange, complete };

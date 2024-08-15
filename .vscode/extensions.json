@@ -1,8 +1,6 @@
 {
   "recommendations": [
     "biomejs.biome",
-    "oven.bun-vscode",
-    "dotenv.dotenv-vscode",
-    "davidanson.vscode-markdownlint"
+    "oven.bun-vscode"
   ]
 }

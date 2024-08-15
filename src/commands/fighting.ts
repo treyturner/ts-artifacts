@@ -1,9 +1,9 @@
-import { type SupportedMethod, call, request } from "../util";
+import { type SupportedMethod, call, getCallerName, request } from "../util";
 
-export async function fight() {
+export function fight() {
   const path = "my/:character/action/fight";
   const method: SupportedMethod = "POST";
-  return call({ method, path });
+  return call(getCallerName(), { method, path });
 }
 
 let cooldown: number;
@@ -12,7 +12,7 @@ export async function fightRepeatedly() {
   const path = "my/:character/action/fight";
   const method: SupportedMethod = "POST";
 
-  const response = await request({ method, path });
+  const response = await request(getCallerName(), { method, path });
   switch (response.status) {
     case 498: {
       console.log("The character cannot be found on your account.");
