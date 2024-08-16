@@ -28,7 +28,7 @@ function replacePathTokens(template: string) {
 
 function getUrl(templatePath: string) {
   const path = replacePathTokens(templatePath);
-  const url = `${config.apiHost}/${path}`;
+  const url = `${config.apiHost}${path}`;
   return url;
 }
 

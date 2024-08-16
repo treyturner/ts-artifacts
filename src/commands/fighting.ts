@@ -1,7 +1,7 @@
-import { type SupportedMethod, call, getCallerName, request } from "../util";
+import { call, getCallerName, request } from "../util";
 
 export function fight() {
-  const path = "my/{name}/action/fight";
+  const path = "/my/{name}/action/fight";
   const method = "POST";
   return call(getCallerName(), { method, path });
 }
@@ -9,7 +9,7 @@ export function fight() {
 let cooldown: number;
 
 export async function fightRepeatedly() {
-  const path = "my/{name}/action/fight";
+  const path = "/my/{name}/action/fight";
   const method = "POST";
 
   const response = await request(getCallerName(), { method, path });

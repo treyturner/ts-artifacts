@@ -1,15 +1,15 @@
-import { type SupportedMethod, call, getCallerName, request } from "../util";
+import { call, getCallerName, request } from "../util";
 
 export function gather() {
-  const path = "my/{name}/action/gathering";
-  const method: SupportedMethod = "POST";
+  const path = "/my/{name}/action/gathering";
+  const method = "POST";
   return call(getCallerName(), { method, path });
 }
 
 let cooldown: number;
 
 export async function gatherRepeatedly() {
-  const path = "my/{name}/action/gathering";
+  const path = "/my/{name}/action/gathering";
   const method = "POST";
   const response = await request(getCallerName(), { method, path });
   switch (response.status) {
