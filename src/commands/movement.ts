@@ -1,19 +1,11 @@
-import type { Character, Cooldown, Destination } from "../types";
+import type { CharacterMovementData } from "../types";
 import { type SupportedMethod, call, getCallerName } from "../util";
 
-type MoveResponse = {
-  data: {
-    cooldown: Cooldown;
-    destination: Destination;
-    character: Character;
-  };
-};
-
 export function move(x: number, y: number) {
-  const path = "my/:character/action/move";
-  const method: SupportedMethod = "POST";
+  const path = "my/{name}/action/move";
+  const method = "POST";
   const body = { x, y };
-  return call<MoveResponse>(getCallerName(), { method, path, body });
+  return call<CharacterMovementData>(getCallerName(), { method, path, body });
 }
 
 export default { move };

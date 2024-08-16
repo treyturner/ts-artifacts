@@ -3,7 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "lint": "biome lint --error-on-warnings ./src"
+    "generate": "bunx openapi-typescript https://api.artifactsmmo.com/openapi.json -o ./lib/api.generated.d.ts",
+    "lint": "biome lint --error-on-warnings ./src",
+    "lint:fix": "biome lint --error-on-warnings --fix ./src"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",

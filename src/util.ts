@@ -1,6 +1,5 @@
 import "dotenv";
 import { prettyPrint } from "@base2/pretty-print-object";
-import { type BunInspectOptions, inspect } from "bun";
 import type { Cooldown } from "./types";
 
 const { env } = process;
@@ -10,7 +9,7 @@ if (!env.API_TOKEN || !env.CHARACTER) throw new Error("API_TOKEN and CHARACTER e
 const config = {
   apiHost: env.API_HOST ?? "https://api.artifactsmmo.com",
   apiToken: env.API_TOKEN,
-  character: env.CHARACTER,
+  name: env.CHARACTER,
 };
 
 export type SupportedMethod = "POST" | "GET";
@@ -23,7 +22,7 @@ const defaultHeaders: HttpHeaders = {
 };
 
 function replacePathTokens(template: string) {
-  const path = template.replaceAll(/\/:character\//g, `/${config.character}/`);
+  const path = template.replaceAll(/\{name\}/g, config.name);
   return path;
 }
 
@@ -56,7 +55,7 @@ export async function request(callerName: string, opts: CallOptions) {
 
   try {
     const url = getUrl(opts.path);
-    log(callerName, `request: ${fullOpts.method} ${replacePathTokens(opts.path)}${pp(opts.body)}`);
+    log(callerName, `request: ${fullOpts.method} ${replacePathTokens(opts.path)} ${pp(opts.body)}`);
     const response = await fetch(url, fullOpts);
     return response;
   } catch (error: unknown) {
@@ -75,7 +74,7 @@ async function handleResponse<T extends MayHaveCooldown>(callerName: string, res
     const body = (await response.json()) as T;
     log(callerName, `response: ${pp(body)}`);
     await handleCooldown(callerName, body);
-    return body;
+    return body.data ? body.data : body;
   } catch (error: unknown) {
     throw new Error(getErrorText(error, "handling response"));
   }
@@ -100,7 +99,7 @@ function getErrorText(error: unknown, context?: string) {
   return `Error${context ? ` ${context}` : ""}: ${error instanceof Error ? error.message : error}`;
 }
 
-/** pretty print */
+/** pretty print, but return empty string for undefined */
 // biome-ignore lint/suspicious/noExplicitAny: true any support
 export function pp(obj: any) {
   return typeof obj === "undefined"
@@ -129,9 +128,7 @@ export function log(
   opts.prefix ??= true;
 
   const line = `${opts.prefix ? `[${getLogTimestamp()}] ${callerName}: ` : ""}${msg}`;
-
-  if (opts.newLine) opts.logFn(line);
-  else process.stdout.write(line);
+  opts.newLine ? opts.logFn(line) : process.stdout.write(line);
 }
 
 export function getCallerName() {
@@ -140,5 +137,5 @@ export function getCallerName() {
 
 export const getLogTimestamp = (date: Date = new Date()): string => {
   const pad = (n: number) => n.toString().padStart(2, "0");
-  return `${pad(date.getFullYear())}-${pad(date.getMonth())}-${pad(date.getDay())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+  return `${date.getFullYear()}-${pad(date.getMonth())}-${pad(date.getDay())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 };

@@ -1,16 +1,16 @@
 import { type SupportedMethod, call, getCallerName, request } from "../util";
 
 export function fight() {
-  const path = "my/:character/action/fight";
-  const method: SupportedMethod = "POST";
+  const path = "my/{name}/action/fight";
+  const method = "POST";
   return call(getCallerName(), { method, path });
 }
 
 let cooldown: number;
 
 export async function fightRepeatedly() {
-  const path = "my/:character/action/fight";
-  const method: SupportedMethod = "POST";
+  const path = "my/{name}/action/fight";
+  const method = "POST";
 
   const response = await request(getCallerName(), { method, path });
   switch (response.status) {
