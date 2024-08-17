@@ -1,17 +1,18 @@
+import type { GrandExchangeTxnItem, GrandExchangeTxnList } from "../types";
 import { call, getCallerName } from "../util";
 
 export function buy(code: string, quantity: number, price: number) {
-  const path = "/my/{name}/action/ge/buy";
   const method = "POST";
-  const body = { code, quantity, price };
-  return call(getCallerName(), { method, path, body });
+  const path = "/my/{name}/action/ge/buy";
+  const body: GrandExchangeTxnItem = { code, quantity, price };
+  return call<GrandExchangeTxnList>(getCallerName(), { method, path, body });
 }
 
 export function sell(code: string, quantity: number, price: number) {
-  const path = "/my/{name}/action/ge/sell";
   const method = "POST";
-  const body = { code, quantity, price };
-  return call(getCallerName(), { method, path, body });
+  const path = "/my/{name}/action/ge/sell";
+  const body: GrandExchangeTxnItem = { code, quantity, price };
+  return call<GrandExchangeTxnList>(getCallerName(), { method, path, body });
 }
 
 export default { buy, sell };

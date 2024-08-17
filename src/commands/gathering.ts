@@ -1,51 +1,52 @@
-import { call, getCallerName, request } from "../util";
+import type { SkillData } from "../types";
+import { call, getCallerName, handleResponse, log, request } from "../util";
 
 export function gather() {
-  const path = "/my/{name}/action/gathering";
   const method = "POST";
-  return call(getCallerName(), { method, path });
+  const path = "/my/{name}/action/gathering";
+  return call<SkillData>(getCallerName(), { method, path });
 }
 
 let cooldown: number;
 
 export async function gatherRepeatedly() {
-  const path = "/my/{name}/action/gathering";
   const method = "POST";
+  const path = "/my/{name}/action/gathering";
   const response = await request(getCallerName(), { method, path });
+  const callerName = getCallerName();
   switch (response.status) {
     case 498: {
-      console.log("The character cannot be found on your account.");
+      log(callerName, "The character cannot be found on your account.");
       break;
     }
     case 497: {
-      console.log("Your character's inventory is full.");
+      log(callerName, "Your character's inventory is full.");
       break;
     }
     case 499: {
-      console.log("Your character is in cooldown.");
+      log(callerName, "Your character is in cooldown.");
       break;
     }
     case 493: {
-      console.log("The resource is too high-level for your character.");
+      log(callerName, "The resource is too high-level for your character.");
       break;
     }
     case 598: {
-      console.log("No resource on this map.");
+      log(callerName, "No resource on this map.");
       break;
     }
     case 200: {
-      const body = (await response.json()) as {
-        data: { cooldown: { total_seconds: number } };
-      };
-
-      console.log("Your character successfully gathered the resource.");
-
-      cooldown = body.data.cooldown.total_seconds;
-      setTimeout(gatherRepeatedly, cooldown * 1000);
-      break;
+      const data = await handleResponse<SkillData>(callerName, response);
+      log(
+        callerName,
+        `Your character successfully gathered ${data.details.items
+          .map((i) => `${i.quantity}x ${i.code}`)
+          .join(", ")}, ` + `gaining ${data.details.xp} xp.`,
+      );
+      return gatherRepeatedly();
     }
     default: {
-      console.log("An error occurred while gathering the resource.");
+      log(callerName, "An error occurred while gathering the resource.");
     }
   }
   return response;

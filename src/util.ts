@@ -1,6 +1,6 @@
 import "dotenv";
 import { prettyPrint } from "@base2/pretty-print-object";
-import type { Cooldown } from "./types";
+import type { Cooldown, ImageType } from "./types";
 
 const { env } = process;
 
@@ -20,6 +20,10 @@ const defaultHeaders: HttpHeaders = {
   Accept: "application/json",
   Authorization: `Bearer ${config.apiToken}`,
 };
+
+export function getImageUrl(type: ImageType, id: string) {
+  return `${config.apiHost}/images/${type}s/${id}.png`;
+}
 
 function replacePathTokens(template: string) {
   const path = template.replaceAll(/\{name\}/g, config.name);
@@ -64,24 +68,27 @@ export async function request(callerName: string, opts: CallOptions) {
 }
 
 interface MayHaveCooldown {
-  data?: {
-    cooldown?: Cooldown;
-  };
+  cooldown?: Cooldown;
 }
 
-async function handleResponse<T extends MayHaveCooldown>(callerName: string, response: Response) {
+/** API response handler. Waits for any cooldown and extracts the data property from the body. */
+export async function handleResponse<T extends MayHaveCooldown>(callerName: string, response: Response) {
+  type MayHaveData = { data?: T };
   try {
-    const body = (await response.json()) as T;
+    const body = (await response.json()) as MayHaveData;
     log(callerName, `response: ${pp(body)}`);
-    await handleCooldown(callerName, body);
-    return body.data ? body.data : body;
+    const { data } = body;
+    if (!data) throw new Error("Didn't receive data property in response object?");
+    await handleCooldown(callerName, data);
+    return data;
   } catch (error: unknown) {
     throw new Error(getErrorText(error, "handling response"));
   }
 }
 
-async function handleCooldown<T extends MayHaveCooldown>(callerName: string, body: T) {
-  const cooldown = body.data?.cooldown;
+/** Waits for a cooldown if specified in the response data */
+async function handleCooldown(callerName: string, data?: MayHaveCooldown) {
+  const cooldown = data?.cooldown;
   if (cooldown) {
     const { total_seconds: totalSeconds, reason } = cooldown;
     log(callerName, `Cooldown ${totalSeconds}s from ${reason}...`, { newLine: false });
@@ -100,7 +107,7 @@ function getErrorText(error: unknown, context?: string) {
 }
 
 /** pretty print, but return empty string for undefined */
-// biome-ignore lint/suspicious/noExplicitAny: true any support
+// biome-ignore lint/suspicious/noExplicitAny:
 export function pp(obj: any) {
   return typeof obj === "undefined"
     ? ""

@@ -1,32 +1,32 @@
+import type { BankItem, GoldReq, GoldTransaction, SimpleItem } from "../types";
 import { call, getCallerName } from "../util";
-import type { Paths } from "../types";
 
 export function depositGold(quantity: number) {
-  const path = "/my/{name}/action/bank/deposit/gold";
   const method = "POST";
-  const body = { quantity };
-  return call(getCallerName(), { method, path, body });
+  const path = "/my/{name}/action/bank/deposit/gold";
+  const body: GoldReq = { quantity };
+  return call<GoldTransaction>(getCallerName(), { method, path, body });
 }
 
 export function withdrawGold(quantity: number) {
-  const path = "/my/{name}/action/bank/withdraw/gold";
   const method = "POST";
-  const body = { quantity };
-  return call(getCallerName(), { method, path, body });
+  const path = "/my/{name}/action/bank/withdraw/gold";
+  const body: GoldReq = { quantity };
+  return call<GoldTransaction>(getCallerName(), { method, path, body });
 }
 
 export function depositItem(code: string, quantity: number) {
-  const path = "/my/{name}/action/bank/deposit";
   const method = "POST";
-  const body = { code, quantity };
-  return call(getCallerName(), { method, path, body });
+  const path = "/my/{name}/action/bank/deposit";
+  const body: SimpleItem = { code, quantity };
+  return call<BankItem>(getCallerName(), { method, path, body });
 }
 
 export function withdrawItem(code: string, quantity: number) {
-  const path = "/my/{name}/action/bank/withdraw";
   const method = "POST";
-  const body = { code, quantity };
-  return call(getCallerName(), { method, path, body });
+  const path = "/my/{name}/action/bank/withdraw";
+  const body: SimpleItem = { code, quantity };
+  return call<BankItem>(getCallerName(), { method, path, body });
 }
 
 export default { depositGold, depositItem, withdrawGold, withdrawItem };
