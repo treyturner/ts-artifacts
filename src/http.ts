@@ -85,7 +85,7 @@ export async function request(callerName: string, opts: CallOptions) {
   }
 }
 
-/** API response handler. Waits for any cooldown and returns the body. */
+/** API response handler. Waits for any cooldown and returns the body */
 export async function handleResponse<T extends MayHaveCooldown>(callerName: string, response: Response) {
   try {
     const body = (await response.json()) as MayHaveDataWithCooldown<T>;
@@ -121,7 +121,7 @@ export async function callForPage<T extends DataPage>(callerName: string, opts: 
   return body;
 }
 
-/** API response handler for DataPages. */
+/** API response handler for DataPages */
 async function handlePageResponse<T extends DataPage>(callerName: string, response: Response) {
   try {
     const body = (await response.json()) as T;
@@ -152,14 +152,14 @@ export async function handlePaging<T, R extends DataPageReq | undefined>(
   return items;
 }
 
-/** Call the API for a DataPage and return the whole body (for page handling) */
+/** Call the API for info (not requiring a cooldown) and return the extracted data property */
 export async function callForInfo<T>(callerName: string, opts: CallOptions) {
   const response = await request(callerName, opts);
   const body = await handleInfoResponse<T>(callerName, response);
   return body;
 }
 
-/** API response handler for DataPages. */
+/** API response handler for info calls (not requiring a cooldown) */
 async function handleInfoResponse<T>(callerName: string, response: Response) {
   try {
     const body = (await response.json()) as MayHaveData<T>;
