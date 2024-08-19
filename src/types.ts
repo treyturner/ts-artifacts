@@ -14,6 +14,7 @@ export type Schemas = Components["schemas"];
 export type CraftReq = Schemas["CraftingSchema"];
 export type DeleteReq = Schemas["SimpleItemSchema"];
 export type EquipReq = Schemas["EquipSchema"];
+export type GEItemReq = Operations["get_ge_item_ge__code__get"]["parameters"]["path"];
 export type GoldReq = Schemas["DepositWithdrawGoldSchema"];
 export type ItemReq = Operations["get_item_items__code__get"]["parameters"]["path"];
 export type MapReq = Operations["get_map_maps__x___y__get"]["parameters"]["path"];
@@ -33,9 +34,9 @@ export type DeleteItem = Schemas["DeleteItemSchema"];
 export type Equip = Schemas["EquipRequestSchema"];
 export type Fight = Schemas["FightSchema"];
 export type GoldTransaction = Schemas["GoldTransactionSchema"];
-export type GrandExchangeItem = Schemas["GEItemSchema"];
-export type GrandExchangeTxnItem = Schemas["GETransactionItemSchema"];
-export type GrandExchangeTxnList = Schemas["GETransactionListSchema"];
+export type GEItem = Schemas["GEItemSchema"];
+export type GETransactionItem = Schemas["GETransactionItemSchema"];
+export type GETransactionList = Schemas["GETransactionListSchema"];
 export type InventorySlot = Schemas["InventorySlot"];
 export type Item = Schemas["ItemSchema"];
 export type ItemEffect = Schemas["ItemEffectSchema"];
@@ -51,6 +52,7 @@ export type TaskData = Schemas["TaskDataSchema"];
 export type TaskRewardData = Schemas["TaskRewardDataSchema"];
 
 // data page request types
+export type GEItemsReq = Operations["get_all_ge_items_ge__get"]["parameters"]["query"];
 export type ItemsReq = Operations["get_all_items_items__get"]["parameters"]["query"];
 export type MapsReq = Operations["get_all_maps_maps__get"]["parameters"]["query"];
 export type MonstersReq = Operations["get_all_monsters_monsters__get"]["parameters"]["query"];
@@ -74,9 +76,7 @@ export type ImageType = "character" | "effect" | "item" | "map" | "monster" | "r
 
 /** data page types */
 export type DataPageReq = { page?: number; size?: number };
-export type DataPage<
-  T = ActiveEvent | Character | GrandExchangeItem | Item | Log | Mapp | Monster | Resource | SimpleItem,
-> = {
+export type DataPage<T = ActiveEvent | Character | GEItem | Item | Log | Mapp | Monster | Resource | SimpleItem> = {
   data: T[];
   total: number | null;
   page: number | null;

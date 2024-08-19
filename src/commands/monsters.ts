@@ -15,7 +15,7 @@ export async function getMonster(query: MonsterReq) {
  **/
 async function getMonstersPage(query: MonstersReq = {}) {
   const method = "GET";
-  const path = "/maps/";
+  const path = "/monster/";
   return callForPage<DataPage<Monster>>(getCallerName(), { method, path, query });
 }
 

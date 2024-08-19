@@ -2,31 +2,27 @@ import { call } from "../http";
 import type { BankItem, GoldReq, GoldTransaction, SimpleItem } from "../types";
 import { getCallerName } from "../util";
 
-export function depositGold(quantity: number) {
+export function depositGold(body: GoldReq) {
   const method = "POST";
   const path = "/my/{name}/action/bank/deposit/gold";
-  const body: GoldReq = { quantity };
   return call<GoldTransaction>(getCallerName(), { method, path, body });
 }
 
-export function withdrawGold(quantity: number) {
+export function withdrawGold(body: GoldReq) {
   const method = "POST";
   const path = "/my/{name}/action/bank/withdraw/gold";
-  const body: GoldReq = { quantity };
   return call<GoldTransaction>(getCallerName(), { method, path, body });
 }
 
-export function depositItem(code: string, quantity: number) {
+export function depositItem(body: SimpleItem) {
   const method = "POST";
   const path = "/my/{name}/action/bank/deposit";
-  const body: SimpleItem = { code, quantity };
   return call<BankItem>(getCallerName(), { method, path, body });
 }
 
-export function withdrawItem(code: string, quantity: number) {
+export function withdrawItem(body: SimpleItem) {
   const method = "POST";
   const path = "/my/{name}/action/bank/withdraw";
-  const body: SimpleItem = { code, quantity };
   return call<BankItem>(getCallerName(), { method, path, body });
 }
 

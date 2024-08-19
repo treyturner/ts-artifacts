@@ -1,6 +1,7 @@
 import { inspect } from "bun";
 import bank from "./commands/bank";
 import { craft } from "./commands/crafting";
+import { getEvents } from "./commands/events";
 import { fight, fightRepeatedly } from "./commands/fighting";
 import { gather, gatherRepeatedly } from "./commands/gathering";
 import grandExchange from "./commands/grand-exchange";
@@ -26,8 +27,8 @@ import { getCallerName, log, pp } from "./util";
 
 const q = [
   // command queue
-  getMaps({ content_code: "ash_tree" }),
-  items.getAll({ type: "weapon" }),
+  // getMaps({ content_code: "ash_tree" }),
+  getEvents(),
 ];
 
 for (const p of q) {

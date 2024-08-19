@@ -5,7 +5,7 @@ import { getCallerName } from "../util";
 /** Get a single resource by code */
 export async function getResource(query: ResourceReq) {
   const method = "GET";
-  const path = `/resource/${query.code}`;
+  const path = `/resources/${query.code}`;
   return callForInfo<Resource>(getCallerName(), { method, path });
 }
 
@@ -15,7 +15,7 @@ export async function getResource(query: ResourceReq) {
  **/
 async function getResourcePage(query: ResourcesReq = {}) {
   const method = "GET";
-  const path = "/maps/";
+  const path = "/resources/";
   return callForPage<DataPage<Resource>>(getCallerName(), { method, path, query });
 }
 

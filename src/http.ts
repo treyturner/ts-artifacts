@@ -1,4 +1,4 @@
-import type { Cooldown, DataPage, DataPageReq, GrandExchangeItem, MapContent } from "./types";
+import type { Cooldown, DataPage, DataPageReq } from "./types";
 import { config, getErrorText, log, pp } from "./util";
 
 export type SupportedMethod = "POST" | "GET";
@@ -49,6 +49,13 @@ interface MayHaveData<T> {
   data?: T;
 }
 
+interface ApiErrorResponseBody {
+  error: {
+    code: number;
+    message: string;
+  };
+}
+
 type CallOptions = {
   method: SupportedMethod;
   path: string;
@@ -87,6 +94,7 @@ export async function request(callerName: string, opts: CallOptions) {
 
 /** API response handler. Waits for any cooldown and returns the body */
 export async function handleResponse<T extends MayHaveCooldown>(callerName: string, response: Response) {
+  if (!response.ok) await throwNotOkResponse(response);
   try {
     const body = (await response.json()) as MayHaveDataWithCooldown<T>;
     if (config.logHttpResponses) log(callerName, `Response: ${pp(body)}`);
@@ -123,6 +131,7 @@ export async function callForPage<T extends DataPage>(callerName: string, opts: 
 
 /** API response handler for DataPages */
 async function handlePageResponse<T extends DataPage>(callerName: string, response: Response) {
+  if (!response.ok) await throwNotOkResponse(response);
   try {
     const body = (await response.json()) as T;
     if (config.logHttpResponses) log(callerName, `Response: ${pp(body)}`);
@@ -161,6 +170,7 @@ export async function callForInfo<T>(callerName: string, opts: CallOptions) {
 
 /** API response handler for info calls (not requiring a cooldown) */
 async function handleInfoResponse<T>(callerName: string, response: Response) {
+  if (!response.ok) await throwNotOkResponse(response);
   try {
     const body = (await response.json()) as MayHaveData<T>;
     if (config.logHttpResponses) log(callerName, `Response: ${pp(body)}`);
@@ -170,4 +180,9 @@ async function handleInfoResponse<T>(callerName: string, response: Response) {
   } catch (error: unknown) {
     throw new Error(getErrorText(error, "handling response"));
   }
+}
+
+async function throwNotOkResponse(response: Response) {
+  const { error } = (await response.json()) as ApiErrorResponseBody;
+  throw new Error(`Received HTTP ${response.status} ${response.statusText}: ${error.message}`);
 }

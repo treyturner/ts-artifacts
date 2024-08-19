@@ -3,10 +3,9 @@ import type { DataPage, MapReq, Mapp, MapsReq } from "../types";
 import { getCallerName } from "../util";
 
 /** Get a single map by x, y coordinates */
-export async function getMap(coordinates: MapReq) {
-  const { x, y } = coordinates;
+export async function getMap(query: MapReq) {
   const method = "GET";
-  const path = `/maps/${x}/${y}`;
+  const path = `/maps/${query.x}/${query.y}`;
   return callForInfo<Mapp>(getCallerName(), { method, path });
 }
 
@@ -14,7 +13,7 @@ export async function getMap(coordinates: MapReq) {
  * Get a data page of a list of maps, potentially filtered by a query.
  * Intended to be wrapped by `handlePaging()`
  **/
-async function getMapsPage(query: MapsReq = {}) {
+async function getMapsPage(query: MapsReq) {
   const method = "GET";
   const path = "/maps/";
   return callForPage<DataPage<Mapp>>(getCallerName(), { method, path, query });

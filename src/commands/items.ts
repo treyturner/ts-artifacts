@@ -14,24 +14,21 @@ import type {
 } from "../types";
 import { getCallerName } from "../util";
 
-export function equip(code: string, slot: EquipSlot) {
+export function equip(body: EquipReq) {
   const method = "POST";
   const path = "/my/{name}/action/equip";
-  const body: EquipReq = { code, slot };
   return call<Equip>(getCallerName(), { method, path, body });
 }
 
-export function unequip(slot: EquipSlot) {
+export function unequip(body: UnequipReq) {
   const method = "POST";
   const path = "/my/{name}/action/unequip";
-  const body: UnequipReq = { slot };
   return call<Equip>(getCallerName(), { method, path, body });
 }
 
-export function discard(code: string, quantity: number) {
+export function discard(body: DeleteReq) {
   const method = "POST";
   const path = "/my/{name}/action/delete";
-  const body: DeleteReq = { code, quantity };
   return call<DeleteItem>(getCallerName(), { method, path, body });
 }
 

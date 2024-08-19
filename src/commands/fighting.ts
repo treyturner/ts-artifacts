@@ -8,8 +8,6 @@ export function fight() {
   return call<CharacterFightData>(getCallerName(), { method, path });
 }
 
-let cooldown: number;
-
 export async function fightRepeatedly() {
   const method = "POST";
   const path = "/my/{name}/action/fight";

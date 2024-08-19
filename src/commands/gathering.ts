@@ -8,8 +8,6 @@ export function gather() {
   return call<SkillData>(getCallerName(), { method, path });
 }
 
-let cooldown: number;
-
 export async function gatherRepeatedly() {
   const method = "POST";
   const path = "/my/{name}/action/gathering";
