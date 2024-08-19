@@ -1,5 +1,6 @@
+import { call } from "../http";
 import type { BankItem, GoldReq, GoldTransaction, SimpleItem } from "../types";
-import { call, getCallerName } from "../util";
+import { getCallerName } from "../util";
 
 export function depositGold(quantity: number) {
   const method = "POST";

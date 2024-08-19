@@ -1,5 +1,6 @@
+import { call } from "../http";
 import type { CharacterMovementData, MoveReq } from "../types";
-import { call, getCallerName } from "../util";
+import { getCallerName } from "../util";
 
 export function move(x: number, y: number) {
   const method = "POST";

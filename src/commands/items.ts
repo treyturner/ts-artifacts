@@ -1,5 +1,18 @@
-import type { DeleteItem, DeleteReq, Equip, EquipReq, EquipSlot, Schemas, UnequipReq } from "../types";
-import { call, getCallerName } from "../util";
+import { call, callForInfo, callForPage, handlePaging } from "../http";
+import type {
+  DataPage,
+  DeleteItem,
+  DeleteReq,
+  Equip,
+  EquipReq,
+  EquipSlot,
+  Item,
+  ItemReq,
+  ItemsReq,
+  SingleItem,
+  UnequipReq,
+} from "../types";
+import { getCallerName } from "../util";
 
 export function equip(code: string, slot: EquipSlot) {
   const method = "POST";
@@ -22,4 +35,29 @@ export function discard(code: string, quantity: number) {
   return call<DeleteItem>(getCallerName(), { method, path, body });
 }
 
-export default { equip, unequip, discard };
+/** Get a single map by x, y coordinates */
+export async function getItem(query: ItemReq) {
+  const method = "GET";
+  const path = `/item/${query.code}`;
+  return callForInfo<SingleItem>(getCallerName(), { method, path });
+}
+
+/**
+ * Get a data page of a list of maps, potentially filtered by content type and/or code.
+ * Intended to be wrapped by handlePaging()
+ **/
+async function getItemsPage(query: ItemsReq = {}) {
+  const method = "GET";
+  const path = "/items/";
+  return callForPage<DataPage<Item>>(getCallerName(), { method, path, query });
+}
+
+/**
+ * Return a complete set of items matching the query
+ * collected across multiple pages of results as needed
+ */
+export async function getItems(query?: Omit<NonNullable<ItemsReq>, "page" | "size">) {
+  return handlePaging<Item, ItemsReq>(getItemsPage, query);
+}
+
+export default { equip, unequip, discard, get: getItem, getAll: getItems };

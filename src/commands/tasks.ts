@@ -1,5 +1,6 @@
+import { call } from "../http";
 import type { TaskData, TaskRewardData } from "../types";
-import { call, getCallerName } from "../util";
+import { getCallerName } from "../util";
 
 export function accept() {
   const method = "POST";

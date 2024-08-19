@@ -3,9 +3,14 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
+    "check": "bun --silent run typecheck && bun --silent run lint && bun --silent run format",
+    "check:fix": "bun --silent run typecheck && bun --silent run lint:fix && bun --silent run format:fix",
+    "format": "biome format ./src",
+    "format:fix": "biome format --write ./src",
     "generate": "bunx openapi-typescript https://api.artifactsmmo.com/openapi.json -o ./lib/api.generated.d.ts",
     "lint": "biome lint --error-on-warnings ./src",
-    "lint:fix": "biome lint --error-on-warnings --fix ./src"
+    "lint:fix": "biome lint --error-on-warnings --fix ./src",
+    "typecheck": "tsc"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
@@ -14,8 +19,5 @@
   },
   "peerDependencies": {
     "typescript": "5.5.4"
-  },
-  "dependencies": {
-    "@base2/pretty-print-object": "^1.0.2"
   }
 }

@@ -1,5 +1,6 @@
+import { call, handleResponse, request } from "../http";
 import type { CharacterFightData } from "../types";
-import { call, getCallerName, handleResponse, log, request } from "../util";
+import { getCallerName, log } from "../util";
 
 export function fight() {
   const method = "POST";

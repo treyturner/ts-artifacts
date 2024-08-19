@@ -1,5 +1,6 @@
+import { call, handleResponse, request } from "../http";
 import type { SkillData } from "../types";
-import { call, getCallerName, handleResponse, log, request } from "../util";
+import { getCallerName, log } from "../util";
 
 export function gather() {
   const method = "POST";
@@ -41,7 +42,7 @@ export async function gatherRepeatedly() {
         callerName,
         `Your character successfully gathered ${data.details.items
           .map((i) => `${i.quantity}x ${i.code}`)
-          .join(", ")}, ` + `gaining ${data.details.xp} xp.`,
+          .join(", ")}, gaining ${data.details.xp} xp.`,
       );
       return gatherRepeatedly();
     }

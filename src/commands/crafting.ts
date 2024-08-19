@@ -1,5 +1,6 @@
+import { call } from "../http";
 import type { CraftReq, SkillData } from "../types";
-import { call, getCallerName } from "../util";
+import { getCallerName } from "../util";
 
 export function craft(code: string, quantity = 1) {
   const method = "POST";

@@ -1,5 +1,6 @@
+import { call } from "../http";
 import type { GrandExchangeTxnItem, GrandExchangeTxnList } from "../types";
-import { call, getCallerName } from "../util";
+import { getCallerName } from "../util";
 
 export function buy(code: string, quantity: number, price: number) {
   const method = "POST";
