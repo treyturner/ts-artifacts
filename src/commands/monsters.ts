@@ -2,7 +2,7 @@ import { callForInfo, callForPage, handlePaging } from "../http";
 import type { DataPage, Monster, MonsterReq, MonstersReq } from "../types";
 import { getCallerName } from "../util";
 
-/** Get a single map by x, y coordinates */
+/** Get a single monster by code */
 export async function getMonster(query: MonsterReq) {
   const method = "GET";
   const path = `/monster/${query.code}`;
@@ -10,8 +10,8 @@ export async function getMonster(query: MonsterReq) {
 }
 
 /**
- * Get a data page of a list of maps, potentially filtered by content type and/or code.
- * Intended to be wrapped by handlePaging()
+ * Get a data page of a list of monsters, potentially filtered by a query.
+ * Intended to be wrapped by `handlePaging()`
  **/
 async function getMonstersPage(query: MonstersReq = {}) {
   const method = "GET";
@@ -20,7 +20,7 @@ async function getMonstersPage(query: MonstersReq = {}) {
 }
 
 /**
- * Return a complete set of maps matching the query
+ * Return a complete set of monsters matching the query,
  * collected across multiple pages of results as needed
  */
 export async function getMonsters(query?: Omit<NonNullable<MonstersReq>, "page" | "size">) {

@@ -43,4 +43,4 @@ export async function fightRepeatedly() {
   return response;
 }
 
-export default { fight, fightRepeatedly };
+export default { once: fight, repeatedly: fightRepeatedly };

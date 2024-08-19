@@ -35,7 +35,7 @@ export function discard(code: string, quantity: number) {
   return call<DeleteItem>(getCallerName(), { method, path, body });
 }
 
-/** Get a single map by x, y coordinates */
+/** Get a single item by code */
 export async function getItem(query: ItemReq) {
   const method = "GET";
   const path = `/item/${query.code}`;
@@ -43,8 +43,8 @@ export async function getItem(query: ItemReq) {
 }
 
 /**
- * Get a data page of a list of maps, potentially filtered by content type and/or code.
- * Intended to be wrapped by handlePaging()
+ * Get a data page of a list of items, potentially filtered by a query.
+ * Intended to be wrapped by `handlePaging()`
  **/
 async function getItemsPage(query: ItemsReq = {}) {
   const method = "GET";
@@ -53,7 +53,7 @@ async function getItemsPage(query: ItemsReq = {}) {
 }
 
 /**
- * Return a complete set of items matching the query
+ * Return a complete set of items matching the query,
  * collected across multiple pages of results as needed
  */
 export async function getItems(query?: Omit<NonNullable<ItemsReq>, "page" | "size">) {

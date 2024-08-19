@@ -11,8 +11,8 @@ export async function getMap(coordinates: MapReq) {
 }
 
 /**
- * Get a data page of a list of maps, potentially filtered by content type and/or code.
- * Intended to be wrapped by handlePaging()
+ * Get a data page of a list of maps, potentially filtered by a query.
+ * Intended to be wrapped by `handlePaging()`
  **/
 async function getMapsPage(query: MapsReq = {}) {
   const method = "GET";
@@ -21,7 +21,7 @@ async function getMapsPage(query: MapsReq = {}) {
 }
 
 /**
- * Return a complete set of maps matching the query
+ * Return a complete set of maps matching the query,
  * collected across multiple pages of results as needed
  */
 export async function getMaps(query?: Omit<NonNullable<MapsReq>, "page" | "size">) {

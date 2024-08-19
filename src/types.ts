@@ -19,6 +19,7 @@ export type ItemReq = Operations["get_item_items__code__get"]["parameters"]["pat
 export type MapReq = Operations["get_map_maps__x___y__get"]["parameters"]["path"];
 export type MonsterReq = Operations["get_monster_monsters__code__get"]["parameters"]["path"];
 export type MoveReq = Schemas["DestinationSchema"];
+export type ResourceReq = Operations["get_resource_resources__code__get"]["parameters"]["path"];
 export type UnequipReq = Schemas["UnequipSchema"];
 
 // response types
@@ -53,6 +54,7 @@ export type TaskRewardData = Schemas["TaskRewardDataSchema"];
 export type ItemsReq = Operations["get_all_items_items__get"]["parameters"]["query"];
 export type MapsReq = Operations["get_all_maps_maps__get"]["parameters"]["query"];
 export type MonstersReq = Operations["get_all_monsters_monsters__get"]["parameters"]["query"];
+export type ResourcesReq = Operations["get_all_resources_resources__get"]["parameters"]["query"];
 
 // interesting child types
 export type Craft = Schemas["CraftSchema"];
