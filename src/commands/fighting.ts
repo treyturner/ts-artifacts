@@ -8,7 +8,7 @@ export function fight() {
   return call<CharacterFightData>(getCallerName(), { method, path });
 }
 
-export async function fightRepeatedly() {
+export async function fightContinuously() {
   const method = "POST";
   const path = "/my/{name}/action/fight";
   const response = await request(getCallerName(), { method, path });
@@ -31,9 +31,9 @@ export async function fightRepeatedly() {
       break;
     }
     case 200: {
-      const data = await handleResponse<CharacterFightData>(callerName, response);
+      const data = await handleResponse<CharacterFightData>(callerName, response, { method, path });
       log(callerName, `The fight ended successfully. You have ${data.fight.result}.`);
-      return fightRepeatedly();
+      return fightContinuously();
     }
     default:
       log(callerName, "An error occurred during the fight.");
@@ -41,4 +41,4 @@ export async function fightRepeatedly() {
   return response;
 }
 
-export default { once: fight, repeatedly: fightRepeatedly };
+export default { once: fight, continuously: fightContinuously };

@@ -5,6 +5,7 @@ import type {
   DeleteReq,
   Equip,
   EquipReq,
+  EquipSlot,
   Item,
   ItemReq,
   ItemsReq,
@@ -15,15 +16,17 @@ import type {
 } from "../types";
 import { getCallerName } from "../util";
 
-export function equip(body: EquipReq) {
+export function equip(slot: EquipSlot, code: string) {
   const method = "POST";
   const path = "/my/{name}/action/equip";
+  const body: EquipReq = { slot, code };
   return call<Equip>(getCallerName(), { method, path, body });
 }
 
-export function unequip(body: UnequipReq) {
+export function unequip(slot: EquipSlot) {
   const method = "POST";
   const path = "/my/{name}/action/unequip";
+  const body = { slot };
   return call<Equip>(getCallerName(), { method, path, body });
 }
 

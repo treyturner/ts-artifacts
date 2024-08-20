@@ -69,7 +69,7 @@ type CallOptions = {
 /** Call the API, wait for cooldown, and return the data property extracted from the body */
 export async function call<T extends MayHaveCooldown>(callerName: string, opts: CallOptions) {
   const response = await request(callerName, opts);
-  const data = await handleResponse<T>(callerName, response);
+  const data = await handleResponse<T>(callerName, response, opts);
   return data;
 }
 
@@ -93,8 +93,12 @@ export async function request(callerName: string, opts: CallOptions) {
 }
 
 /** API response handler. Waits for any cooldown and returns the body */
-export async function handleResponse<T extends MayHaveCooldown>(callerName: string, response: Response) {
-  if (!response.ok) await throwNotOkResponse(response);
+export async function handleResponse<T extends MayHaveCooldown>(
+  callerName: string,
+  response: Response,
+  opts: CallOptions,
+) {
+  if (!response.ok) await throwNotOkResponse(response, opts);
   try {
     const body = (await response.json()) as MayHaveDataWithCooldown<T>;
     if (config.logHttpResponses) log(callerName, `Response: ${pp(body)}`);
@@ -125,13 +129,13 @@ async function handleCooldown<T extends MayHaveCooldown>(callerName: string, bod
 /** Call the API for a DataPage and return the whole body (for page handling) */
 export async function callForPage<T extends DataPage>(callerName: string, opts: CallOptions) {
   const response = await request(callerName, opts);
-  const body: T = await handlePageResponse<T>(callerName, response);
+  const body: T = await handlePageResponse<T>(callerName, response, opts);
   return body;
 }
 
 /** API response handler for DataPages */
-async function handlePageResponse<T extends DataPage>(callerName: string, response: Response) {
-  if (!response.ok) await throwNotOkResponse(response);
+async function handlePageResponse<T extends DataPage>(callerName: string, response: Response, opts: CallOptions) {
+  if (!response.ok) await throwNotOkResponse(response, opts);
   try {
     const body = (await response.json()) as T;
     if (config.logHttpResponses) log(callerName, `Response: ${pp(body)}`);
@@ -164,13 +168,13 @@ export async function handlePaging<T, R extends DataPageReq | undefined>(
 /** Call the API for info (not requiring a cooldown) and return the extracted data property */
 export async function callForInfo<T>(callerName: string, opts: CallOptions) {
   const response = await request(callerName, opts);
-  const body = await handleInfoResponse<T>(callerName, response);
+  const body = await handleInfoResponse<T>(callerName, response, opts);
   return body;
 }
 
 /** API response handler for info calls (not requiring a cooldown) */
-async function handleInfoResponse<T>(callerName: string, response: Response) {
-  if (!response.ok) await throwNotOkResponse(response);
+async function handleInfoResponse<T>(callerName: string, response: Response, opts: CallOptions) {
+  if (!response.ok) await throwNotOkResponse(response, opts);
   try {
     const body = (await response.json()) as MayHaveData<T>;
     if (config.logHttpResponses) log(callerName, `Response: ${pp(body)}`);
@@ -182,7 +186,12 @@ async function handleInfoResponse<T>(callerName: string, response: Response) {
   }
 }
 
-async function throwNotOkResponse(response: Response) {
+async function throwNotOkResponse(response: Response, opts: CallOptions) {
+  const url = getUrl(opts.path, opts.query);
+  const bodyLog = opts.body ? `\nRequest body: ${pp(opts.body)}` : "";
   const { error } = (await response.json()) as ApiErrorResponseBody;
-  throw new Error(`Received HTTP ${response.status} ${response.statusText}: ${error.message}`);
+  throw new Error(
+    `Received HTTP ${response.status} (${response.statusText}) ` +
+      `from ${opts.method} ${url}: ${error.message}${bodyLog}`,
+  );
 }

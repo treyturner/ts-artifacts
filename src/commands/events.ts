@@ -13,3 +13,5 @@ async function getEventsPage(query: DataPageReq = {}) {
 export async function getEvents() {
   return handlePaging<ActiveEvent, DataPageReq>(getEventsPage);
 }
+
+export default { getAll: getEvents };

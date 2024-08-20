@@ -8,7 +8,7 @@ export function gather() {
   return call<SkillData>(getCallerName(), { method, path });
 }
 
-export async function gatherRepeatedly() {
+export async function gatherContinuously() {
   const method = "POST";
   const path = "/my/{name}/action/gathering";
   const response = await request(getCallerName(), { method, path });
@@ -35,14 +35,14 @@ export async function gatherRepeatedly() {
       break;
     }
     case 200: {
-      const data = await handleResponse<SkillData>(callerName, response);
+      const data = await handleResponse<SkillData>(callerName, response, { method, path });
       log(
         callerName,
         `Your character successfully gathered ${data.details.items
           .map((i) => `${i.quantity}x ${i.code}`)
           .join(", ")}, gaining ${data.details.xp} xp.`,
       );
-      return gatherRepeatedly();
+      return gatherContinuously();
     }
     default: {
       log(callerName, "An error occurred while gathering the resource.");
@@ -51,4 +51,4 @@ export async function gatherRepeatedly() {
   return response;
 }
 
-export default { gather, gatherRepeatedly };
+export default { once: gather, continuously: gatherContinuously };

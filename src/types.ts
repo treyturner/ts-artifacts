@@ -60,6 +60,7 @@ export type Drop = Schemas["DropSchema"];
 export type MapContent = Schemas["MapContentSchema"];
 
 // data page request types
+export type BankItemsReq = Operations["get_bank_items_my_bank_items_get"]["parameters"]["query"];
 export type GEItemsReq = Operations["get_all_ge_items_ge__get"]["parameters"]["query"];
 export type ItemsReq = Operations["get_all_items_items__get"]["parameters"]["query"];
 export type MapsReq = Operations["get_all_maps_maps__get"]["parameters"]["query"];
