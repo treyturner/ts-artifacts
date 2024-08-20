@@ -5,10 +5,11 @@ import type {
   DeleteReq,
   Equip,
   EquipReq,
-  EquipSlot,
   Item,
   ItemReq,
   ItemsReq,
+  RecycleReq,
+  RecyclingData,
   SingleItem,
   UnequipReq,
 } from "../types";
@@ -30,6 +31,12 @@ export function discard(body: DeleteReq) {
   const method = "POST";
   const path = "/my/{name}/action/delete";
   return call<DeleteItem>(getCallerName(), { method, path, body });
+}
+
+export function recycle(body: RecycleReq) {
+  const method = "POST";
+  const path = "/my/{name}/action/recycling";
+  return call<RecyclingData>(getCallerName(), { method, path, body });
 }
 
 /** Get a single item by code */
