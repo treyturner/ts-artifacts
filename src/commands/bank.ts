@@ -1,5 +1,5 @@
-import { call, callForPage, handlePaging } from "../http";
-import type { BankItem, BankItemsReq, DataPage, GoldReq, GoldTransaction, SimpleItem } from "../types";
+import { call, callForInfo, callForPage, handlePaging } from "../http";
+import type { BankItem, BankItemsReq, DataPage, Gold, GoldReq, GoldTransaction, SimpleItem } from "../types";
 import { getCallerName } from "../util";
 
 export function depositGold(body: GoldReq) {
@@ -44,4 +44,10 @@ export async function getBankItems(query?: Omit<NonNullable<BankItemsReq>, "page
   return handlePaging<SimpleItem, BankItemsReq>(getBankItemsPage, query);
 }
 
-export default { depositGold, depositItem, withdrawGold, withdrawItem, getItems: getBankItems };
+export async function getBankGold() {
+  const method = "GET";
+  const path = "/my/bank/gold";
+  return callForInfo<Gold>(getCallerName(), { method, path });
+}
+
+export default { depositGold, depositItem, withdrawGold, withdrawItem, getItems: getBankItems, getGold: getBankGold };

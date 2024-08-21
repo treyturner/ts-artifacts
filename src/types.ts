@@ -34,6 +34,7 @@ export type Cooldown = Schemas["CooldownSchema"];
 export type DeleteItem = Schemas["DeleteItemSchema"];
 export type Equip = Schemas["EquipRequestSchema"];
 export type Fight = Schemas["FightSchema"];
+export type Gold = Schemas["GoldSchema"];
 export type GoldTransaction = Schemas["GoldTransactionSchema"];
 export type GEItem = Schemas["GEItemSchema"];
 export type GETransactionItem = Schemas["GETransactionItemSchema"];
