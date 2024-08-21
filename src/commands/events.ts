@@ -11,7 +11,7 @@ async function getEventsPage(query: DataPageReq = {}) {
 
 /** Return a complete set of events, collected across multiple pages of results as needed */
 export async function getEvents() {
-  return handlePaging<ActiveEvent, DataPageReq>(getEventsPage);
+  return handlePaging<ActiveEvent, DataPageReq>(getCallerName(), getEventsPage);
 }
 
 export default { getAll: getEvents };

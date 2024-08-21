@@ -36,7 +36,7 @@ async function getGEItemsPage(query: GEItemsReq) {
  * collected across multiple pages of results as needed
  */
 export async function getGEItems(query?: Omit<NonNullable<GEItemsReq>, "page" | "size">) {
-  return handlePaging<GEItem, GEItemsReq>(getGEItemsPage, query);
+  return handlePaging<GEItem, GEItemsReq>(getCallerName(), getGEItemsPage, query);
 }
 
 export default { buy, getItem: getGEItem, getItems: getGEItems, sell };

@@ -32,7 +32,7 @@ export async function fightContinuously() {
     }
     case 200: {
       const data = await handleResponse<CharacterFightData>(callerName, response, { method, path });
-      log(callerName, `The fight ended successfully. You have ${data.fight.result}.`);
+      log(callerName, `The fight ended successfully.${data?.fight.result ? ` You have ${data.fight.result}.` : ""}`);
       return fightContinuously();
     }
     default:

@@ -1,5 +1,5 @@
 import "dotenv";
-import { inspect } from "bun";
+import { type InspectOptions, inspect } from "node:util";
 import type { ImageType } from "./types";
 
 const { env } = process;
@@ -14,20 +14,28 @@ export const config = {
   name: env.CHARACTER,
   logHttpRequests: affirmative.includes(env.LOG_HTTP_REQUESTS?.toUpperCase() ?? ""),
   logHttpResponses: affirmative.includes(env.LOG_HTTP_RESPONSES?.toUpperCase() ?? ""),
+  hideCharacterInResponseLog: affirmative.includes(env.HIDE_CHARACTER_IN_RESPONSE?.toUpperCase() ?? ""),
+  hideCooldownInResponseLog: affirmative.includes(env.HIDE_COOLDOWN_IN_RESPONSE?.toUpperCase() ?? ""),
 };
 
 export function getImageUrl(type: ImageType, id: string) {
   return `${config.apiHost}/images/${type}s/${id}.png`;
 }
 
-export function getErrorText(error: unknown, context?: string) {
+export function getUnknownErrorText(error: unknown, context?: string) {
   return `Error${context ? ` ${context}` : ""}: ${error instanceof Error ? error.message : error}`;
 }
 
-/** pretty print, but return empty string for undefined */
+/** pretty print, but return empty string for undefined and fit onto one line if reasonably short */
 // biome-ignore lint/suspicious/noExplicitAny: util.inspect accepts any
-export function pp(obj: any) {
-  return typeof obj === "undefined" ? "" : inspect(obj, { colors: true });
+export function pp(obj: any, opts: InspectOptions = {}) {
+  const defaults: InspectOptions = {
+    breakLength: 120,
+    colors: true,
+    depth: null,
+  };
+  if (typeof obj === "undefined") return "";
+  return inspect(obj, { ...defaults, ...opts });
 }
 
 type LogFunction = {
@@ -67,4 +75,23 @@ export function pluralize(input: Array<unknown> | number, suffix = "s") {
   const num = Array.isArray(input) ? input.length : input;
   if (num === 1 || num === -1) return "";
   return suffix;
+}
+
+// biome-ignore lint/suspicious/noExplicitAny: String() accepts any
+export function grammarJoin(array: Array<any> | undefined, opts: { conj?: string } = {}) {
+  if (!array || array.length === 0) return "";
+  const conj = opts.conj ?? "and";
+
+  switch (array.length) {
+    case 1:
+      return String(array[0]);
+    case 2:
+      return array.map((e) => String(e)).join(` ${conj} `);
+    default: {
+      const stringified = array.map((e) => String(e));
+      const result = stringified.slice(0, -1);
+      result.push(`${conj} ${stringified.slice(-1)}`);
+      return result.join(", ");
+    }
+  }
 }

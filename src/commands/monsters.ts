@@ -24,7 +24,7 @@ async function getMonstersPage(query: MonstersReq = {}) {
  * collected across multiple pages of results as needed
  */
 export async function getMonsters(query?: Omit<NonNullable<MonstersReq>, "page" | "size">) {
-  return handlePaging<Monster, MonstersReq>(getMonstersPage, query);
+  return handlePaging<Monster, MonstersReq>(getCallerName(), getMonstersPage, query);
 }
 
 export default { get: getMonster, getAll: getMonsters };

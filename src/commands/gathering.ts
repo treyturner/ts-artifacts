@@ -1,6 +1,6 @@
 import { call, handleResponse, request } from "../http";
 import type { SkillData } from "../types";
-import { getCallerName, log } from "../util";
+import { getCallerName, grammarJoin, log } from "../util";
 
 export function gather() {
   const method = "POST";
@@ -36,12 +36,9 @@ export async function gatherContinuously() {
     }
     case 200: {
       const data = await handleResponse<SkillData>(callerName, response, { method, path });
-      log(
-        callerName,
-        `Your character successfully gathered ${data.details.items
-          .map((i) => `${i.quantity}x ${i.code}`)
-          .join(", ")}, gaining ${data.details.xp} xp.`,
-      );
+      const list = data && data.details.items.length > 0 ? ` ${grammarJoin(data?.details.items)}` : "";
+      const xp = data?.details.xp ? `, gaining ${data?.details.xp} xp` : "";
+      log(callerName, `Your character successfully gathered${list}${xp}.`);
       return gatherContinuously();
     }
     default: {

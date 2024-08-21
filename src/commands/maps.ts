@@ -24,7 +24,7 @@ async function getMapsPage(query: MapsReq) {
  * collected across multiple pages of results as needed
  */
 export async function getMaps(query?: Omit<NonNullable<MapsReq>, "page" | "size">) {
-  return handlePaging<Mapp, MapsReq>(getMapsPage, query);
+  return handlePaging<Mapp, MapsReq>(getCallerName(), getMapsPage, query);
 }
 
 export default { get: getMap, getAll: getMaps };

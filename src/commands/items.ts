@@ -64,7 +64,7 @@ async function getItemsPage(query: ItemsReq = {}) {
  * collected across multiple pages of results as needed
  */
 export async function getItems(query?: Omit<NonNullable<ItemsReq>, "page" | "size">) {
-  return handlePaging<Item, ItemsReq>(getItemsPage, query);
+  return handlePaging<Item, ItemsReq>(getCallerName(), getItemsPage, query);
 }
 
 export default { equip, unequip, discard, get: getItem, getAll: getItems };

@@ -7,6 +7,7 @@ import ge from "./commands/grand-exchange";
 import items from "./commands/items";
 import maps from "./commands/maps";
 import { move } from "./commands/movement";
+import resources from "./commands/resources";
 import tasks from "./commands/tasks";
 import { getCallerName, log, pp } from "./util";
 
@@ -16,7 +17,6 @@ import { getCallerName, log, pp } from "./util";
 
 // await fight.once();
 
-// await move(-1, 0);
 // await gather.continuously();
 
 // await move(2, 1);
@@ -24,8 +24,7 @@ import { getCallerName, log, pp } from "./util";
 // await craft("wooden_staff");
 // await items.equip("weapon", "wooden_staff");
 
-const q = [events.getAll()];
-
-for (const p of q) {
-  log(getCallerName(), pp(await p));
-}
+await move(0, 0);
+const copperRocks = (await maps.getAll({ content_type: "resource", content_code: "copper_rocks" })).at(0);
+await move(copperRocks);
+await gather.once();

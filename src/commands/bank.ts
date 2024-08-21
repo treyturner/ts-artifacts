@@ -41,7 +41,7 @@ async function getBankItemsPage(query: BankItemsReq) {
  * collected across multiple pages of results as needed
  */
 export async function getBankItems(query?: Omit<NonNullable<BankItemsReq>, "page" | "size">) {
-  return handlePaging<SimpleItem, BankItemsReq>(getBankItemsPage, query);
+  return handlePaging<SimpleItem, BankItemsReq>(getCallerName(), getBankItemsPage, query);
 }
 
 export async function getBankGold() {

@@ -24,7 +24,7 @@ async function getResourcePage(query: ResourcesReq = {}) {
  * collected across multiple pages of results as needed
  */
 export async function getResources(query?: Omit<NonNullable<ResourcesReq>, "page" | "size">) {
-  return handlePaging<Resource, ResourcesReq>(getResourcePage, query);
+  return handlePaging<Resource, ResourcesReq>(getCallerName(), getResourcePage, query);
 }
 
 export default { get: getResource, getAll: getResources };
