@@ -1,14 +1,16 @@
-import { call, handleResponse, request } from "../http";
+import { actionCall, handleResponse, request } from "../http";
 import type { SkillData } from "../types";
 import { getCallerName, grammarJoin, log } from "../util";
 
-export function gather() {
+export const gather = { continuously, once };
+
+function once() {
   const method = "POST";
   const path = "/my/{name}/action/gathering";
-  return call<SkillData>(getCallerName(), { method, path });
+  return actionCall<SkillData>(getCallerName(), { method, path });
 }
 
-export async function gatherContinuously() {
+async function continuously() {
   const method = "POST";
   const path = "/my/{name}/action/gathering";
   const response = await request(getCallerName(), { method, path });
@@ -39,7 +41,7 @@ export async function gatherContinuously() {
       const list = data && data.details.items.length > 0 ? ` ${grammarJoin(data?.details.items)}` : "";
       const xp = data?.details.xp ? `, gaining ${data?.details.xp} xp` : "";
       log(callerName, `Your character successfully gathered${list}${xp}.`);
-      return gatherContinuously();
+      return continuously();
     }
     default: {
       log(callerName, "An error occurred while gathering the resource.");
@@ -47,5 +49,3 @@ export async function gatherContinuously() {
   }
   return response;
 }
-
-export default { once: gather, continuously: gatherContinuously };

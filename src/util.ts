@@ -1,22 +1,6 @@
-import "dotenv";
 import { type InspectOptions, inspect } from "node:util";
+import { config } from "./config";
 import type { ImageType } from "./types";
-
-const { env } = process;
-
-if (!env.API_TOKEN || !env.CHARACTER) throw new Error("API_TOKEN and CHARACTER environment variables are required");
-
-const affirmative = ["1", "TRUE", "ON", "YES"];
-
-export const config = {
-  apiHost: env.API_HOST ?? "https://api.artifactsmmo.com",
-  apiToken: env.API_TOKEN,
-  name: env.CHARACTER,
-  logHttpRequests: affirmative.includes(env.LOG_HTTP_REQUESTS?.toUpperCase() ?? ""),
-  logHttpResponses: affirmative.includes(env.LOG_HTTP_RESPONSES?.toUpperCase() ?? ""),
-  hideCharacterInResponseLog: affirmative.includes(env.HIDE_CHARACTER_IN_RESPONSE?.toUpperCase() ?? ""),
-  hideCooldownInResponseLog: affirmative.includes(env.HIDE_COOLDOWN_IN_RESPONSE?.toUpperCase() ?? ""),
-};
 
 export function getImageUrl(type: ImageType, id: string) {
   return `${config.apiHost}/images/${type}s/${id}.png`;
@@ -44,6 +28,33 @@ type LogFunction = {
   // biome-ignore lint/suspicious/noExplicitAny: console.log accepts any
   (message?: any, ...optionalParams: any[]): void;
 };
+
+/**
+ * Return a copy of an object with all properties converted to strings.
+ * Useful for building query strings from objects.
+ **/
+// biome-ignore lint/suspicious/noExplicitAny: String() accepts any
+export function stringify(obj?: { [key: string]: any }): { [key: string]: string } {
+  return Object.fromEntries(
+    Object.entries(obj ?? {}).map(([k, v]) => {
+      if (typeof v === "string") return [k, v];
+      return [k, String(v)];
+    }),
+  );
+}
+
+/**
+ * Return a copy of an object with undefined properties removed.
+ * Used to sanitize headers when a request unsets a default value (ie. Authorization).
+ **/
+// biome-ignore lint/suspicious/noExplicitAny: Object.entries() accepts any
+export function stripUndefined(obj?: { [key: string]: any }): { [key: string]: NonNullable<any> } {
+  return Object.fromEntries(
+    Object.entries(obj ?? {}).map(([k, v]) => {
+      return typeof v !== "undefined" ? [k, v] : [];
+    }),
+  );
+}
 
 export function log(
   callerName: string,

@@ -1,22 +1,31 @@
-import { call } from "../http";
-import type { CharacterMovementData, MoveReq } from "../types";
-import { getCallerName } from "../util";
+import { actionCall } from "../http";
+import type { CharacterMovementData, MapContentType, MoveReq } from "../types";
+import { getCallerName, log } from "../util";
+import { maps } from "./maps";
 
-export function move(arg1: number, arg2: number): Promise<CharacterMovementData>;
-export function move(arg1?: MoveReq): Promise<CharacterMovementData>;
-export function move(arg1?: number | MoveReq, arg2?: number) {
+function to(x: number, y: number): Promise<CharacterMovementData>;
+function to(body?: MoveReq): Promise<CharacterMovementData>;
+function to(arg1?: number | MoveReq, arg2?: number) {
   const method = "POST";
   const path = "/my/{name}/action/move";
   const notThrowable = [490];
 
-  let body: MoveReq;
-  if (typeof arg1 === "number") {
-    if (typeof arg2 === "undefined") throw new Error("move arg2 unexpectedly undefined");
-    body = { x: arg1, y: arg2 };
-  } else if (typeof arg1 !== "undefined") body = arg1;
-  else throw new Error("move() was passed an undefined MoveReq");
+  if (typeof arg1 !== "undefined") {
+    let body: MoveReq;
 
-  return call<CharacterMovementData>(getCallerName(), { method, path, body, notThrowable });
+    if (typeof arg1 === "number") {
+      if (typeof arg2 === "undefined") throw new Error("move arg2 unexpectedly undefined");
+      body = { x: arg1, y: arg2 };
+    } else body = arg1;
+
+    return actionCall<CharacterMovementData>(getCallerName(), { method, path, body, notThrowable });
+  }
+  log(getCallerName(), "received undefined MoveReq", { logFn: console.warn });
 }
 
-export default { move };
+async function toA(content_type?: MapContentType, content_code?: string) {
+  const locs = await maps.getAll({ content_type, content_code });
+  return move.to(locs.at(0));
+}
+
+export const move = { to, toA };

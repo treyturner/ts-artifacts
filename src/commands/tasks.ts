@@ -1,23 +1,29 @@
-import { call } from "../http";
-import type { TaskData, TaskRewardData } from "../types";
+import { actionCall } from "../http";
+import type { TaskCancelled, TaskData, TaskRewardData } from "../types";
 import { getCallerName } from "../util";
 
-export function accept() {
+export const tasks = { accept, cancel, complete, exchange };
+
+function accept() {
   const method = "POST";
-  const path = "/my/{name}/action/task/exchange";
-  return call<TaskData>(getCallerName(), { method, path });
+  const path = "/my/{name}/action/task/new";
+  return actionCall<TaskData>(getCallerName(), { method, path });
 }
 
-export function exchange() {
+function exchange() {
   const method = "POST";
   const path = "/my/{name}/action/task/exchange";
-  return call<TaskRewardData>(getCallerName(), { method, path });
+  return actionCall<TaskRewardData>(getCallerName(), { method, path });
 }
 
-export function complete() {
+function complete() {
   const method = "POST";
   const path = "/my/{name}/action/task/complete";
-  return call<TaskRewardData>(getCallerName(), { method, path });
+  return actionCall<TaskRewardData>(getCallerName(), { method, path });
 }
 
-export default { accept, exchange, complete };
+function cancel() {
+  const method = "POST";
+  const path = "/my/{name}/action/task/cancel";
+  return actionCall<TaskCancelled>(getCallerName(), { method, path });
+}

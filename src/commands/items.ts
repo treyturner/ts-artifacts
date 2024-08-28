@@ -1,4 +1,4 @@
-import { call, callForInfo, callForPage, handlePaging } from "../http";
+import { actionCall, handlePaging, infoCall, pageCall } from "../http";
 import type {
   DataPage,
   DeleteItem,
@@ -16,55 +16,46 @@ import type {
 } from "../types";
 import { getCallerName } from "../util";
 
-export function equip(slot: EquipSlot, code: string) {
+export const items = { discard, equip, get, getAll, recycle, unequip };
+
+function equip(slot: EquipSlot, code: string, quantity?: number) {
   const method = "POST";
   const path = "/my/{name}/action/equip";
-  const body: EquipReq = { slot, code };
-  return call<Equip>(getCallerName(), { method, path, body });
+  const body: EquipReq = { slot, code, quantity };
+  return actionCall<Equip>(getCallerName(), { method, path, body });
 }
 
-export function unequip(slot: EquipSlot) {
+function unequip(slot: EquipSlot) {
   const method = "POST";
   const path = "/my/{name}/action/unequip";
-  const body = { slot };
-  return call<Equip>(getCallerName(), { method, path, body });
+  const body: UnequipReq = { slot };
+  return actionCall<Equip>(getCallerName(), { method, path, body });
 }
 
-export function discard(body: DeleteReq) {
+function discard(body: DeleteReq) {
   const method = "POST";
   const path = "/my/{name}/action/delete";
-  return call<DeleteItem>(getCallerName(), { method, path, body });
+  return actionCall<DeleteItem>(getCallerName(), { method, path, body });
 }
 
-export function recycle(body: RecycleReq) {
+function recycle(body: RecycleReq) {
   const method = "POST";
   const path = "/my/{name}/action/recycling";
-  return call<RecyclingData>(getCallerName(), { method, path, body });
+  return actionCall<RecyclingData>(getCallerName(), { method, path, body });
 }
 
-/** Get a single item by code */
-export async function getItem(query: ItemReq) {
+function get(query: ItemReq) {
   const method = "GET";
   const path = `/item/${query.code}`;
-  return callForInfo<SingleItem>(getCallerName(), { method, path });
+  return infoCall<SingleItem>(getCallerName(), { method, path });
 }
 
-/**
- * Get a data page of a list of items, potentially filtered by a query.
- * Intended to be wrapped by `handlePaging()`
- **/
-async function getItemsPage(query: ItemsReq = {}) {
-  const method = "GET";
-  const path = "/items/";
-  return callForPage<DataPage<Item>>(getCallerName(), { method, path, query });
-}
+function getAll(query?: Omit<NonNullable<ItemsReq>, "page" | "size">) {
+  const getItemsPage = (query: ItemsReq = {}) => {
+    const method = "GET";
+    const path = "/items";
+    return pageCall<DataPage<Item>>(getCallerName(), { method, path, query });
+  };
 
-/**
- * Return a complete set of items matching the query,
- * collected across multiple pages of results as needed
- */
-export async function getItems(query?: Omit<NonNullable<ItemsReq>, "page" | "size">) {
   return handlePaging<Item, ItemsReq>(getCallerName(), getItemsPage, query);
 }
-
-export default { equip, unequip, discard, get: getItem, getAll: getItems };

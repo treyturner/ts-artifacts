@@ -1,14 +1,16 @@
-import { call, handleResponse, request } from "../http";
+import { actionCall, handleResponse, request } from "../http";
 import type { CharacterFightData } from "../types";
 import { getCallerName, log } from "../util";
 
-export function fight() {
+export const fight = { continuously, once };
+
+function once() {
   const method = "POST";
   const path = "/my/{name}/action/fight";
-  return call<CharacterFightData>(getCallerName(), { method, path });
+  return actionCall<CharacterFightData>(getCallerName(), { method, path });
 }
 
-export async function fightContinuously() {
+async function continuously() {
   const method = "POST";
   const path = "/my/{name}/action/fight";
   const response = await request(getCallerName(), { method, path });
@@ -33,12 +35,10 @@ export async function fightContinuously() {
     case 200: {
       const data = await handleResponse<CharacterFightData>(callerName, response, { method, path });
       log(callerName, `The fight ended successfully.${data?.fight.result ? ` You have ${data.fight.result}.` : ""}`);
-      return fightContinuously();
+      return continuously();
     }
     default:
       log(callerName, "An error occurred during the fight.");
   }
   return response;
 }
-
-export default { once: fight, continuously: fightContinuously };

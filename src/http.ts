@@ -1,8 +1,9 @@
+import { config } from "./config";
 import type { Character, Cooldown, DataPage, DataPageReq } from "./types";
-import { config, getUnknownErrorText, log, pluralize, pp } from "./util";
+import { getUnknownErrorText, log, pluralize, pp, stringify, stripUndefined } from "./util";
 
 type SupportedMethod = "GET" | "POST";
-type HttpHeaders = { [key: string]: string };
+type HttpHeaders = { [key: string]: string | undefined };
 
 const defaultHeaders: HttpHeaders = {
   "Content-Type": "application/json",
@@ -25,13 +26,7 @@ function getUrl(templatePath: string, query?: { [key: string]: any }) {
 
 // biome-ignore lint/suspicious/noExplicitAny: String() accepts any
 function getQueryString(query?: { [key: string]: any }) {
-  const stringified: { [key: string]: string } = Object.fromEntries(
-    Object.entries(query ?? {}).map(([k, v]) => {
-      if (typeof v === "string") return [k, v];
-      return [k, String(v)];
-    }),
-  );
-  const params = new URLSearchParams(stringified);
+  const params = new URLSearchParams(stringify(stripUndefined(query)));
   let str = params.toString();
   if (str.length > 0) str = `?${str}`;
   return str;
@@ -71,7 +66,7 @@ type CallOptions = {
 };
 
 /** Call the API, wait for cooldown, and return the data property extracted from the body */
-export async function call<T extends MayHaveCooldown & MayHaveCharacter>(callerName: string, opts: CallOptions) {
+export async function actionCall<T extends MayHaveCooldown & MayHaveCharacter>(callerName: string, opts: CallOptions) {
   const response = await request(callerName, opts);
   const data = await handleResponse<T>(callerName, response, opts);
   return data;
@@ -81,7 +76,7 @@ export async function call<T extends MayHaveCooldown & MayHaveCharacter>(callerN
 export async function request(callerName: string, opts: CallOptions) {
   const fullOpts: Omit<FetchRequestInit, "body"> & { body?: string } = {
     method: opts.method,
-    headers: { ...defaultHeaders, ...opts.headers },
+    headers: stripUndefined({ ...defaultHeaders, ...opts.headers }),
     body: opts?.body ? JSON.stringify(opts.body) : undefined,
   };
 
@@ -134,7 +129,7 @@ async function handleCooldown<T extends MayHaveCooldown>(callerName: string, bod
 }
 
 /** Call the API for a DataPage and return the whole body (for page handling) */
-export async function callForPage<T extends DataPage>(callerName: string, opts: CallOptions) {
+export async function pageCall<T extends DataPage>(callerName: string, opts: CallOptions) {
   const response = await request(callerName, opts);
   const body: T = await handlePageResponse<T>(callerName, response, opts);
   return body;
@@ -180,8 +175,8 @@ export async function handlePaging<T, R extends DataPageReq | undefined>(
   return items;
 }
 
-/** Call the API for info (not requiring a cooldown) and return the extracted data property */
-export async function callForInfo<T>(callerName: string, opts: CallOptions) {
+/** Call the API for info (not requiring a cooldown) and return the complete response body */
+export async function infoCall<T>(callerName: string, opts: CallOptions) {
   const response = await request(callerName, opts);
   const body = await handleInfoResponse<T>(callerName, response, opts);
   return body;
@@ -191,10 +186,9 @@ export async function callForInfo<T>(callerName: string, opts: CallOptions) {
 async function handleInfoResponse<T>(callerName: string, response: Response, opts: CallOptions) {
   if (!response.ok) await throwNotOkResponse(response, opts);
   try {
-    const body = (await response.json()) as MayHaveData<T>;
+    const body = (await response.json()) as T;
     if (config.logHttpResponses) log(callerName, `Response: ${pp(body)}`);
     if (!body) throw new Error("Didn't receive a response body?");
-    if (!body.data) throw new Error("Didn't receive data property in response body?");
     return body;
   } catch (error: unknown) {
     throw new Error(getUnknownErrorText(error, "handling response"));
