@@ -33,7 +33,6 @@ describe("info calls", () => {
         expect(item).toBeObject();
         // biome-ignore lint/suspicious/noExplicitAny: type assert
         const itemObj = item as NonNullable<any>;
-        console.log(pp(itemObj));
         expect(itemObj.item).toBeObject();
         expect(itemObj.ge).toBeObject();
         validateItem(itemObj.item);
