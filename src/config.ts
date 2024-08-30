@@ -1,22 +1,82 @@
 import "dotenv";
+import type { RecursivePartial } from "./types";
+import { getCallerName, log, pp } from "./util";
 
 const { env } = process;
 
-if (!env.API_TOKEN && (!env.USERNAME || !env.PASSWORD))
-  throw new Error("API_TOKEN or (USERNAME and PASSWORD) environment variables are required");
+export type HasConfig = {
+  config: Config;
+};
 
-if (!env.CHARACTER) throw new Error("CHARACTER environment variable is required.");
+export type Config = {
+  apiHost: string;
+  username?: string;
+  password?: string;
+  apiToken?: string;
+  character?: string;
+  prefs: Preferences;
+};
 
-const affirmative = ["1", "TRUE", "ON", "YES"];
+export type Preferences = {
+  logHttpRequests: boolean;
+  logHttpResponses: boolean;
+  hideCharacterInResponseLog: boolean;
+  hideCooldownInResponseLog: boolean;
+};
 
-export const config = {
-  apiHost: env.API_HOST ?? "https://api.artifactsmmo.com",
-  apiToken: env.API_TOKEN,
-  username: env.USERNAME,
-  password: env.PASSWORD,
-  name: env.CHARACTER,
-  logHttpRequests: affirmative.includes(env.LOG_HTTP_REQUESTS?.toUpperCase() ?? ""),
-  logHttpResponses: affirmative.includes(env.LOG_HTTP_RESPONSES?.toUpperCase() ?? ""),
-  hideCharacterInResponseLog: affirmative.includes(env.HIDE_CHARACTER_IN_RESPONSE?.toUpperCase() ?? ""),
-  hideCooldownInResponseLog: affirmative.includes(env.HIDE_COOLDOWN_IN_RESPONSE?.toUpperCase() ?? ""),
+function meetsConfigMinimum(proposed?: Partial<Config>): proposed is Config {
+  if (!proposed) {
+    log(getCallerName(), "Config is undefined. Set environment variables or pass constructor arguments", {
+      logFn: console.error,
+    });
+    return false;
+  }
+
+  if (!proposed.apiToken && (!proposed.username || !proposed.password)) {
+    log(
+      getCallerName(),
+      "API token (or username and password) are required. Set environment variables or pass constructor arguments",
+      { logFn: console.error },
+    );
+    return false;
+  }
+
+  if (!/https?:\/\/.+\..+/.test(proposed.apiHost ?? "")) {
+    log(getCallerName(), `Supplied apiHost '${proposed.apiHost}' is invalid`, { logFn: console.error });
+    return false;
+  }
+
+  return true;
+}
+
+export const getConfig = (opts: RecursivePartial<Config> = {}): Config => {
+  const affirmative = ["1", "TRUE", "ON", "YES", "OPEN"];
+  const negative = ["0", "FALSE", "OFF", "NO", "CLOSE"];
+
+  const defaults: Config = {
+    apiHost: "https://api.artifactsmmo.com",
+    apiToken: env.API_TOKEN,
+    username: env.USERNAME,
+    password: env.PASSWORD,
+    character: env.CHARACTER,
+    prefs: {
+      logHttpRequests: affirmative.includes(env.LOG_HTTP_REQUESTS?.toUpperCase() ?? "1"),
+      logHttpResponses: affirmative.includes(env.LOG_HTTP_RESPONSES?.toUpperCase() ?? "1"),
+      hideCharacterInResponseLog: !negative.includes(env.HIDE_CHARACTER_IN_RESPONSE?.toUpperCase() ?? "1"),
+      hideCooldownInResponseLog: !negative.includes(env.HIDE_COOLDOWN_IN_RESPONSE?.toUpperCase() ?? "1"),
+    },
+  };
+
+  const { prefs: userPrefs, ...userOpts } = opts;
+
+  const prefs: Preferences = {
+    logHttpRequests: userPrefs?.logHttpRequests ?? defaults.prefs.logHttpRequests,
+    logHttpResponses: userPrefs?.logHttpResponses ?? defaults.prefs.logHttpResponses,
+    hideCharacterInResponseLog: userPrefs?.hideCharacterInResponseLog ?? defaults.prefs.hideCharacterInResponseLog,
+    hideCooldownInResponseLog: userPrefs?.hideCooldownInResponseLog ?? defaults.prefs.hideCooldownInResponseLog,
+  };
+
+  const config: Partial<Config> = { ...defaults, ...userOpts, prefs };
+  if (meetsConfigMinimum(config)) return config;
+  throw new Error(`Resolved an invalid config: ${pp(config)}`);
 };

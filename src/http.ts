@@ -1,24 +1,27 @@
-import { config } from "./config";
+import type { Config } from "./config";
 import type { Character, Cooldown, DataPage, DataPageReq } from "./types";
 import { getUnknownErrorText, log, pluralize, pp, stringify, stripUndefined } from "./util";
 
 type SupportedMethod = "GET" | "POST";
 type HttpHeaders = { [key: string]: string | undefined };
 
-const defaultHeaders: HttpHeaders = {
-  "Content-Type": "application/json",
-  Accept: "application/json",
-  Authorization: `Bearer ${config.apiToken}`,
-};
+function getDefaultHeaders(config: Config): HttpHeaders {
+  return {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    Authorization: `Bearer ${config.apiToken}`,
+  };
+}
 
-function replacePathTokens(template: string) {
-  const path = template.replaceAll(/\{name\}/g, config.name);
+function replacePathTokens(config: Config, template: string) {
+  if (!config.character) throw new Error("Character must be specified before calling an action that requires it");
+  const path = template.replaceAll(/\{name\}/g, config.character);
   return path;
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: String() accepts any
-function getUrl(templatePath: string, query?: { [key: string]: any }) {
-  const path = replacePathTokens(templatePath);
+function getUrl(config: Config, templatePath: string, query?: { [key: string]: any }) {
+  const path = replacePathTokens(config, templatePath);
   const queryStr = getQueryString(query);
   const url = config.apiHost + path + queryStr;
   return url;
@@ -51,7 +54,8 @@ interface ApiErrorResponseBody {
   };
 }
 
-type CallOptions = {
+export type CallOptions = {
+  config: Config;
   /** API uses only GET and POST */
   method: SupportedMethod;
   /** The tokenized path, ie. `/my/{name}/action/move` */
@@ -65,7 +69,10 @@ type CallOptions = {
   notThrowable?: number[];
 };
 
-/** Call the API, wait for cooldown, and return the data property extracted from the body */
+/**
+ * Call the API, wait for cooldown, and return the data property extracted from
+ * the body. Returns null on not-ok statuses configured to be non-throwable.
+ */
 export async function actionCall<T extends MayHaveCooldown & MayHaveCharacter>(callerName: string, opts: CallOptions) {
   const response = await request(callerName, opts);
   const data = await handleResponse<T>(callerName, response, opts);
@@ -76,14 +83,14 @@ export async function actionCall<T extends MayHaveCooldown & MayHaveCharacter>(c
 export async function request(callerName: string, opts: CallOptions) {
   const fullOpts: Omit<FetchRequestInit, "body"> & { body?: string } = {
     method: opts.method,
-    headers: stripUndefined({ ...defaultHeaders, ...opts.headers }),
+    headers: stripUndefined({ ...getDefaultHeaders(opts.config), ...opts.headers }),
     body: opts?.body ? JSON.stringify(opts.body) : undefined,
   };
 
   try {
-    const path = replacePathTokens(opts.path) + getQueryString(opts.query);
-    if (config.logHttpRequests) log(callerName, `Request: ${fullOpts.method} ${path} ${pp(opts.body)}`);
-    const url = getUrl(opts.path, opts.query);
+    const path = replacePathTokens(opts.config, opts.path) + getQueryString(opts.query);
+    if (opts.config.prefs.logHttpRequests) log(callerName, `Request: ${fullOpts.method} ${path} ${pp(opts.body)}`);
+    const url = getUrl(opts.config, opts.path, opts.query);
     const response = await fetch(url, fullOpts);
     return response;
   } catch (error: unknown) {
@@ -103,10 +110,10 @@ export async function handleResponse<T extends MayHaveCooldown & MayHaveCharacte
   }
   try {
     const body = (await response.json()) as MayHaveData<T>;
-    if (config.logHttpResponses) logHttpResponse(callerName, structuredClone(body));
+    if (opts.config.prefs.logHttpResponses) logActionResponse(opts.config, callerName, structuredClone(body));
     await handleCooldown<T>(callerName, body);
     if (response.ok && !body.data) throw new Error("Didn't receive data property in ok response body?");
-    return body.data;
+    return body.data ?? null;
   } catch (error: unknown) {
     throw new Error(getUnknownErrorText(error, "handling response"));
   }
@@ -150,6 +157,7 @@ async function handlePageResponse<T extends DataPage>(callerName: string, respon
 
 /** Page-handling wrapper for collecting all matching records across multiple data pages */
 export async function handlePaging<T, R extends DataPageReq | undefined>(
+  config: Config,
   callerName: string,
   getPageFn: (query: DataPageReq) => Promise<DataPage<T>>,
   query?: Omit<NonNullable<R>, "page" | "size">,
@@ -164,7 +172,7 @@ export async function handlePaging<T, R extends DataPageReq | undefined>(
     fullQuery.page++;
   } while (body.page && body.pages && body.pages > body.page);
 
-  if (config.logHttpResponses)
+  if (config.prefs.logHttpResponses)
     log(
       callerName,
       `Returned ${items.length} item${pluralize(items)}${
@@ -187,7 +195,7 @@ async function handleInfoResponse<T>(callerName: string, response: Response, opt
   if (!response.ok) await throwNotOkResponse(response, opts);
   try {
     const body = (await response.json()) as T;
-    if (config.logHttpResponses) log(callerName, `Response: ${pp(body)}`);
+    if (opts.config.prefs.logHttpResponses) log(callerName, `Response: ${pp(body)}`);
     if (!body) throw new Error("Didn't receive a response body?");
     return body;
   } catch (error: unknown) {
@@ -207,14 +215,19 @@ async function warnNotOkResponse(response: Response, opts: CallOptions, callerNa
 }
 
 async function getHttpErrorText(response: Response, opts: CallOptions, callerName?: string) {
-  const url = getUrl(opts.path, opts.query);
+  const url = getUrl(opts.config, opts.path, opts.query);
   const { error } = (await response.json()) as ApiErrorResponseBody;
   const statusTextStr: string = response.statusText ? ` (${response.statusText})` : "";
   return `${callerName ? `${callerName} r` : "R"}eceived HTTP ${response.status}${statusTextStr} from ${opts.method} ${url}: ${error.message}`;
 }
 
-function logHttpResponse<T extends MayHaveCharacter & MayHaveCooldown>(callerName: string, body: MayHaveData<T>) {
-  const { hideCharacterInResponseLog: hideChar, hideCooldownInResponseLog: hideCool } = config;
+/** Log an HTTP response, optionally stripping out cooldown and character objects for brevity */
+function logActionResponse<T extends MayHaveCharacter & MayHaveCooldown>(
+  config: Config,
+  callerName: string,
+  body: MayHaveData<T>,
+) {
+  const { hideCharacterInResponseLog: hideChar, hideCooldownInResponseLog: hideCool } = config.prefs;
   const clone = structuredClone(body);
   // biome-ignore lint/performance/noDelete: Much easier than any alternative; performance is not a concern
   if (clone.data?.character && hideChar) delete clone.data.character;

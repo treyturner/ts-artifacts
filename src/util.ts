@@ -1,9 +1,8 @@
 import { type InspectOptions, inspect } from "node:util";
-import { config } from "./config";
 import type { ImageType } from "./types";
 
-export function getImageUrl(type: ImageType, id: string) {
-  return `${config.apiHost}/images/${type}s/${id}.png`;
+export function getImageUrl(apiHost: string, type: ImageType, id: string) {
+  return `${apiHost}/images/${type}s/${id}.png`;
 }
 
 export function getUnknownErrorText(error: unknown, context?: string) {

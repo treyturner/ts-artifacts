@@ -1,6 +1,6 @@
 import type { components as Components, operations as Operations } from "../lib/api.generated";
 
-/** Re-export openapi-typescript generated types for convenience */
+/** Collect, organize, & re-export openapi-typescript generated types for convenience */
 
 // entrypoints
 export type {
@@ -126,3 +126,9 @@ export type DataPage<
   size: number | null;
   pages?: number | null;
 };
+
+/** Rolled up result of multiple bank item transactions */
+export type BankItems = Omit<Schemas["BankItemTransactionSchema"], "item"> & { items: Item[] };
+
+/** Utility types */
+export type RecursivePartial<T> = { [P in keyof T]?: RecursivePartial<T[P]> };

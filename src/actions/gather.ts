@@ -1,19 +1,22 @@
-import { actionCall, handleResponse, request } from "../http";
+import type { HasClient } from "..";
+import { actionCall, handleResponse, request, type CallOptions } from "../http";
 import type { SkillData } from "../types";
 import { getCallerName, grammarJoin, log } from "../util";
 
-export const gather = { continuously, once };
+export const gatherActions = { continuously, once };
 
-function once() {
+function once(this: HasClient) {
   const method = "POST";
   const path = "/my/{name}/action/gathering";
-  return actionCall<SkillData>(getCallerName(), { method, path });
+  const opts: CallOptions = { method, path, config: this.client.config };
+  return actionCall<SkillData>(getCallerName(), opts);
 }
 
-async function continuously() {
+async function continuously(this: HasClient): Promise<Response> {
   const method = "POST";
   const path = "/my/{name}/action/gathering";
-  const response = await request(getCallerName(), { method, path });
+  const opts: CallOptions = { method, path, config: this.client.config };
+  const response = await request(getCallerName(), opts);
   const callerName = getCallerName();
   switch (response.status) {
     case 498: {
@@ -37,11 +40,12 @@ async function continuously() {
       break;
     }
     case 200: {
-      const data = await handleResponse<SkillData>(callerName, response, { method, path });
+      const opts: CallOptions = { method, path, config: this.client.config };
+      const data = await handleResponse<SkillData>(callerName, response, opts);
       const list = data && data.details.items.length > 0 ? ` ${grammarJoin(data?.details.items)}` : "";
       const xp = data?.details.xp ? `, gaining ${data?.details.xp} xp` : "";
       log(callerName, `Your character successfully gathered${list}${xp}.`);
-      return continuously();
+      return continuously.call(this);
     }
     default: {
       log(callerName, "An error occurred while gathering the resource.");
