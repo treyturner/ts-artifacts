@@ -2,7 +2,7 @@
   "formatter": {
     "enabled": true,
     "formatWithErrors": false,
-    "ignore": [],
+    "ignore": ["src/lib/**/*.generated.d.ts"],
     "attributePosition": "auto",
     "indentStyle": "space",
     "indentWidth": 2,
@@ -24,5 +24,8 @@
     "formatter": {
       "trailingCommas": "none"
     }
+  },
+  "files": {
+    "ignore": ["dist/**/*.*"]
   }
 }

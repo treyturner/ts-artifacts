@@ -3,14 +3,16 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "check": "bun --silent run typecheck && bun --silent run lint && bun --silent run format",
-    "check:fix": "bun --silent run typecheck && bun --silent run lint:fix && bun --silent run format:fix",
-    "format": "biome format ./src",
-    "format:fix": "biome format --write ./src",
-    "generate": "bunx openapi-typescript https://api.artifactsmmo.com/openapi.json -o ./lib/api.generated.d.ts",
-    "lint": "biome lint --error-on-warnings ./src",
-    "lint:fix": "biome lint --error-on-warnings --fix ./src",
-    "typecheck": "tsc"
+    "build": "tsc -p src/tsconfig.json",
+    "check": "bun --silent run lint && bun --silent run format && bun --silent run typecheck",
+    "check:fix": "bun --silent run lint:fix && bun --silent run format:fix && bun --silent run typecheck",
+    "clean": "rm -rf dist",
+    "format": "biome format src/ test/",
+    "format:fix": "biome format --write src/ test/",
+    "generate": "openapi-typescript https://api.artifactsmmo.com/openapi.json -o ./lib/api.generated.d.ts",
+    "lint": "biome lint --error-on-warnings src/ test/",
+    "lint:fix": "biome lint --error-on-warnings --fix src/ test/",
+    "typecheck": "tsc -p src/tsconfig.json && tsc --noEmit -p test/tsconfig.json"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",

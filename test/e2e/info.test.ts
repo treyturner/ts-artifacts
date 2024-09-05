@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 import { ArtifactsApi } from "../../src";
-import { pp } from "../../src/util";
 
 let c: ArtifactsApi;
 

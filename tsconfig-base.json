@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "dist",
     "lib": [
       "ESNext"
     ],
@@ -10,9 +11,8 @@
     "allowJs": true,
     /* Bundler mode */
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    "allowImportingTsExtensions": false,
     "verbatimModuleSyntax": true,
-    "noEmit": true,
     /* Linting */
     "skipLibCheck": true,
     "strict": true,

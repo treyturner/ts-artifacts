@@ -1,4 +1,4 @@
-import type { components as Components, operations as Operations } from "../lib/api.generated";
+import type { components as Components, operations as Operations } from "./lib/api.generated";
 
 /** Collect, organize, & re-export openapi-typescript generated types for convenience */
 
@@ -7,7 +7,7 @@ export type {
   components as Components,
   operations as Operations,
   paths as Paths,
-} from "../lib/api.generated";
+} from "./lib/api.generated";
 export type Schemas = Components["schemas"];
 
 // request types

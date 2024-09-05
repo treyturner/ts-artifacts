@@ -23,16 +23,23 @@ export type HasClient = {
 export class ArtifactsApi {
   config: Config;
 
-  account;
-  bank;
-  craft;
-  exchange;
-  fight;
-  gather;
-  info;
-  items;
-  move;
-  tasks;
+  account: HasClient & typeof account & { bank: HasClient & typeof accountBank };
+  bank: HasClient & typeof bankActions;
+  craft: HasClient & typeof craftActions;
+  exchange: HasClient & typeof exchangeActions;
+  fight: HasClient & typeof fightActions;
+  gather: HasClient & typeof gatherActions;
+  info: HasClient &
+    typeof meta & {
+      exchange: HasClient & typeof exchangeInfo;
+      items: HasClient & typeof itemsInfo;
+      maps: HasClient & typeof mapsInfo;
+      monsters: HasClient & typeof monstersInfo;
+      resources: HasClient & typeof resourcesInfo;
+    };
+  items: HasClient & typeof itemActions;
+  move: HasClient & typeof moveActions;
+  tasks: HasClient & typeof taskActions;
 
   constructor(opts?: Omit<Partial<Config>, "prefs"> & { prefs?: Partial<Preferences> }) {
     this.config = getConfig(opts);
