@@ -1,9 +1,5 @@
-import type { Config } from "./config";
-import type { Character, Cooldown, DataPage, DataPageReq } from "./types";
+import type { CallOptions, Character, Config, Cooldown, DataPage, DataPageReq, HttpHeaders } from "./index";
 import { getUnknownErrorText, log, pluralize, pp, stringify, stripUndefined } from "./util";
-
-type SupportedMethod = "GET" | "POST";
-type HttpHeaders = { [key: string]: string | undefined };
 
 function getDefaultHeaders(config: Config): HttpHeaders {
   return {
@@ -53,21 +49,6 @@ interface ApiErrorResponseBody {
     message: string;
   };
 }
-
-export type CallOptions = {
-  config: Config;
-  /** API uses only GET and POST */
-  method: SupportedMethod;
-  /** The tokenized path, ie. `/my/{name}/action/move` */
-  path: string;
-  // biome-ignore lint/suspicious/noExplicitAny: String() accepts any
-  query?: { [key: string]: any };
-  headers?: HttpHeaders;
-  // biome-ignore lint/suspicious/noExplicitAny: JSON.stringify() accepts any
-  body?: any;
-  /** not-ok (4xx and 5xx) HTTP status codes which should NOT throw an exception */
-  notThrowable?: number[];
-};
 
 /**
  * Call the API, wait for cooldown, and return the data property extracted from
@@ -144,7 +125,7 @@ export async function pageCall<T extends DataPage>(callerName: string, opts: Cal
 
 /** API response handler for DataPages */
 async function handlePageResponse<T extends DataPage>(callerName: string, response: Response, opts: CallOptions) {
-  if (!response.ok) await throwNotOkResponse(response, opts);
+  if (!response.ok) await throwNotOkResponse(response, opts, callerName);
   try {
     const body = (await response.json()) as T;
     if (!body) throw new Error("Didn't receive a response body?");

@@ -1,6 +1,6 @@
 import type { HasClient } from "..";
-import { type CallOptions, handlePaging, infoCall, pageCall } from "../http";
-import type { Bank, BankItemsReq, DataPage, Gold, SimpleItem } from "../types";
+import { handlePaging, infoCall, pageCall } from "../http";
+import type { Bank, BankItemsReq, CallOptions, DataPage, DataPageQuery, Gold, SimpleItem } from "../index";
 import { getCallerName } from "../util";
 
 export const accountBank = { getDetails, getItems };
@@ -13,7 +13,7 @@ async function getDetails(this: HasClient) {
   return responseBody.data;
 }
 
-function getItems(this: HasClient, query?: Omit<NonNullable<BankItemsReq>, "page" | "size">) {
+function getItems(this: HasClient, query?: DataPageQuery<BankItemsReq>) {
   const getItemsPage = (query: BankItemsReq) => {
     const method = "GET";
     const path = "/my/bank/items";

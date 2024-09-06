@@ -1,14 +1,16 @@
 import type { HasClient } from "..";
-import { type CallOptions, handlePaging, infoCall, pageCall } from "../http";
+import { handlePaging, infoCall, pageCall } from "../http";
 import type {
   Achievement,
   AddCharacterReq,
+  CallOptions,
   Character,
   CharacterAchievementsReq,
   DataPage,
+  DataPageQuery,
   DataPageReq,
   DeleteCharacterReq,
-} from "../types";
+} from "../index";
 import { getCallerName } from "../util";
 
 export const characters = { create, destroy, getAchievements, getAll };
@@ -38,7 +40,7 @@ function getAll(this: HasClient) {
   return handlePaging<Character, DataPageReq>(this.client.config, getCallerName(), getCharactersPage);
 }
 
-function getAchievements(this: HasClient, query?: Omit<NonNullable<CharacterAchievementsReq>, "page" | "size">) {
+function getAchievements(this: HasClient, query?: DataPageQuery<CharacterAchievementsReq>) {
   const getAchievementsPage = (query: CharacterAchievementsReq = {}) => {
     const method = "GET";
     const path = "/characters/{name}/achievements";

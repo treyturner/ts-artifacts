@@ -1,7 +1,10 @@
 {
-  "name": "ts-artifacts-mmo-sandbox",
+  "name": "ts-artifacts-api-client",
   "module": "index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
+  "version": "0.0.1",
   "scripts": {
     "build": "tsc -p src/tsconfig.json",
     "check": "bun --silent run lint && bun --silent run format && bun --silent run typecheck",
@@ -12,12 +15,17 @@
     "generate": "openapi-typescript https://api.artifactsmmo.com/openapi.json -o ./lib/api.generated.d.ts",
     "lint": "biome lint --error-on-warnings src/ test/",
     "lint:fix": "biome lint --error-on-warnings --fix src/ test/",
-    "typecheck": "tsc -p src/tsconfig.json && tsc --noEmit -p test/tsconfig.json"
+    "prepare": "husky",
+    "typecheck": "tsc -p src/tsconfig.json && tsc --noEmit -p test/tsconfig.json && bun --silent run clean"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
+    "@commitlint/cli": "19.4.1",
+    "@commitlint/config-conventional": "19.4.1",
     "@types/bun": "latest",
-    "dotenv": "16.4.5"
+    "cz-conventional-changelog": "3.3.0",
+    "dotenv": "16.4.5",
+    "husky": "9.1.5"
   },
   "peerDependencies": {
     "typescript": "5.5.4"

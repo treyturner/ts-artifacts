@@ -1,6 +1,11 @@
 {
   "recommendations": [
     "biomejs.biome",
-    "oven.bun-vscode"
+    "oven.bun-vscode",
+    "github.vscode-github-actions",
+    "fcrespo82.markdown-table-formatter",
+    "davidanson.vscode-markdownlint",
+    "mxsdev.typescript-explorer",
+    "knisterpeter.vscode-commitizen"
   ]
 }

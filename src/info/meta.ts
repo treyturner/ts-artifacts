@@ -1,41 +1,9 @@
 import type { HasClient } from "..";
-import { type CallOptions, handlePaging, infoCall, pageCall } from "../http";
-import type {
-  AchievementReq,
-  AchievementsReq,
-  ActiveEvent,
-  BaseAchievement,
-  DataPage,
-  DataPageReq,
-  ServerStatus,
-} from "../types";
+import { handlePaging, infoCall, pageCall } from "../http";
+import type { ActiveEvent, CallOptions, DataPage, DataPageReq, ServerStatus } from "../index";
 import { getCallerName } from "../util";
 
-export const meta = { getAchievement, getAchievements, getEvents, getLeaderboard, getServerStatus };
-
-async function getAchievement(this: HasClient, query: AchievementReq) {
-  const method = "GET";
-  const path = `/achievements/${query.code}`;
-  const opts: CallOptions = { method, path, config: this.client.config };
-  const responseBody = await infoCall<{ data: BaseAchievement }>(getCallerName(), opts);
-  return responseBody.data;
-}
-
-function getAchievements(this: HasClient, query?: Omit<NonNullable<AchievementsReq>, "page" | "size">) {
-  const getAchievementsPage = (query: AchievementsReq = {}) => {
-    const method = "GET";
-    const path = "/achievements";
-    const opts: CallOptions = { method, path, query, config: this.client.config };
-    return pageCall<DataPage<BaseAchievement>>(getCallerName(), opts);
-  };
-
-  return handlePaging<BaseAchievement, AchievementsReq>(
-    this.client.config,
-    getCallerName(),
-    getAchievementsPage,
-    query,
-  );
-}
+export const metaInfo = { getEvents, getLeaderboard, getServerStatus };
 
 function getEvents(this: HasClient) {
   const getEventsPage = (query: DataPageReq = {}) => {

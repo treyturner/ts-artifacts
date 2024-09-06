@@ -1,6 +1,6 @@
 import type { HasClient } from "..";
-import { type CallOptions, handlePaging, infoCall, pageCall } from "../http";
-import type { DataPage, Item, ItemReq, ItemsReq, SingleItem } from "../types";
+import { handlePaging, infoCall, pageCall } from "../http";
+import type { CallOptions, DataPage, DataPageQuery, Item, ItemReq, ItemsReq, SingleItem } from "../index";
 import { getCallerName } from "../util";
 
 export const itemsInfo = { get, getAll };
@@ -13,7 +13,7 @@ async function get(this: HasClient, query: ItemReq) {
   return responseBody.data;
 }
 
-function getAll(this: HasClient, query?: Omit<NonNullable<ItemsReq>, "page" | "size">) {
+function getAll(this: HasClient, query?: DataPageQuery<ItemsReq>) {
   const getItemsPage = (query: ItemsReq = {}) => {
     const method = "GET";
     const path = "/items";

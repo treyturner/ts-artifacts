@@ -1,6 +1,6 @@
 import type { HasClient } from "..";
-import { type CallOptions, actionCall, handleResponse, request } from "../http";
-import type { CharacterFightData } from "../types";
+import { actionCall, handleResponse, request } from "../http";
+import type { CallOptions, CharacterFightData } from "../index";
 import { getCallerName, log } from "../util";
 
 export const fightActions = { continuously, once };

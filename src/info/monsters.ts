@@ -1,6 +1,6 @@
 import type { HasClient } from "..";
-import { type CallOptions, handlePaging, infoCall, pageCall } from "../http";
-import type { DataPage, Monster, MonsterReq, MonstersReq } from "../types";
+import { handlePaging, infoCall, pageCall } from "../http";
+import type { CallOptions, DataPage, DataPageQuery, Monster, MonsterReq, MonstersReq } from "../index";
 import { getCallerName } from "../util";
 
 export const monstersInfo = { get, getAll };
@@ -13,7 +13,7 @@ async function get(this: HasClient, query: MonsterReq) {
   return responseBody.data;
 }
 
-function getAll(this: HasClient, query?: Omit<NonNullable<MonstersReq>, "page" | "size">) {
+function getAll(this: HasClient, query?: DataPageQuery<MonstersReq>) {
   const getMonstersPage = (query: MonstersReq = {}) => {
     const method = "GET";
     const path = "/monster";

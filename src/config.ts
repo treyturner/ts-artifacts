@@ -1,28 +1,8 @@
 import "dotenv";
-import type { RecursivePartial } from "./types";
+import type { Config, Preferences, RecursivePartial } from "./index";
 import { getCallerName, log, pp } from "./util";
 
 const { env } = process;
-
-export type HasConfig = {
-  config: Config;
-};
-
-export type Config = {
-  apiHost: string;
-  username?: string;
-  password?: string;
-  apiToken?: string;
-  character?: string;
-  prefs: Preferences;
-};
-
-export type Preferences = {
-  logHttpRequests: boolean;
-  logHttpResponses: boolean;
-  hideCharacterInResponseLog: boolean;
-  hideCooldownInResponseLog: boolean;
-};
 
 function meetsConfigMinimum(proposed?: Partial<Config>): proposed is Config {
   if (!proposed) {
@@ -54,16 +34,16 @@ export const getConfig = (opts: RecursivePartial<Config> = {}): Config => {
   const negative = ["0", "FALSE", "OFF", "NO", "CLOSE"];
 
   const defaults: Config = {
-    apiHost: "https://api.artifactsmmo.com",
-    apiToken: env.API_TOKEN,
-    username: env.USERNAME,
-    password: env.PASSWORD,
-    character: env.CHARACTER,
+    apiHost: env.ARTIFACTS_API_BASEURL ?? "https://api.artifactsmmo.com",
+    apiToken: env.ARTIFACTS_API_TOKEN,
+    username: env.ARTIFACTS_USERNAME,
+    password: env.ARTIFACTS_PASSWORD,
+    character: env.ARTIFACTS_CHARACTER,
     prefs: {
-      logHttpRequests: affirmative.includes(env.LOG_HTTP_REQUESTS?.toUpperCase() ?? "1"),
-      logHttpResponses: affirmative.includes(env.LOG_HTTP_RESPONSES?.toUpperCase() ?? "1"),
-      hideCharacterInResponseLog: !negative.includes(env.HIDE_CHARACTER_IN_RESPONSE?.toUpperCase() ?? "1"),
-      hideCooldownInResponseLog: !negative.includes(env.HIDE_COOLDOWN_IN_RESPONSE?.toUpperCase() ?? "1"),
+      logHttpRequests: affirmative.includes(env.ARTIFACTS_LOG_HTTP_REQUESTS?.toUpperCase() ?? "1"),
+      logHttpResponses: affirmative.includes(env.ARTIFACTS_LOG_HTTP_RESPONSES?.toUpperCase() ?? "1"),
+      hideCharacterInResponseLog: !negative.includes(env.ARTIFACTS_HIDE_CHARACTER_IN_RESPONSE?.toUpperCase() ?? "1"),
+      hideCooldownInResponseLog: !negative.includes(env.ARTIFACTS_HIDE_COOLDOWN_IN_RESPONSE?.toUpperCase() ?? "1"),
     },
   };
 

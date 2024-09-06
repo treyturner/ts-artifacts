@@ -2,12 +2,15 @@
   "formatter": {
     "enabled": true,
     "formatWithErrors": false,
-    "ignore": ["src/lib/**/*.generated.d.ts"],
     "attributePosition": "auto",
     "indentStyle": "space",
     "indentWidth": 2,
     "lineWidth": 120,
-    "lineEnding": "lf"
+    "lineEnding": "lf",
+    "ignore": ["dist"]
+  },
+  "linter": {
+    "ignore": ["dist"]
   },
   "javascript": {
     "formatter": {
@@ -24,8 +27,5 @@
     "formatter": {
       "trailingCommas": "none"
     }
-  },
-  "files": {
-    "ignore": ["dist/**/*.*"]
   }
 }

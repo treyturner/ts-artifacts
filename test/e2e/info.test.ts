@@ -54,7 +54,7 @@ describe("info calls", () => {
   describe("meta", () => {
     describe("server status", () => {
       it("can be retrieved", async () => {
-        const data = await c.info.getServerStatus();
+        const data = await c.info.meta.getServerStatus();
         expect(data.status).toBe("online");
       });
     });

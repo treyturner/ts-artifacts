@@ -1,11 +1,11 @@
 import type { HasClient } from "..";
-import { handlePaging, infoCall, pageCall, type CallOptions } from "../http";
-import type { DataPage, GEItem, GEItemReq, GEItemsReq } from "../types";
+import { handlePaging, infoCall, pageCall } from "../http";
+import type { CallOptions, DataPage, DataPageQuery, GEItem, GEItemReq, GEItemsReq } from "../index";
 import { getCallerName } from "../util";
 
-export const exchangeInfo = { getItem, getItems };
+export const exchangeItemsInfo = { get, getAll };
 
-async function getItem(this: HasClient, query: GEItemReq) {
+async function get(this: HasClient, query: GEItemReq) {
   const method = "GET";
   const path = `/ge/${query.code}`;
   const opts: CallOptions = { method, path, config: this.client.config };
@@ -13,7 +13,7 @@ async function getItem(this: HasClient, query: GEItemReq) {
   return responseBody.data;
 }
 
-function getItems(this: HasClient, query?: Omit<NonNullable<GEItemsReq>, "page" | "size">) {
+function getAll(this: HasClient, query?: DataPageQuery<GEItemsReq>) {
   const getItemsPage = (query: GEItemsReq) => {
     const method = "GET";
     const path = "/ge";

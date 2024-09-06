@@ -1,6 +1,14 @@
 import type { HasClient } from "..";
-import { type CallOptions, actionCall } from "../http";
-import type { BankExtensionTransaction, BankItem, GoldReq, GoldTransaction, Item, SimpleItem } from "../types";
+import { actionCall } from "../http";
+import type {
+  BankExtensionTransaction,
+  BankItem,
+  CallOptions,
+  GoldReq,
+  GoldTransaction,
+  Item,
+  SimpleItem,
+} from "../index";
 import { getCallerName } from "../util";
 
 export const bankActions = {

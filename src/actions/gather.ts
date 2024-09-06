@@ -1,6 +1,5 @@
-import type { HasClient } from "..";
-import { actionCall, handleResponse, request, type CallOptions } from "../http";
-import type { SkillData } from "../types";
+import { actionCall, handleResponse, request } from "../http";
+import type { CallOptions, HasClient, SkillData } from "../index";
 import { getCallerName, grammarJoin, log } from "../util";
 
 export const gatherActions = { continuously, once };

@@ -1,6 +1,6 @@
 import type { HasClient } from "..";
-import { type CallOptions, handlePaging, infoCall, pageCall } from "../http";
-import type { DataPage, Resource, ResourceReq, ResourcesReq } from "../types";
+import { handlePaging, infoCall, pageCall } from "../http";
+import type { CallOptions, DataPage, DataPageQuery, Resource, ResourceReq, ResourcesReq } from "../index";
 import { getCallerName } from "../util";
 
 export const resourcesInfo = { get, getAll };
@@ -13,7 +13,7 @@ async function get(this: HasClient, query: ResourceReq) {
   return responseBody.data;
 }
 
-function getAll(this: HasClient, query?: Omit<NonNullable<ResourcesReq>, "page" | "size">) {
+function getAll(this: HasClient, query?: DataPageQuery<ResourcesReq>) {
   const getResourcePage = (query: ResourcesReq = {}) => {
     const method = "GET";
     const path = "/resources";
