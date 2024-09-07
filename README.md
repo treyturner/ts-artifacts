@@ -140,9 +140,9 @@ client
 │   ├── to(x, y)
 │   ├── to({ x, y })
 │   └── toA(contentType, contentCode)
-├── tasks
-│   ├── accept()
-│   ├── cancel()
-│   ├── complete()
-│   └── exchange()
+└── tasks
+    ├── accept()
+    ├── cancel()
+    ├── complete()
+    └── exchange()
 ```
