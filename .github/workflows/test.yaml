@@ -5,6 +5,10 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   check-and-test:
     runs-on: ubuntu-latest
+    env:
+      ARTIFACTS_USERNAME: ${{ secrets.ARTIFACTS_USERNAME }}
+      ARTIFACTS_PASSWORD: ${{ secrets.ARTIFACTS_PASSWORD }}
+      ARTIFACTS_CHARACTER: ${{ secrets.ARTIFACTS_CHARACTER }}
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
