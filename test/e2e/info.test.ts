@@ -54,9 +54,32 @@ describe("info calls", () => {
   describe("meta", () => {
     describe("server status", () => {
       it("can be retrieved", async () => {
+        // biome-ignore lint/suspicious/noExplicitAny: type assert
+        const isValidAnnouncement = (a: any) => {
+          expect(a.message).toBeString();
+          expect(a.created_at).toBeString();
+          return true;
+        };
         const data = await c.info.meta.getServerStatus();
+        expect(data.status).toBeString();
         expect(data.status).toBe("online");
+        if (typeof data.version !== "undefined") expect(data.version).toBeString();
+        expect(data.max_level).toBeNumber();
+        expect(data.characters_online).toBeNumber();
+        expect(data.server_time).toBeString();
+        expect(data.announcements).toBeArray();
+        expect(data.announcements.every((e) => isValidAnnouncement(e))).toBeTrue();
+        expect(data.last_wipe).toBeString();
+        expect(data.next_wipe).toBeString();
       });
+    });
+
+    describe("leaderboard", () => {
+      it.todo("can be retrieved", async () => {});
+    });
+
+    describe("events", () => {
+      it.todo("can be retrieved", async () => {});
     });
   });
 });
