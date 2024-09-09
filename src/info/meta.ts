@@ -13,7 +13,7 @@ function getEvents(this: HasClient) {
     return pageCall<DataPage<ActiveEvent>>(getCallerName(), opts);
   };
 
-  return handlePaging<ActiveEvent, DataPageReq>(this.client.config, getCallerName(), getEventsPage);
+  return handlePaging<ActiveEvent, undefined>(this.client.config, getCallerName(), getEventsPage);
 }
 
 function getLeaderboard(this: HasClient) {
@@ -24,7 +24,7 @@ function getLeaderboard(this: HasClient) {
     return pageCall<DataPage<ActiveEvent>>(getCallerName(), opts);
   };
 
-  return handlePaging<ActiveEvent, DataPageReq>(this.client.config, getCallerName(), getLeaderboardPage);
+  return handlePaging<ActiveEvent, undefined>(this.client.config, getCallerName(), getLeaderboardPage);
 }
 
 async function getServerStatus(this: HasClient) {

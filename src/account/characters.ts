@@ -1,4 +1,4 @@
-import type { HasClient } from "..";
+import type { HasClient, Log } from "..";
 import { handlePaging, infoCall, pageCall } from "../http";
 import type {
   Achievement,
@@ -13,20 +13,22 @@ import type {
 } from "../index";
 import { getCallerName } from "../util";
 
-export const characters = { create, destroy, getAchievements, getAll };
+export const characters = { create, destroy, getAchievements, getAll, getAllLogs };
 
-function create(this: HasClient, body: AddCharacterReq) {
+async function create(this: HasClient, body: AddCharacterReq) {
   const method = "POST";
   const path = "/characters/create";
   const opts: CallOptions = { method, path, body, config: this.client.config };
-  return infoCall<Character>(getCallerName(), opts);
+  const responseBody = await infoCall<{ data: Character }>(getCallerName(), opts);
+  return responseBody.data;
 }
 
-function destroy(this: HasClient, body: DeleteCharacterReq) {
+async function destroy(this: HasClient, body: DeleteCharacterReq) {
   const method = "POST";
   const path = "/characters/delete";
   const opts: CallOptions = { method, path, body, config: this.client.config };
-  return infoCall<Character>(getCallerName(), opts);
+  const responseBody = await infoCall<{ data: Character }>(getCallerName(), opts);
+  return responseBody.data;
 }
 
 function getAll(this: HasClient) {
@@ -37,7 +39,18 @@ function getAll(this: HasClient) {
     return pageCall<DataPage<Character>>(getCallerName(), opts);
   };
 
-  return handlePaging<Character, DataPageReq>(this.client.config, getCallerName(), getCharactersPage);
+  return handlePaging<Character, undefined>(this.client.config, getCallerName(), getCharactersPage);
+}
+
+function getAllLogs(this: HasClient) {
+  const getLogsPage = (query: DataPageReq = {}) => {
+    const method = "GET";
+    const path = "/my/logs";
+    const opts: CallOptions = { method, path, query, config: this.client.config };
+    return pageCall<DataPage<Log>>(getCallerName(), opts);
+  };
+
+  return handlePaging<Log, undefined>(this.client.config, getCallerName(), getLogsPage);
 }
 
 function getAchievements(this: HasClient, query?: DataPageQuery<CharacterAchievementsReq>) {
