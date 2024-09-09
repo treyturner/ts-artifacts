@@ -1,10 +1,14 @@
 {
-  "name": "ts-artifacts-api-client",
+  "name": "@trey.turner/artifacts-api-client",
+  "version": "1.0.0",
   "module": "index.ts",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
-  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/treyturner/ts-artifacts-api-client.git"
+  },
   "scripts": {
     "build": "tsc -p src/tsconfig.json",
     "check": "bun --silent run lint && bun --silent run format && bun --silent run typecheck",
