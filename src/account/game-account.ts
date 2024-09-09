@@ -13,17 +13,19 @@ async function getToken(this: HasClient, username = process.env.USERNAME, passwo
   return (await infoCall<TokenResponse>(getCallerName(), opts)).token;
 }
 
-function create(this: HasClient, body: AddAccountReq) {
+async function create(this: HasClient, body: AddAccountReq) {
   const method = "POST";
   const path = "/accounts/create";
   const headers = { Authorization: undefined };
   const opts: CallOptions = { method, path, headers, body, config: this.client.config };
-  return infoCall<Response>(getCallerName(), opts);
+  const responseBody = await infoCall<Response>(getCallerName(), opts);
+  return responseBody.message;
 }
 
-function changePassword(this: HasClient, body: ChangePasswordReq) {
+async function changePassword(this: HasClient, body: ChangePasswordReq) {
   const method = "POST";
   const path = "/my/change_password";
   const opts: CallOptions = { method, path, body, config: this.client.config };
-  return infoCall<Response>(getCallerName(), opts);
+  const responseBody = await infoCall<Response>(getCallerName(), opts);
+  return responseBody.message;
 }
