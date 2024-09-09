@@ -1,6 +1,6 @@
 # ts-artifacts-api-client
 
-TypeScript API client for [Artifacts MMO](https://artifactsmmo.com).
+`@trey.turner/artifacts-api-client` is an API client for [Artifacts MMO](https://artifactsmmo.com) written in TypeScript.
 
 ## Development Status
 
@@ -40,13 +40,16 @@ Create an `.env` file in the repo root or use any other means to supply values t
 import { ArtifactsApi } from './index';
 
 const client = new ArtifactsApi({
+  // To make authenticated requests, provide either a username and password
   username: "foo",
   password: "bar",
-  // Everything else is optional (though character is recommended)
+  // or an API token
+  apiToken: "abc123",
+  // Everything else is optional (though character is required to take any action)
   character: "Ness",      
   prefs: {
-    logHttpRequests: false,
-    logHttpResponses: false,
+    logHttpRequests: true,
+    logHttpResponses: true,
     hideCharacterInResponseLog: true,
     hideCooldownInResponseLog: true,
   },
@@ -86,7 +89,8 @@ client
 │   │   ├── create()
 │   │   ├── destroy()
 │   │   ├── getAchievements()
-│   │   └── getAll()
+│   │   ├── getAll()
+│   │   └── getAllLogs()
 │   ├── create()
 │   └── getToken()
 ├── bank
