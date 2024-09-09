@@ -6,7 +6,7 @@ import { getCallerName } from "../util";
 export const accountBank = { getDetails, getItems };
 
 async function getDetails(this: HasClient) {
-  const method = "POST";
+  const method = "GET";
   const path = "/my/bank";
   const opts: CallOptions = { method, path, config: this.client.config };
   const responseBody = await infoCall<{ data: Bank }>(getCallerName(), opts);
