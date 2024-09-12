@@ -1,6 +1,5 @@
-import type { HasClient } from "..";
 import { handlePaging, infoCall, pageCall } from "../http";
-import type { CallOptions, DataPage, DataPageQuery, MapReq, Mapp, MapsReq } from "../index";
+import type { CallOptions, DataPage, DataPageQuery, HasClient, MapReq, Mapp, MapsReq } from "../index";
 import { getCallerName } from "../util";
 
 export const mapsInfo = { get, getAll };
@@ -8,7 +7,7 @@ export const mapsInfo = { get, getAll };
 function get(this: HasClient, query: MapReq) {
   const method = "GET";
   const path = `/maps/${query.x}/${query.y}`;
-  const opts: CallOptions = { config: this.client.config, method, path };
+  const opts: CallOptions = { auth: false, method, path, client: this.client };
   return infoCall<Mapp>(getCallerName(), opts);
 }
 
@@ -16,7 +15,7 @@ function getAll(this: HasClient, query?: DataPageQuery<MapsReq>) {
   const getMapsPage = (query: MapsReq) => {
     const method = "GET";
     const path = "/maps";
-    const opts: CallOptions = { config: this.client.config, method, path, query };
+    const opts: CallOptions = { auth: false, method, path, query, client: this.client };
     return pageCall<DataPage<Mapp>>(getCallerName(), opts);
   };
 

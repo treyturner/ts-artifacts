@@ -1,5 +1,5 @@
-import type { HasClient } from "..";
 import { actionCall } from "../http";
+import type { HasClient } from "../index";
 import type { CallOptions, CharacterMovementData, MapContentType, MoveReq } from "../index";
 import { getCallerName, log } from "../util";
 
@@ -19,7 +19,7 @@ function to(this: HasClient, arg1?: number | MoveReq, arg2?: number) {
       if (typeof arg2 === "undefined") throw new Error("move() y coordinate undefined when x coordinate is a number");
       body = { x: arg1, y: arg2 };
     } else body = arg1;
-    const opts: CallOptions = { method, path, body, notThrowable, config: this.client.config };
+    const opts: CallOptions = { auth: true, method, path, body, notThrowable, client: this.client };
     return actionCall<CharacterMovementData>(getCallerName(), opts);
   }
   log(getCallerName(), "received undefined MoveReq", { logFn: console.warn });

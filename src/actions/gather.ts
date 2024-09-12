@@ -7,14 +7,14 @@ export const gatherActions = { continuously, once };
 function once(this: HasClient) {
   const method = "POST";
   const path = "/my/{name}/action/gathering";
-  const opts: CallOptions = { method, path, config: this.client.config };
+  const opts: CallOptions = { auth: true, method, path, client: this.client };
   return actionCall<SkillData>(getCallerName(), opts);
 }
 
 async function continuously(this: HasClient): Promise<Response> {
   const method = "POST";
   const path = "/my/{name}/action/gathering";
-  const opts: CallOptions = { method, path, config: this.client.config };
+  const opts: CallOptions = { auth: true, method, path, client: this.client };
   const response = await request(getCallerName(), opts);
   const callerName = getCallerName();
   switch (response.status) {
@@ -39,7 +39,7 @@ async function continuously(this: HasClient): Promise<Response> {
       break;
     }
     case 200: {
-      const opts: CallOptions = { method, path, config: this.client.config };
+      const opts: CallOptions = { auth: true, method, path, client: this.client };
       const data = await handleResponse<SkillData>(callerName, response, opts);
       const list = data && data.details.items.length > 0 ? ` ${grammarJoin(data?.details.items)}` : "";
       const xp = data?.details.xp ? `, gaining ${data?.details.xp} xp` : "";

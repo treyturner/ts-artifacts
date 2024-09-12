@@ -1,25 +1,36 @@
-import type { CallOptions, Character, Config, Cooldown, DataPage, DataPageReq, HttpHeaders } from "./index";
-import { getUnknownErrorText, log, pluralize, pp, stringify, stripUndefined } from "./util";
+import type {
+  ArtifactsApi,
+  CallOptions,
+  Character,
+  Config,
+  Cooldown,
+  DataPage,
+  DataPageReq,
+  HttpHeaders,
+} from "./index";
+import { getCallerName, getUnknownErrorText, log, pluralize, pp, stringify, stripUndefined } from "./util";
 
 function getDefaultHeaders(config: Config): HttpHeaders {
-  return {
+  const headers: HttpHeaders = {
     "Content-Type": "application/json",
     Accept: "application/json",
-    Authorization: `Bearer ${config.apiToken}`,
   };
+  if (config.apiToken) headers.Authorization = `Bearer ${config.apiToken}`;
+  return headers;
 }
 
-function replacePathTokens(config: Config, template: string) {
-  if (!config.character) throw new Error("Character must be specified before calling an action that requires it");
-  const path = template.replaceAll(/\{name\}/g, config.character);
+function replacePathTokens(client: ArtifactsApi, template: string) {
+  if (!client.config.character)
+    throw new Error("Character must be specified before calling an action that requires it");
+  const path = template.replaceAll(/\{name\}/g, client.config.character);
   return path;
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: String() accepts any
-function getUrl(config: Config, templatePath: string, query?: { [key: string]: any }) {
-  const path = replacePathTokens(config, templatePath);
+function getUrl(client: ArtifactsApi, templatePath: string, query?: { [key: string]: any }) {
+  const path = replacePathTokens(client, templatePath);
   const queryStr = getQueryString(query);
-  const url = config.apiHost + path + queryStr;
+  const url = client.config.apiHost + path + queryStr;
   return url;
 }
 
@@ -62,16 +73,18 @@ export async function actionCall<T extends MayHaveCooldown & MayHaveCharacter>(c
 
 /** Make a request and return a Response */
 export async function request(callerName: string, opts: CallOptions) {
+  if (opts.auth && !opts.client.config.apiToken) await opts.client.setToken();
   const fullOpts: Omit<FetchRequestInit, "body"> & { body?: string } = {
     method: opts.method,
-    headers: stripUndefined({ ...getDefaultHeaders(opts.config), ...opts.headers }),
+    headers: stripUndefined({ ...getDefaultHeaders(opts.client.config), ...opts.headers }),
     body: opts?.body ? JSON.stringify(opts.body) : undefined,
   };
 
   try {
-    const path = replacePathTokens(opts.config, opts.path) + getQueryString(opts.query);
-    if (opts.config.prefs.logHttpRequests) log(callerName, `Request: ${fullOpts.method} ${path} ${pp(opts.body)}`);
-    const url = getUrl(opts.config, opts.path, opts.query);
+    const path = replacePathTokens(opts.client, opts.path) + getQueryString(opts.query);
+    if (opts.client.config.prefs.logHttpRequests)
+      log(callerName, `Request: ${fullOpts.method} ${path} ${pp(opts.body)}`);
+    const url = getUrl(opts.client, opts.path, opts.query);
     const response = await fetch(url, fullOpts);
     return response;
   } catch (error: unknown) {
@@ -91,7 +104,8 @@ export async function handleResponse<T extends MayHaveCooldown & MayHaveCharacte
   }
   try {
     const body = (await response.json()) as MayHaveData<T>;
-    if (opts.config.prefs.logHttpResponses) logActionResponse(opts.config, callerName, structuredClone(body));
+    if (opts.client.config.prefs.logHttpResponses)
+      logActionResponse(opts.client.config, callerName, structuredClone(body));
     await handleCooldown<T>(callerName, body);
     if (response.ok && !body.data) throw new Error("Didn't receive data property in ok response body?");
     return body.data ?? null;
@@ -176,7 +190,7 @@ async function handleInfoResponse<T>(callerName: string, response: Response, opt
   if (!response.ok) await throwNotOkResponse(response, opts);
   try {
     const body = (await response.json()) as T;
-    if (opts.config.prefs.logHttpResponses) log(callerName, `Response: ${pp(body)}`);
+    if (opts.client.config.prefs.logHttpResponses) log(callerName, `Response: ${pp(body)}`);
     if (!body) throw new Error("Didn't receive a response body?");
     return body;
   } catch (error: unknown) {
@@ -196,7 +210,7 @@ async function warnNotOkResponse(response: Response, opts: CallOptions, callerNa
 }
 
 async function getHttpErrorText(response: Response, opts: CallOptions, callerName?: string) {
-  const url = getUrl(opts.config, opts.path, opts.query);
+  const url = getUrl(opts.client, opts.path, opts.query);
   const { error } = (await response.json()) as ApiErrorResponseBody;
   const statusTextStr: string = response.statusText ? ` (${response.statusText})` : "";
   return `${callerName ? `${callerName} r` : "R"}eceived HTTP ${response.status}${statusTextStr} from ${opts.method} ${url}: ${error.message}`;

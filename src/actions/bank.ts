@@ -1,4 +1,3 @@
-import type { HasClient } from "..";
 import { actionCall } from "../http";
 import type {
   BankExtensionTransaction,
@@ -6,6 +5,7 @@ import type {
   CallOptions,
   GoldReq,
   GoldTransaction,
+  HasClient,
   Item,
   SimpleItem,
 } from "../index";
@@ -24,21 +24,21 @@ export const bankActions = {
 function buyExpansion(this: HasClient) {
   const method = "POST";
   const path = "/my/{name}/action/bank/buy_expansion";
-  const opts: CallOptions = { method, path, config: this.client.config };
+  const opts: CallOptions = { auth: true, method, path, client: this.client };
   return actionCall<BankExtensionTransaction>(getCallerName(), opts);
 }
 
 function depositGold(this: HasClient, body: GoldReq) {
   const method = "POST";
   const path = "/my/{name}/action/bank/deposit/gold";
-  const opts: CallOptions = { method, path, body, config: this.client.config };
+  const opts: CallOptions = { auth: true, method, path, body, client: this.client };
   return actionCall<GoldTransaction>(getCallerName(), opts);
 }
 
 function depositItem(this: HasClient, body: SimpleItem) {
   const method = "POST";
   const path = "/my/{name}/action/bank/deposit";
-  const opts: CallOptions = { method, path, body, config: this.client.config };
+  const opts: CallOptions = { auth: true, method, path, body, client: this.client };
   return actionCall<BankItem>(getCallerName(), opts);
 }
 
@@ -49,14 +49,14 @@ function depositItems(this: HasClient, bodies: SimpleItem[]) {
 function withdrawGold(this: HasClient, body: GoldReq) {
   const method = "POST";
   const path = "/my/{name}/action/bank/withdraw/gold";
-  const opts: CallOptions = { method, path, body, config: this.client.config };
+  const opts: CallOptions = { auth: true, method, path, body, client: this.client };
   return actionCall<GoldTransaction>(getCallerName(), opts);
 }
 
 function withdrawItem(this: HasClient, body: SimpleItem) {
   const method = "POST";
   const path = "/my/{name}/action/bank/withdraw";
-  const opts: CallOptions = { method, path, body, config: this.client.config };
+  const opts: CallOptions = { auth: true, method, path, body, client: this.client };
   return actionCall<BankItem>(getCallerName(), opts);
 }
 

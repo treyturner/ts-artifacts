@@ -1,6 +1,5 @@
-import type { HasClient } from "..";
 import { actionCall, handleResponse, request } from "../http";
-import type { CallOptions, CharacterFightData } from "../index";
+import type { CallOptions, CharacterFightData, HasClient } from "../index";
 import { getCallerName, log } from "../util";
 
 export const fightActions = { continuously, once };
@@ -8,14 +7,14 @@ export const fightActions = { continuously, once };
 function once(this: HasClient) {
   const method = "POST";
   const path = "/my/{name}/action/fight";
-  const opts: CallOptions = { method, path, config: this.client.config };
+  const opts: CallOptions = { auth: true, method, path, client: this.client };
   return actionCall<CharacterFightData>(getCallerName(), opts);
 }
 
 async function continuously(this: HasClient): Promise<Response> {
   const method = "POST";
   const path = "/my/{name}/action/fight";
-  const opts: CallOptions = { method, path, config: this.client.config };
+  const opts: CallOptions = { auth: true, method, path, client: this.client };
   const response = await request(getCallerName(), opts);
   const callerName = getCallerName();
   switch (response.status) {
@@ -36,7 +35,7 @@ async function continuously(this: HasClient): Promise<Response> {
       break;
     }
     case 200: {
-      const opts: CallOptions = { method, path, config: this.client.config };
+      const opts: CallOptions = { auth: true, method, path, client: this.client };
       const data = await handleResponse<CharacterFightData>(callerName, response, opts);
       log(callerName, `The fight ended successfully.${data?.fight.result ? ` You have ${data.fight.result}.` : ""}`);
       return continuously.call(this);
