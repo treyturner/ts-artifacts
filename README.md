@@ -88,9 +88,8 @@ client
 │   ├── characters
 │   │   ├── create()
 │   │   ├── destroy()
-│   │   ├── getAchievements()
 │   │   ├── getAll()
-│   │   └── getAllLogs()
+│   │   └── getLogs()
 │   ├── create()
 │   └── getToken()
 ├── bank
@@ -104,8 +103,8 @@ client
 ├── craft
 │   └── once()
 ├── exchange
-│   ├── withdrawItem()
-│   └── withdrawItems()
+│   ├── buy()
+│   └── sell()
 ├── fight
 │   ├── continuously()
 │   └── once()
@@ -114,6 +113,10 @@ client
 │   └── once()
 ├── info
 │   ├── achievements
+│   │   ├── get()
+│   │   ├── getAll()
+│   │   └── getCharacterAchievements()
+│   ├── characters
 │   │   ├── get()
 │   │   └── getAll()
 │   ├── exchangeItems
