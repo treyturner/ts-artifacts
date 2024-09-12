@@ -75,11 +75,67 @@ describe("info calls", () => {
     });
 
     describe("leaderboard", () => {
-      it.todo("can be retrieved", async () => {});
+      it("can be retrieved", async () => {
+        // biome-ignore lint/suspicious/noExplicitAny: type assert
+        const validateLeaderboardEntry = (le: any) => {
+          expect(le.name).toBeString();
+          expect(le.skin).toBeString();
+          expect(le.achievements_points).toBeNumber();
+          expect(le.level).toBeNumber();
+          expect(le.total_xp).toBeNumber();
+          expect(le.mining_level).toBeNumber();
+          expect(le.mining_total_xp).toBeNumber();
+          expect(le.woodcutting_level).toBeNumber();
+          expect(le.woodcutting_total_xp).toBeNumber();
+          expect(le.fishing_level).toBeNumber();
+          expect(le.fishing_total_xp).toBeNumber();
+          expect(le.weaponcrafting_level).toBeNumber();
+          expect(le.weaponcrafting_total_xp).toBeNumber();
+          expect(le.gearcrafting_level).toBeNumber();
+          expect(le.gearcrafting_total_xp).toBeNumber();
+          expect(le.jewelrycrafting_level).toBeNumber();
+          expect(le.jewelrycrafting_total_xp).toBeNumber();
+          expect(le.cooking_level).toBeNumber();
+          expect(le.cooking_total_xp).toBeNumber();
+          expect(le.gold).toBeNumber();
+        };
+
+        const leaders = (await c.info.meta.getLeaderboard()) as unknown;
+        expect(leaders).toBeDefined();
+        expect(leaders).toBeArray();
+        // biome-ignore lint/suspicious/noExplicitAny: type assert
+        const leadersArr = leaders as any[];
+        expect(leadersArr.length).toBeGreaterThan(0);
+        const leader = leadersArr.pop();
+        validateLeaderboardEntry(leader);
+      });
     });
 
     describe("events", () => {
-      it.todo("can be retrieved", async () => {});
+      it("can be retrieved", async () => {
+        // biome-ignore lint/suspicious/noExplicitAny: type assert
+        const validateEvent = (e: any) => {
+          expect(e.name).toBeString();
+          expect(e.map).toBeObject();
+          expect(e.map.name).toBeString();
+          expect(e.map.skin).toBeString();
+          expect(e.map.x).toBeNumber();
+          expect(e.map.y).toBeNumber();
+          expect(e.previous_skin).toBeString();
+          expect(e.duration).toBeNumber();
+          expect(e.expiration).toBeString();
+          expect(e.created_at).toBeString();
+        };
+
+        const events = (await c.info.meta.getEvents()) as unknown;
+        expect(events).toBeDefined();
+        expect(events).toBeArray();
+        // biome-ignore lint/suspicious/noExplicitAny: type assert
+        const eventsArr = events as any[];
+        expect(eventsArr.length).toBeGreaterThan(0);
+        const event = eventsArr.pop();
+        validateEvent(event);
+      });
     });
   });
 });
