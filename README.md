@@ -1,3 +1,5 @@
+[![Tests](https://github.com/treyturner/ts-artifacts-api-client/actions/workflows/test.yaml/badge.svg)](https://github.com/treyturner/ts-artifacts-api-client/actions/workflows/test.yaml)
+
 # ts-artifacts-api-client
 
 `@trey.turner/artifacts-api-client` is an API client for [Artifacts MMO](https://artifactsmmo.com) written in TypeScript.
