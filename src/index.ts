@@ -11,6 +11,7 @@ import { moveActions } from "./actions/move";
 import { taskActions } from "./actions/tasks";
 import { getConfig } from "./config";
 import { achievementsInfo } from "./info/achievements";
+import { charactersInfo } from "./info/characters";
 import { exchangeItemsInfo } from "./info/exchange-items";
 import { itemsInfo } from "./info/items-info";
 import { mapsInfo } from "./info/maps";
@@ -24,7 +25,7 @@ export class ArtifactsApi {
   account: HasClient &
     typeof account & {
       bank: HasClient & typeof accountBank;
-      chars: HasClient & typeof characters;
+      characters: HasClient & typeof characters;
     };
   bank: HasClient & typeof bankActions;
   craft: HasClient & typeof craftActions;
@@ -33,6 +34,7 @@ export class ArtifactsApi {
   gather: HasClient & typeof gatherActions;
   info: HasClient & {
     achievements: HasClient & typeof achievementsInfo;
+    characters: HasClient & typeof charactersInfo;
     exchangeItems: HasClient & typeof exchangeItemsInfo;
     items: HasClient & typeof itemsInfo;
     maps: HasClient & typeof mapsInfo;
@@ -50,7 +52,7 @@ export class ArtifactsApi {
       client: this,
       ...account,
       bank: { client: this, ...accountBank },
-      chars: { client: this, ...characters },
+      characters: { client: this, ...characters },
     };
     this.bank = { client: this, ...bankActions };
     this.craft = { client: this, ...craftActions };
@@ -60,6 +62,7 @@ export class ArtifactsApi {
     this.info = {
       client: this,
       achievements: { client: this, ...achievementsInfo },
+      characters: { client: this, ...charactersInfo },
       exchangeItems: { client: this, ...exchangeItemsInfo },
       items: { client: this, ...itemsInfo },
       maps: { client: this, ...mapsInfo },
@@ -70,6 +73,10 @@ export class ArtifactsApi {
     this.items = { client: this, ...itemActions };
     this.move = { client: this, ...moveActions };
     this.tasks = { client: this, ...taskActions };
+  }
+
+  async setToken() {
+    this.config.apiToken = await this.account.getToken();
   }
 }
 
@@ -92,6 +99,7 @@ export type AddCharacterReq = Schemas["AddCharacterSchema"];
 export type ChangePasswordReq = Schemas["ChangePassword"];
 export type CharacterAchievementsReq =
   Operations["get_character_achievements_characters__name__achievements_get"]["parameters"]["query"];
+export type CharacterReq = Operations["get_character_characters__name__get"]["parameters"]["path"];
 export type CraftReq = Schemas["CraftingSchema"];
 export type DeleteReq = Schemas["SimpleItemSchema"];
 export type DeleteCharacterReq = Schemas["DeleteCharacterSchema"];
@@ -197,7 +205,9 @@ export type Preferences = {
 type SupportedMethod = "GET" | "POST";
 export type HttpHeaders = { [key: string]: string | undefined };
 export type CallOptions = {
-  config: Config;
+  client: ArtifactsApi;
+  /** Does call require auth? */
+  auth: boolean;
   /** API uses only GET and POST */
   method: SupportedMethod;
   /** The tokenized path, ie. `/my/{name}/action/move` */
