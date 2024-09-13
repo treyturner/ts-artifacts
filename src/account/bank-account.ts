@@ -1,5 +1,5 @@
+import type { Bank, BankItemsReq, CallOptions, DataPage, DataPageQuery, Gold, HasClient, SimpleItem } from "..";
 import { handlePaging, infoCall, pageCall } from "../http";
-import type { Bank, BankItemsReq, CallOptions, DataPage, DataPageQuery, Gold, HasClient, SimpleItem } from "../index";
 import { getCallerName } from "../util";
 
 export const accountBank = { getDetails, getItems };

@@ -1,6 +1,5 @@
+import type { CallOptions, CharacterMovementData, HasClient, MapContentType, MoveReq } from "..";
 import { actionCall } from "../http";
-import type { HasClient } from "../index";
-import type { CallOptions, CharacterMovementData, MapContentType, MoveReq } from "../index";
 import { getCallerName, log } from "../util";
 
 export const moveActions = { to, toA };

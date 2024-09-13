@@ -1,5 +1,5 @@
+import type { CallOptions, Character, CharacterReq, DataPage, DataPageReq, HasClient } from "..";
 import { handlePaging, infoCall, pageCall } from "../http";
-import type { CallOptions, Character, CharacterReq, DataPage, DataPageReq, HasClient } from "../index";
 import { getCallerName } from "../util";
 
 export const charactersInfo = { get, getAll };

@@ -1,5 +1,5 @@
+import type { AddAccountReq, CallOptions, ChangePasswordReq, HasClient, Response, TokenResponse } from "..";
 import { infoCall } from "../http";
-import type { AddAccountReq, CallOptions, ChangePasswordReq, HasClient, Response, TokenResponse } from "../index";
 import { getCallerName } from "../util";
 
 export const account = { changePassword, create, getToken };

@@ -1,5 +1,5 @@
+import type { CallOptions, DataPage, DataPageQuery, HasClient, Monster, MonsterReq, MonstersReq } from "..";
 import { handlePaging, infoCall, pageCall } from "../http";
-import type { CallOptions, DataPage, DataPageQuery, HasClient, Monster, MonsterReq, MonstersReq } from "../index";
 import { getCallerName } from "../util";
 
 export const monstersInfo = { get, getAll };

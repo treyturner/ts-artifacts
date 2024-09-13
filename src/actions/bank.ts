@@ -1,4 +1,3 @@
-import { actionCall } from "../http";
 import type {
   BankExtensionTransaction,
   BankItem,
@@ -8,7 +7,8 @@ import type {
   HasClient,
   Item,
   SimpleItem,
-} from "../index";
+} from "..";
+import { actionCall } from "../http";
 import { getCallerName } from "../util";
 
 export const bankActions = {

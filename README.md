@@ -39,7 +39,7 @@ Create an `.env` file in the repo root or use any other means to supply values t
 ### Configuration via constructor
 
 ```ts
-import { ArtifactsApi } from './index';
+import { ArtifactsApi } from '@trey.turner/artifacts-api-client';
 
 const client = new ArtifactsApi({
   // To make authenticated requests, provide either a username and password

@@ -1,5 +1,5 @@
+import type { CallOptions, DataPage, DataPageQuery, HasClient, MapReq, Mapp, MapsReq } from "..";
 import { handlePaging, infoCall, pageCall } from "../http";
-import type { CallOptions, DataPage, DataPageQuery, HasClient, MapReq, Mapp, MapsReq } from "../index";
 import { getCallerName } from "../util";
 
 export const mapsInfo = { get, getAll };
