@@ -4,11 +4,12 @@ import { getCallerName } from "../util";
 
 export const mapsInfo = { get, getAll };
 
-function get(this: HasClient, query: MapReq) {
+async function get(this: HasClient, query: MapReq) {
   const method = "GET";
   const path = `/maps/${query.x}/${query.y}`;
   const opts: CallOptions = { auth: false, method, path, client: this.client };
-  return infoCall<Mapp>(getCallerName(), opts);
+  const responseBody = await infoCall<{ data: Mapp }>(getCallerName(), opts);
+  return responseBody.data;
 }
 
 function getAll(this: HasClient, query?: DataPageQuery<MapsReq>) {
