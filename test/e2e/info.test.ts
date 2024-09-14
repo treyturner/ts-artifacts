@@ -17,24 +17,23 @@ describe("info calls", () => {
   describe("items", () => {
     describe("get item", () => {
       it("should return data for an item", async () => {
-        const item = (await c.info.items.get({ code: "copper_ore" })) as unknown;
-        expect(item).toBeObject();
-        // biome-ignore lint/suspicious/noExplicitAny: type assert
-        const itemObj = item as NonNullable<any>;
-        expect(itemObj.item).toBeObject();
-        expect(itemObj.ge).toBeObject();
-        validate.item(itemObj.item);
+        const data = (await c.info.items.get({ code: "copper_ore" })) as unknown;
+        expect(data).toBeObject();
+        expect(data).toHaveProperty("item");
+        expect(data).toHaveProperty("ge");
+        const wrapper = data as { item: unknown; ge: unknown };
+        validate.item(wrapper.item);
+        validate.geItem(wrapper.ge);
       });
     });
 
     describe("get all items", () => {
       it("should return data from all pages", async () => {
-        const items = (await c.info.items.getAll()) as unknown;
-        expect(items).toBeArray();
-        // biome-ignore lint/suspicious/noExplicitAny: type assert
-        const itemsArr = items as any[];
-        expect(itemsArr.length).toBeGreaterThan(100);
-        const item = itemsArr.pop();
+        const data = (await c.info.items.getAll()) as unknown;
+        expect(data).toBeArray();
+        const items = data as unknown[];
+        expect(items.length).toBeGreaterThan(100);
+        const item = items.pop();
         validate.item(item);
       });
     });
@@ -51,23 +50,21 @@ describe("info calls", () => {
 
     describe("leaderboard", () => {
       it("can be retrieved", async () => {
-        const leaders = (await c.info.meta.getLeaderboard()) as unknown;
-        expect(leaders).toBeArray();
-        // biome-ignore lint/suspicious/noExplicitAny: type assert
-        const leadersArr = leaders as any[];
-        expect(leadersArr.length).toBeGreaterThan(0);
-        const leader = leadersArr.pop();
+        const data = (await c.info.meta.getLeaderboard()) as unknown;
+        expect(data).toBeArray();
+        const entries = data as unknown[];
+        expect(entries.length).toBeGreaterThan(0);
+        const leader = entries.pop();
         validate.leaderboardEntry(leader);
       });
     });
 
     describe("events", () => {
       it("can be retrieved", async () => {
-        const events = (await c.info.meta.getEvents()) as unknown;
-        expect(events).toBeArray();
-        // biome-ignore lint/suspicious/noExplicitAny: type assert
-        const eventsArr = events as any[];
-        if (eventsArr.length > 0) validate.event(eventsArr.pop());
+        const data = (await c.info.meta.getEvents()) as unknown;
+        expect(data).toBeArray();
+        const events = data as unknown[];
+        if (events.length > 0) validate.event(events.pop());
       });
     });
   });

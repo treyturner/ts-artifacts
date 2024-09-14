@@ -24,9 +24,9 @@ describe("account", () => {
 
       // when a request is made to an unauthenticated endpoint
       // then an error shouldn't be thrown
-      let responseData: unknown;
+      let data: unknown;
       try {
-        responseData = await c.info.maps.get({ x: 0, y: 0 });
+        data = await c.info.maps.get({ x: 0, y: 0 });
       } catch (err) {
         expect(
           err,
@@ -35,12 +35,12 @@ describe("account", () => {
       }
 
       // and the response should be valid
-      validate.map(responseData);
+      validate.map(data);
     });
   });
 
   describe("token", () => {
-    it("is retrieved automatically when command with auth: true is called", async () => {
+    it("is retrieved automatically if unset when auth'd endpoint is called", async () => {
       // given a valid username and password are set
       expect(c.config.username).toBeString();
       expect(c.config.username?.length).toBeGreaterThan(0);
@@ -50,21 +50,20 @@ describe("account", () => {
       // and token is unset
       c.config.apiToken = undefined;
 
-      // when an authenticated request is made
-      // then an error shouldn't be thrown
+      // when an authenticated request is made then an error shouldn't be thrown
       try {
-        expect(await c.account.bank.getDetails()).not.toThrowError;
+        await c.account.bank.getDetails();
       } catch (err) {
         expect(err, `Couldn't automatically retrieve token?\n${getUnknownErrorText(err)}`).toBeUndefined();
       }
 
-      // and the client tokenshould be automatically set
+      // and the client token should be automatically set
       const apiToken: unknown = c.config.apiToken;
       expect(apiToken).toBeString();
       expect((apiToken as string).length).toBeGreaterThan(0);
     });
 
-    it("isn't retrieved automatically when command with auth: false is called", async () => {
+    it("isn't retrieved automatically when unauth'd endpoint is called", async () => {
       //given a valid username and password are set
       expect(c.config.username).toBeString();
       expect(c.config.username?.length).toBeGreaterThan(0);
@@ -93,8 +92,15 @@ describe("account", () => {
   describe("bank", () => {
     describe("get details", () => {
       it("should return account bank details", async () => {
-        const responseData: unknown = await c.account.bank.getDetails();
-        validate.bank(responseData);
+        const data: unknown = await c.account.bank.getDetails();
+        validate.bankDetails(data);
+      });
+    });
+
+    describe("get items", () => {
+      it("should return account bank items", async () => {
+        const data: unknown = await c.account.bank.getItems();
+        validate.bankItems(data);
       });
     });
   });
