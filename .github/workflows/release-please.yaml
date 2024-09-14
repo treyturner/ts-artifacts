@@ -1,0 +1,43 @@
+name: Publish to npm
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yaml
+    secrets: inherit
+
+  release-please:
+    needs: [test]
+    permissions:
+      contents: read
+      id-token: write      
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          release-type: node
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: ".bun-version"
+      - run: bun install --frozen-lockfile      
+      - run: bun transpile
+      - uses: actions/setup-node@v4        
+        if: ${{ steps.release.outputs.release_created }}  
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'                    
+      - run: npm publish --provenance --access public
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
