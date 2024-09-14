@@ -31,7 +31,7 @@ jobs:
         with:
           bun-version-file: ".bun-version"
       - run: bun install --frozen-lockfile      
-      - run: bun transpile
+      - run: bun run build
       - uses: actions/setup-node@v4        
         if: ${{ steps.release.outputs.release_created }}  
         with:
