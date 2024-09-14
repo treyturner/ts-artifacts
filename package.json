@@ -10,6 +10,7 @@
     "url": "https://github.com/treyturner/ts-artifacts-api-client.git"
   },
   "scripts": {
+    "prebuild": "bun clean",
     "build": "tsc -p src/tsconfig.json",
     "check": "bun --silent run lint && bun --silent run format && bun --silent run typecheck",
     "check:fix": "bun --silent run lint:fix && bun --silent run format:fix && bun --silent run typecheck",
@@ -20,7 +21,7 @@
     "lint": "biome lint --error-on-warnings src/ test/",
     "lint:fix": "biome lint --error-on-warnings --fix src/ test/",
     "prepare": "husky",
-    "typecheck": "tsc -p src/tsconfig.json && tsc --noEmit -p test/tsconfig.json && bun --silent run clean"
+    "typecheck": "tsc -p src/tsconfig.json && tsc --noEmit -p test/tsconfig.json"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
@@ -29,7 +30,8 @@
     "@types/bun": "latest",
     "cz-conventional-changelog": "3.3.0",
     "dotenv": "16.4.5",
-    "husky": "9.1.5"
+    "husky": "9.1.5",
+    "node-inspect-extracted": "3.0.2"
   },
   "peerDependencies": {
     "typescript": "5.5.4"

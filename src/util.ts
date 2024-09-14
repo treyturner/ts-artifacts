@@ -1,4 +1,4 @@
-import { type InspectOptions, inspect } from "node:util";
+import { type InspectOptions, inspect } from "node-inspect-extracted";
 import type { ImageType } from ".";
 
 export function getImageUrl(apiHost: string, type: ImageType, id: string) {
