@@ -1,12 +1,14 @@
 name: Tests
 
 on:
-  push:
-    # pushes to main trigger release workflow which calls this workflow
-    branches-ignore: main
   pull_request:
-  workflow_call:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
 
 jobs:
   check-and-test:
@@ -21,11 +23,5 @@ jobs:
         with:
           bun-version-file: ".bun-version"
       - run: bun install --frozen-lockfile
-      - name: "commitlint: Validate current commit (last commit)"
-        if: github.event_name == 'push'
-        run: bunx commitlint --last --verbose
-      - name: "commitlint: Validate PR commits"
-        if: github.event_name == 'pull_request'
-        run: bunx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
       - run: bun check
       - run: bun test
