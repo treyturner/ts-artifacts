@@ -1,23 +1,13 @@
 name: Lint commits
+on: [push, pull_request]
 
-on:
-  push:
-  pull_request:
+permissions:
+  contents: read
+  pull-requests: read
 
 jobs:
   commitlint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version-file: ".bun-version"
-      - run: bun install --frozen-lockfile
-      - name: "commitlint: Validate current commit (last commit)"
-        if: github.event_name == 'push'
-        run: bunx commitlint --last --verbose
-      - name: "commitlint: Validate PR commits"
-        if: github.event_name == 'pull_request'
-        run: bunx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
+      - uses: wagoid/commitlint-github-action@v6
