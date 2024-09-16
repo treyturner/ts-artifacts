@@ -1,28 +1,31 @@
-[![Tests](https://github.com/treyturner/ts-artifacts-api-client/actions/workflows/test.yaml/badge.svg)](https://github.com/treyturner/ts-artifacts-api-client/actions/workflows/test.yaml)
-
 # ts-artifacts-api-client
 
-`@trey.turner/artifacts-api-client` is an API client for [Artifacts MMO](https://artifactsmmo.com) written in TypeScript.
+A typed and promisified API client for [Artifacts MMO](https://artifactsmmo.com).
 
-## Development Status
+## Status
 
-This is a new project in early development. It is at best alpha software and no warranty is expressed or implied. Pull requests and issues are welcome.
+[![Tests](https://github.com/treyturner/ts-artifacts-api-client/actions/workflows/test.yaml/badge.svg)](https://github.com/treyturner/ts-artifacts-api-client/actions/workflows/test.yaml)\
+[![Publish to npm](https://github.com/treyturner/ts-artifacts-api-client/actions/workflows/release-please.yaml/badge.svg)](https://github.com/treyturner/ts-artifacts-api-client/actions/workflows/release-please.yaml)
 
-API coverage is believed to be complete. It was manually tested to some extent at the time of last release, but updates to the game's API may cause breakage until adjustments can be made. Automated test coverage will be expanded in the future.
+This is a new project in early development. Pull requests, issues, and suggestions are welcome. Use at your own risk; no warranty is expressed or implied.
 
-I aspire to develop some additional bells and whistles, including wrapping multiple clients into some form of party management.
+API coverage is believed to be complete. Some amount of automated E2E testing passed against the game's production API at the time of last release, but changes to the game may cause breakage until this client can be updated.
+
+Automated test coverage will be expanded in the future but isn't a priority at this time.
 
 ## Configuration
 
 Configuration can be supplied via environment variables or constructor arguments.
 
-One of (an API token) or (a username and password) are required.
+One of (an API token) or (a username and password) are required to make authenticated requests, but you can mine data out of `info` endpoints without them.
 
-Specifying a character isn't required to instantiate a client, but requests that require one (with `{name}` in the path) will throw an exception unless one has been configured via `client.config.character = "foobarbaz"`.
+Calling an action (or any endpoint with `{name}` in the path) before configuring the client with a character will cause an exception to be thrown.
+
+Reconfigure a created client by modifying it's `config` property, ie. `client.config.character = "Cujo"` or `client.config.username = "AmonTobin"`.
 
 ### Environment variables
 
-Create an `.env` file in the repo root or use any other means to supply values to supported environment variables:
+Create an `.env` file in the repo root or supply values to supported environment variables using any other means:
 
 | Variable                               | Description                                         | Default Value                  |
 |----------------------------------------|-----------------------------------------------------|--------------------------------|
@@ -48,14 +51,14 @@ const client = new ArtifactsApi({
   // or an API token
   apiToken: "abc123",
   // Everything else is optional (though character is required to take any action)
-  character: "Ness",      
+  character: "Ness",
   prefs: {
     logHttpRequests: true,
     logHttpResponses: true,
     hideCharacterInResponseLog: true,
     hideCooldownInResponseLog: true,
   },
-});    
+});
 ```
 
 ## Usage
@@ -77,7 +80,9 @@ The `await` includes waiting for any resulting cooldown to expire.
 
 This library takes an opinionated approach to organizing the game's API endpoints.
 
-Worth noting: [`account`](src/account) and [`info`](src/info) calls generally do not result in a cooldown; most other commands are actions which do.
+`config` is the client's [config object](src/config.ts#L36) and is editable after instantiation.
+
+[`account`](src/account) and [`info`](src/info) calls generally do not result in a cooldown; most other commands are actions which do.
 
 ```js
 client
