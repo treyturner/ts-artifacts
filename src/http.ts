@@ -11,9 +11,15 @@ function getDefaultHeaders(config: Config): HttpHeaders {
 }
 
 function replacePathTokens(client: ArtifactsApi, template: string) {
-  if (!client.config.character)
-    throw new Error("Character must be specified before calling an action that requires it");
-  const path = template.replaceAll(/\{name\}/g, client.config.character);
+  if (!/{[a-zA-Z_$]\w*}/.test(template)) return template;
+
+  let path = template;
+  if (/{name}/.test(path)) {
+    if (!client.config.character)
+      throw new Error("Character must be specified before calling an action that requires it");
+    path = path.replaceAll(/{name}/g, client.config.character);
+  }
+
   return path;
 }
 
