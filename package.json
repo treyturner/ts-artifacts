@@ -21,6 +21,7 @@
     "lint": "biome lint --error-on-warnings src/ test/",
     "lint:fix": "biome lint --error-on-warnings --fix src/ test/",
     "prepare": "husky",
+    "test": "bun test --timeout 15000",
     "typecheck": "tsc -p src/tsconfig.json && tsc --noEmit -p test/tsconfig.json"
   },
   "devDependencies": {

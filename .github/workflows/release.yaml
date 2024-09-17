@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  release-please:
+  release:
     permissions:
       contents: read
       id-token: write
