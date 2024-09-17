@@ -69,6 +69,7 @@ export async function request(callerName: string, opts: CallOptions) {
     method: opts.method,
     headers: stripUndefined({ ...getDefaultHeaders(opts.client.config), ...opts.headers }),
     body: opts?.body ? JSON.stringify(opts.body) : undefined,
+    signal: opts?.timeout ? AbortSignal.timeout(opts.timeout) : undefined,
   };
 
   try {

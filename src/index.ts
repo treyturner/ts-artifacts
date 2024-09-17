@@ -219,6 +219,8 @@ export type CallOptions = {
   body?: any;
   /** not-ok (4xx and 5xx) HTTP status codes which should NOT throw an exception */
   notThrowable?: number[];
+  /** HTTP timeout in milliseconds */
+  timeout?: number;
 };
 /** used for image url generation */
 export type ImageType = "character" | "effect" | "item" | "map" | "monster" | "resource";
