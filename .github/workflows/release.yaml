@@ -1,4 +1,4 @@
-name: Publish to npm
+name: Publish last successful build to npm registry
 
 on:
   push:
