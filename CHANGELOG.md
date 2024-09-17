@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.1](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.0...v1.0.1) (2024-09-17)
+
+
+### Features
+
+* support specifying HTTP timeout ([#6](https://github.com/treyturner/ts-artifacts-api-client/issues/6)) ([e3c34d2](https://github.com/treyturner/ts-artifacts-api-client/commit/e3c34d20ba0b4db0854f2330b2a0146fb568b305))
+
+
+### Miscellaneous Chores
+
+* release 1.0.1 ([#4](https://github.com/treyturner/ts-artifacts-api-client/issues/4)) ([baf47de](https://github.com/treyturner/ts-artifacts-api-client/commit/baf47dedc210a247a86d897474af5e51401c43b9))
+
 ## 1.0.0 (2024-09-15)
 
 
