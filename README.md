@@ -5,7 +5,7 @@ A typed and promisified API client for [Artifacts MMO](https://artifactsmmo.com)
 ## Status
 
 [![Checks and tests](https://github.com/treyturner/ts-artifacts-api-client/actions/workflows/test.yaml/badge.svg)](https://github.com/treyturner/ts-artifacts-api-client/actions/workflows/test.yaml)\
-[![Publish last successful build to npm registry](https://github.com/treyturner/ts-artifacts-api-client/actions/workflows/release.yaml/badge.svg)](https://github.com/treyturner/ts-artifacts-api-client/actions/workflows/release.yaml)
+[![Last successful build published to npm registry](https://github.com/treyturner/ts-artifacts-api-client/actions/workflows/release.yaml/badge.svg)](https://github.com/treyturner/ts-artifacts-api-client/actions/workflows/release.yaml)
 
 This is a new project in early development. Pull requests, issues, and suggestions are welcome. Use at your own risk; no warranty is expressed or implied.
 
