@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.1...v1.0.2) (2024-09-17)
+
+
+### Documentation
+
+* fix publish badge ([#8](https://github.com/treyturner/ts-artifacts-api-client/issues/8)) ([7b8a473](https://github.com/treyturner/ts-artifacts-api-client/commit/7b8a4736425c927c69a2e0757a2f04e2345a6758))
+
 ## [1.0.1](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.0...v1.0.1) (2024-09-17)
 
 
