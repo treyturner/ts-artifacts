@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.2...v1.0.3) (2024-09-17)
+
+
+### Bug Fixes
+
+* only assert needed path tokens ([#10](https://github.com/treyturner/ts-artifacts-api-client/issues/10)) ([2a116b8](https://github.com/treyturner/ts-artifacts-api-client/commit/2a116b800d42925bc733528dba5ef44ebd171d92))
+
 ## [1.0.2](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.1...v1.0.2) (2024-09-17)
 
 
