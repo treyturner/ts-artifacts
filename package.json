@@ -3,7 +3,7 @@
   "version": "1.0.4",
   "module": "index.ts",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/types.d.ts",
   "type": "module",
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
     "clean": "rm -rf dist",
     "format": "biome format src/ test/",
     "format:fix": "biome format --write src/ test/",
-    "generate": "openapi-typescript https://api.artifactsmmo.com/openapi.json -o ./lib/api.generated.d.ts",
+    "generate": "openapi-typescript https://api.artifactsmmo.com/openapi.json -o ./src/lib/api.generated.ts",
     "lint": "biome lint --error-on-warnings src/ test/",
     "lint:fix": "biome lint --error-on-warnings --fix src/ test/",
     "prepare": "husky",
@@ -28,15 +28,16 @@
     "node-inspect-extracted": "3.0.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.8.3",
-    "@commitlint/cli": "19.4.1",
-    "@commitlint/config-conventional": "19.4.1",
+    "@biomejs/biome": "1.9.2",
+    "@commitlint/cli": "19.5.0",
+    "@commitlint/config-conventional": "19.5.0",
     "@types/bun": "latest",
     "cz-conventional-changelog": "3.3.0",
     "dotenv": "16.4.5",
-    "husky": "9.1.5"
+    "husky": "9.1.6",
+    "openapi-typescript": "7.4.1"
   },
   "peerDependencies": {
-    "typescript": "5.5.4"
+    "typescript": "5.6.2"
   }
 }

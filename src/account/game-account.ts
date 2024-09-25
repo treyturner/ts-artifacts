@@ -1,5 +1,5 @@
-import type { AddAccountReq, CallOptions, ChangePasswordReq, HasClient, Response, TokenResponse } from "..";
 import { infoCall } from "../http";
+import type { AddAccountReq, ApiResponse, CallOptions, ChangePasswordReq, HasClient, TokenResponse } from "../types";
 import { getCallerName } from "../util";
 
 export const account = { changePassword, create, getToken };
@@ -21,7 +21,7 @@ async function create(this: HasClient, body: AddAccountReq) {
   const path = "/accounts/create";
   const headers = { Authorization: undefined };
   const opts: CallOptions = { auth: false, method, path, headers, body, client: this.client };
-  const responseBody = await infoCall<Response>(getCallerName(), opts);
+  const responseBody = await infoCall<ApiResponse>(getCallerName(), opts);
   return responseBody.message;
 }
 
@@ -29,6 +29,6 @@ async function changePassword(this: HasClient, body: ChangePasswordReq) {
   const method = "POST";
   const path = "/my/change_password";
   const opts: CallOptions = { auth: true, method, path, body, client: this.client };
-  const responseBody = await infoCall<Response>(getCallerName(), opts);
+  const responseBody = await infoCall<ApiResponse>(getCallerName(), opts);
   return responseBody.message;
 }

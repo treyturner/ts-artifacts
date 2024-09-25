@@ -1,5 +1,5 @@
-import type { CallOptions, HasClient, TaskCancelled, TaskData, TaskRewardData } from "..";
 import { actionCall } from "../http";
+import type { CallOptions, HasClient, TaskCancelled, TaskData, TaskRewardData } from "../types";
 import { getCallerName } from "../util";
 
 export const taskActions = { accept, cancel, complete, exchange };

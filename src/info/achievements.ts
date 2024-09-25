@@ -1,3 +1,4 @@
+import { handlePaging, infoCall, pageCall } from "../http";
 import type {
   Achievement,
   AchievementReq,
@@ -8,8 +9,7 @@ import type {
   DataPage,
   DataPageQuery,
   HasClient,
-} from "..";
-import { handlePaging, infoCall, pageCall } from "../http";
+} from "../types";
 import { getCallerName } from "../util";
 
 export const achievementsInfo = { get, getAll, getCharacterAchievements };

@@ -1,6 +1,6 @@
 import "dotenv";
-import type { Config, Preferences, RecursivePartial } from ".";
 import { getCallerName, log, pp } from "./util";
+import type { Config, RecursivePartial, Preferences } from "./types";
 
 const { env } = process;
 

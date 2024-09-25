@@ -1,5 +1,5 @@
-import type { CallOptions, GETransactionItem, GETransactionList, HasClient } from "..";
 import { actionCall } from "../http";
+import type { CallOptions, GETransactionItem, GETransactionList, HasClient } from "../types";
 import { getCallerName } from "../util";
 
 export const exchangeActions = { buy, sell };

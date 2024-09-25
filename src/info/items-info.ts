@@ -1,5 +1,5 @@
-import type { CallOptions, DataPage, DataPageQuery, HasClient, Item, ItemReq, ItemsReq, SingleItem } from "..";
 import { handlePaging, infoCall, pageCall } from "../http";
+import type { CallOptions, DataPage, DataPageQuery, HasClient, Item, ItemReq, ItemsReq, SingleItem } from "../types";
 import { getCallerName } from "../util";
 
 export const itemsInfo = { get, getAll };

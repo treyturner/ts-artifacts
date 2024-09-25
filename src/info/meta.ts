@@ -1,3 +1,4 @@
+import { handlePaging, infoCall, pageCall } from "../http";
 import type {
   ActiveEvent,
   CallOptions,
@@ -6,8 +7,7 @@ import type {
   DataPageReq,
   HasClient,
   ServerStatus,
-} from "..";
-import { handlePaging, infoCall, pageCall } from "../http";
+} from "../types";
 import { getCallerName } from "../util";
 
 export const metaInfo = { getEvents, getLeaderboard, getServerStatus };

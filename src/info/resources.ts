@@ -1,5 +1,5 @@
-import type { CallOptions, DataPage, DataPageQuery, HasClient, Resource, ResourceReq, ResourcesReq } from "..";
 import { handlePaging, infoCall, pageCall } from "../http";
+import type { CallOptions, DataPage, DataPageQuery, HasClient, Resource, ResourceReq, ResourcesReq } from "../types";
 import { getCallerName } from "../util";
 
 export const resourcesInfo = { get, getAll };

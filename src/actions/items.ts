@@ -1,3 +1,4 @@
+import { actionCall } from "../http";
 import type {
   CallOptions,
   DeleteItem,
@@ -9,8 +10,7 @@ import type {
   RecycleReq,
   RecyclingData,
   UnequipReq,
-} from "..";
-import { actionCall } from "../http";
+} from "../types";
 import { getCallerName } from "../util";
 
 export const itemActions = { discard, equip, recycle, unequip };

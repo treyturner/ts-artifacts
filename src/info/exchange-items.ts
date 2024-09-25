@@ -1,5 +1,5 @@
-import type { CallOptions, DataPage, DataPageQuery, GEItem, GEItemReq, GEItemsReq, HasClient } from "..";
 import { handlePaging, infoCall, pageCall } from "../http";
+import type { CallOptions, DataPage, DataPageQuery, GEItem, GEItemReq, GEItemsReq, HasClient } from "../types";
 import { getCallerName } from "../util";
 
 export const exchangeItemsInfo = { get, getAll };

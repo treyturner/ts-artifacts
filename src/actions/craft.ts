@@ -1,5 +1,5 @@
-import type { CallOptions, CraftReq, HasClient, SkillData } from "..";
 import { actionCall } from "../http";
+import type { CallOptions, CraftReq, HasClient, SkillData } from "../types";
 import { getCallerName } from "../util";
 
 export const craftActions = { once };

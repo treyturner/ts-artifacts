@@ -1,3 +1,4 @@
+import { handlePaging, infoCall, pageCall } from "../http";
 import type {
   AddCharacterReq,
   CallOptions,
@@ -7,8 +8,7 @@ import type {
   DeleteCharacterReq,
   HasClient,
   Log,
-} from "..";
-import { handlePaging, infoCall, pageCall } from "../http";
+} from "../types";
 import { getCallerName } from "../util";
 
 export const characters = { create, destroy, getAll, getLogs };
