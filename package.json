@@ -24,6 +24,9 @@
     "test": "bun test --timeout 15000",
     "typecheck": "tsc -p src/tsconfig.json && tsc --noEmit -p test/tsconfig.json"
   },
+  "dependencies": {
+    "node-inspect-extracted": "3.0.2"
+  },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
     "@commitlint/cli": "19.4.1",
@@ -31,8 +34,7 @@
     "@types/bun": "latest",
     "cz-conventional-changelog": "3.3.0",
     "dotenv": "16.4.5",
-    "husky": "9.1.5",
-    "node-inspect-extracted": "3.0.2"
+    "husky": "9.1.5"
   },
   "peerDependencies": {
     "typescript": "5.5.4"
