@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.3...v1.0.4) (2024-09-25)
+
+
+### Bug Fixes
+
+* make node-inspect-extracted prod dependency ([#14](https://github.com/treyturner/ts-artifacts-api-client/issues/14)) ([97461a8](https://github.com/treyturner/ts-artifacts-api-client/commit/97461a83d1b33b0cce2acbaecb898ed460f6d945))
+
 ## [1.0.3](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.2...v1.0.3) (2024-09-17)
 
 
