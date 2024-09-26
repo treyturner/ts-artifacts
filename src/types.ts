@@ -1,4 +1,4 @@
-import type { ArtifactsApi as _ArtifactsApi } from ".";
+import { ArtifactsApi } from ".";
 import type { components as Components, operations as Operations } from "./lib/api.generated";
 
 /** Collect, organize, & re-export openapi-typescript generated types for convenience */
@@ -112,6 +112,8 @@ export type ServerStatus = Schemas["StatusSchema"];
  * custom types (not derived from openapi spec)
  **/
 
+export { ArtifactsApi };
+
 export type State = {
   party: Character[];
   bank: {
@@ -121,7 +123,7 @@ export type State = {
 };
 
 /** config types */
-export type HasClient = { client: _ArtifactsApi };
+export type HasClient = { client: ArtifactsApi };
 export type HasConfig = { config: Config };
 export type Config = {
   apiHost: string;
@@ -142,7 +144,7 @@ export type Preferences = {
 type SupportedMethod = "GET" | "POST";
 export type HttpHeaders = { [key: string]: string | undefined };
 export type CallOptions = {
-  client: _ArtifactsApi;
+  client: ArtifactsApi;
   /** Does call require auth? */
   auth: boolean;
   /** API uses only GET and POST */
