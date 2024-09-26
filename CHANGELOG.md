@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.6](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.5...v1.0.6) (2024-09-26)
+
+
+### Bug Fixes
+
+* remove redundant exported ArtifactsApi type ([#19](https://github.com/treyturner/ts-artifacts-api-client/issues/19)) ([0f658b5](https://github.com/treyturner/ts-artifacts-api-client/commit/0f658b5cd435f0c6b833029ee40447ef91b81df1))
+
 ## [1.0.5](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.4...v1.0.5) (2024-09-26)
 
 
