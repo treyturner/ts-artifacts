@@ -112,7 +112,6 @@ export type ServerStatus = Schemas["StatusSchema"];
  * custom types (not derived from openapi spec)
  **/
 
-export type { ArtifactsApi } from ".";
 export type State = {
   party: Character[];
   bank: {

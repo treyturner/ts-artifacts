@@ -1,13 +1,5 @@
-import type {
-  ArtifactsApi,
-  CallOptions,
-  Character,
-  Config,
-  Cooldown,
-  DataPage,
-  DataPageReq,
-  HttpHeaders,
-} from "./types";
+import type { ArtifactsApi } from ".";
+import type { CallOptions, Character, Config, Cooldown, DataPage, DataPageReq, HttpHeaders } from "./types";
 import { getUnknownErrorText, log, pluralize, pp, stringify, stripUndefined } from "./util";
 
 function getDefaultHeaders(config: Config): HttpHeaders {
