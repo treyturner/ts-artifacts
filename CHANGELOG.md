@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.8](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.7...v1.0.8) (2024-09-26)
+
+
+### Bug Fixes
+
+* still struggling with exporting class against type ([#23](https://github.com/treyturner/ts-artifacts-api-client/issues/23)) ([f7b7a05](https://github.com/treyturner/ts-artifacts-api-client/commit/f7b7a05dbe72ea50c96c7ac09af2423c1f0c92fa))
+
 ## [1.0.7](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.6...v1.0.7) (2024-09-26)
 
 
