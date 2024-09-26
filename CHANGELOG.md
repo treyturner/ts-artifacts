@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.5](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.4...v1.0.5) (2024-09-26)
+
+
+### Features
+
+* update gen'd types, add new task endpoints and unpaged reqs ([#18](https://github.com/treyturner/ts-artifacts-api-client/issues/18)) ([8eb05e0](https://github.com/treyturner/ts-artifacts-api-client/commit/8eb05e0f61a1c63a30c2bbd7ec658a7fc3354fe7))
+
+
+### Code Refactoring
+
+* move types ([#16](https://github.com/treyturner/ts-artifacts-api-client/issues/16)) ([082cf0c](https://github.com/treyturner/ts-artifacts-api-client/commit/082cf0c876ac067f359aefa42f464e823fb2e881))
+
 ## [1.0.4](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.3...v1.0.4) (2024-09-25)
 
 
