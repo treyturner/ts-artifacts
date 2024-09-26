@@ -10,7 +10,19 @@
     "ignore": ["dist"]
   },
   "linter": {
-    "ignore": ["dist"]
+    "ignore": ["dist"],
+    "rules": {
+      "correctness": {
+        "noUnusedVariables": {
+          "level": "error",
+          "fix": "none"
+        },
+        "noUnusedImports": {
+          "level": "error",
+          "fix": "none"
+        }
+      }
+    }
   },
   "javascript": {
     "formatter": {

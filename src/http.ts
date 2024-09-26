@@ -158,20 +158,20 @@ async function handlePageResponse<T extends DataPage>(callerName: string, respon
 }
 
 /** Page-handling wrapper for collecting all matching records across multiple data pages */
-export async function handlePaging<T, R extends DataPageReq | undefined>(
+export async function handlePaging<T, R extends DataPageReq | undefined | never>(
   config: Config,
   callerName: string,
-  getPageFn: (query: DataPageReq) => Promise<DataPage<T>>,
+  getPageFn: (pageQuery: DataPageReq) => Promise<DataPage<T>>,
   query?: Omit<NonNullable<R>, "page" | "size">,
 ) {
-  const fullQuery: DataPageReq & { page: number } = { ...query, size: 100, page: 1 };
+  const pageQuery: DataPageReq & { page: number } = { ...query, size: 100, page: 1 };
   const items: T[] = [];
   let body: DataPage<T>;
 
   do {
-    body = await getPageFn(fullQuery);
+    body = await getPageFn(pageQuery);
     items.push(...body.data);
-    fullQuery.page++;
+    pageQuery.page++;
   } while (body.page && body.pages && body.pages > body.page);
 
   if (config.prefs.logHttpResponses)

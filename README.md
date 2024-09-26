@@ -13,19 +13,52 @@ API coverage is believed to be complete. Some amount of automated E2E testing pa
 
 Automated test coverage will be expanded in the future but isn't a priority at this time.
 
+At this time, development is driven by the needs of my [CLI](https://github.com/treyturner/ts-artifacts-cli). I'm currently exploring approaches to game and client state management.
+
+## Installation
+
+Add as a dependency to your project's `package.json`:
+
+```json
+dependencies: {
+  "@trey.turner/artifacts-api-client": "^1.0.5"
+}
+```
+
+Then install using your package manager or runtime of choice, like [bun](https://bun.sh):
+
+```sh
+user@dev:~/ts-artifacts-api-client$ bun i
+bun install v1.1.26 (0a37423b)
+
+$ husky
+
++ typescript@5.5.4
++ @biomejs/biome@1.8.3
++ @commitlint/cli@19.4.1
++ @commitlint/config-conventional@19.4.1
++ @types/bun@1.1.8
++ cz-conventional-changelog@3.3.0
++ dotenv@16.4.5
++ husky@9.1.5
++ node-inspect-extracted@3.0.2
+
+225 packages installed [662.00ms]
+```
+
 ## Configuration
 
 Configuration can be supplied via environment variables or constructor arguments.
 
-One of (an API token) or (a username and password) are required to make authenticated requests, but you can mine data out of `info` endpoints without them.
+One of (an API token) or (a username and password) are required to make authenticated requests, but you can mine data out of `info` endpoints without them. A token will be retrieved automatically if not set when calling an authenticated endpoint, or it can be acquired programatically at any time with `await client.setToken()`.
 
-Calling an action (or any endpoint with `{name}` in the path) before configuring the client with a character will cause an exception to be thrown.
+Calling an action before selecting a character will cause an exception to be thrown.
 
-Reconfigure a created client by modifying it's `config` property, ie. `client.config.character = "Cujo"` or `client.config.username = "AmonTobin"`.
+Reconfigure an existing client by setting its `config` property, ie. `client.config.character = "Cujo"` or `client.config.username = "AmonTobin"`.
 
 ### Environment variables
 
-Create an `.env` file in the repo root or supply values to supported environment variables using any other means:
+If you did a development install of dependencies, you can copy [`example.env`](example.env) in the repo root to `.env` and edit it to supply values to supported environment variables. Otherwise, they can be set using whatever mechanism available to you:
 
 | Variable                               | Description                                         | Default Value                  |
 |----------------------------------------|-----------------------------------------------------|--------------------------------|
@@ -39,16 +72,26 @@ Create an `.env` file in the repo root or supply values to supported environment
 | `ARTIFACTS_HIDE_CHARACTER_IN_RESPONSE` | Hide character state when logging response bodies?  | `1`                            |
 | `ARTIFACTS_HIDE_COOLDOWN_IN_RESPONSE`  | Hide cooldown details when logging response bodies? | `1`                            |
 
+When your required configuration is set into environment variables, you can use a no-arg constructor:
+
+```ts
+import { ArtifactsApi } from '@trey.turner/artifacts-api-client';
+
+const api = new ArtifactsApi();
+// will logs response to console if configured as such
+await api.info.meta.getServerStatus();
+```
+
 ### Configuration via constructor
 
 ```ts
 import { ArtifactsApi } from '@trey.turner/artifacts-api-client';
 
-const client = new ArtifactsApi({
-  // To make authenticated requests, provide either a username and password
+const ness = new ArtifactsApi({
+  // To make authenticated requests, supply a username and password
   username: "foo",
   password: "bar",
-  // or an API token
+  // An API token can be used instead, but must be valid if supplied
   apiToken: "abc123",
   // Everything else is optional (though character is required to take any action)
   character: "Ness",
@@ -67,14 +110,14 @@ Just a simple example for now of different ways to move a character:
 
 ```ts
 // using discrete x/y coordinates
-await client.move.to(0, 1);
+await ness.move.to(0, 1);
 // or using a coordinate object
-await client.move.to({ x: 0, y: 1 });
+await ness.move.to({ x: 0, y: 1 });
 // or by specifying a resource type and code
-await client.move.toA("resource", "copper_ore");
+await ness.move.toA("resource", "copper_ore");
 ```
 
-The `await` includes waiting for any resulting cooldown to expire.
+The `await` currently includes waiting for any resulting cooldown to expire. This will likely change in the future with the introduction of party management.
 
 ## Structure
 
@@ -142,9 +185,14 @@ client
 │   ├── monsters
 │   │   ├── get()
 │   │   └── getAll()
-│   └── resources
+│   ├── resources
+|   │   ├── get()
+|   │   └── getAll()
+|   └── tasks
 |       ├── get()
-|       └── getAll()
+|       ├── getAll()
+|       ├── getAllRewards()
+|       └── getReward()
 ├── items
 │   ├── discard()
 │   ├── equip()
@@ -158,5 +206,6 @@ client
     ├── accept()
     ├── cancel()
     ├── complete()
-    └── exchange()
+    ├── exchange()
+    └── trade()
 ```

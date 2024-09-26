@@ -25,4 +25,4 @@ jobs:
           bun-version-file: ".bun-version"
       - run: bun install --frozen-lockfile
       - run: bun check
-      - run: bun run test
+      - run: bun test

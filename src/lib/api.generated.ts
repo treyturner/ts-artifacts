@@ -335,9 +335,29 @@ export interface paths {
     put?: never;
     /**
      * Action Task Exchange
-     * @description Exchange 3 tasks coins for a random reward. Rewards are exclusive resources for crafting  items.
+     * @description Exchange 6 tasks coins for a random reward. Rewards are exclusive items or resources.
      */
     post: operations["action_task_exchange_my__name__action_task_exchange_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/my/{name}/action/task/trade": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Action Task Trade
+     * @description Trading items with a Tasks Master.
+     */
+    post: operations["action_task_trade_my__name__action_task_trade_post"];
     delete?: never;
     options?: never;
     head?: never;
@@ -796,6 +816,86 @@ export interface paths {
      * @description Retrieve the details of a Grand Exchange item.
      */
     get: operations["get_ge_item_ge__code__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/tasks/list": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get All Tasks
+     * @description Fetch the list of all tasks.
+     */
+    get: operations["get_all_tasks_tasks_list_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/tasks/list/{code}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Task
+     * @description Retrieve the details of a task.
+     */
+    get: operations["get_task_tasks_list__code__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/tasks/rewards": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get All Tasks Rewards
+     * @description Fetch the list of all tasks rewards. To obtain these rewards, you must exchange 6 task coins with a tasks master.
+     */
+    get: operations["get_all_tasks_rewards_tasks_rewards_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/tasks/rewards/{code}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Tasks Reward
+     * @description Retrieve the details of a tasks reward.
+     */
+    get: operations["get_tasks_reward_tasks_rewards__code__get"];
     put?: never;
     post?: never;
     delete?: never;
@@ -1945,6 +2045,32 @@ export interface components {
       /** Pages */
       pages?: number | null;
     };
+    /** DataPage[TaskFullSchema] */
+    DataPage_TaskFullSchema_: {
+      /** Data */
+      data: components["schemas"]["TaskFullSchema"][];
+      /** Total */
+      total: number | null;
+      /** Page */
+      page: number | null;
+      /** Size */
+      size: number | null;
+      /** Pages */
+      pages?: number | null;
+    };
+    /** DataPage[TasksRewardFullSchema] */
+    DataPage_TasksRewardFullSchema_: {
+      /** Data */
+      data: components["schemas"]["TasksRewardFullSchema"][];
+      /** Total */
+      total: number | null;
+      /** Page */
+      page: number | null;
+      /** Size */
+      size: number | null;
+      /** Pages */
+      pages?: number | null;
+    };
     /** DeleteCharacterSchema */
     DeleteCharacterSchema: {
       /**
@@ -2662,35 +2788,47 @@ export interface components {
       /** @description Player details. */
       character: components["schemas"]["CharacterSchema"];
     };
-    /** TaskResponseSchema */
-    TaskResponseSchema: {
-      data: components["schemas"]["TaskDataSchema"];
+    /** TaskFullResponseSchema */
+    TaskFullResponseSchema: {
+      data: components["schemas"]["TaskFullSchema"];
     };
-    /** TaskRewardDataSchema */
-    TaskRewardDataSchema: {
-      /** @description Cooldown details. */
-      cooldown: components["schemas"]["CooldownSchema"];
-      /** @description Reward details. */
-      reward: components["schemas"]["TaskRewardSchema"];
-      /** @description Player details. */
-      character: components["schemas"]["CharacterSchema"];
-    };
-    /** TaskRewardResponseSchema */
-    TaskRewardResponseSchema: {
-      data: components["schemas"]["TaskRewardDataSchema"];
-    };
-    /** TaskRewardSchema */
-    TaskRewardSchema: {
+    /** TaskFullSchema */
+    TaskFullSchema: {
       /**
        * Code
-       * @description Item code.
+       * @description Task objective.
        */
       code: string;
       /**
-       * Quantity
-       * @description Item quantity.
+       * Level
+       * @description Task level.
        */
-      quantity: number;
+      level: number;
+      /**
+       * Type
+       * @description The type of task.
+       * @enum {string}
+       */
+      type: "monsters" | "items";
+      /**
+       * Min Quantity
+       * @description Minimum amount of task.
+       */
+      min_quantity: number;
+      /**
+       * Max Quantity
+       * @description Maximum amount of task.
+       */
+      max_quantity: number;
+      /**
+       * Skill
+       * @description Skill required to complete the task.
+       */
+      skill: string | null;
+    };
+    /** TaskResponseSchema */
+    TaskResponseSchema: {
+      data: components["schemas"]["TaskDataSchema"];
     };
     /** TaskSchema */
     TaskSchema: {
@@ -2704,12 +2842,91 @@ export interface components {
        * @description The type of task.
        * @enum {string}
        */
-      type: "monsters" | "resources" | "crafts";
+      type: "monsters" | "items";
       /**
        * Total
        * @description The total required to complete the task.
        */
       total: number;
+    };
+    /** TaskTradeDataSchema */
+    TaskTradeDataSchema: {
+      /** @description Cooldown details. */
+      cooldown: components["schemas"]["CooldownSchema"];
+      /** @description Reward details. */
+      trade: components["schemas"]["TaskTradeSchema"];
+      /** @description Player details. */
+      character: components["schemas"]["CharacterSchema"];
+    };
+    /** TaskTradeResponseSchema */
+    TaskTradeResponseSchema: {
+      data: components["schemas"]["TaskTradeDataSchema"];
+    };
+    /** TaskTradeSchema */
+    TaskTradeSchema: {
+      /**
+       * Code
+       * @description Item code.
+       */
+      code: string;
+      /**
+       * Quantity
+       * @description Item quantity.
+       */
+      quantity: number;
+    };
+    /** TasksRewardDataSchema */
+    TasksRewardDataSchema: {
+      /** @description Cooldown details. */
+      cooldown: components["schemas"]["CooldownSchema"];
+      /** @description Reward details. */
+      reward: components["schemas"]["TasksRewardSchema"];
+      /** @description Player details. */
+      character: components["schemas"]["CharacterSchema"];
+    };
+    /** TasksRewardFullResponseSchema */
+    TasksRewardFullResponseSchema: {
+      data: components["schemas"]["TasksRewardFullSchema"];
+    };
+    /** TasksRewardFullSchema */
+    TasksRewardFullSchema: {
+      /**
+       * Code
+       * @description Item code.
+       */
+      code: string;
+      /**
+       * Min Quantity
+       * @description Minimum quantity of item.
+       */
+      min_quantity: number;
+      /**
+       * Max Quantity
+       * @description Maximum quantity of item.
+       */
+      max_quantity: number;
+      /**
+       * Odds
+       * @description Item odds.
+       */
+      odds: number;
+    };
+    /** TasksRewardResponseSchema */
+    TasksRewardResponseSchema: {
+      data: components["schemas"]["TasksRewardDataSchema"];
+    };
+    /** TasksRewardSchema */
+    TasksRewardSchema: {
+      /**
+       * Code
+       * @description Item code.
+       */
+      code: string;
+      /**
+       * Quantity
+       * @description Item quantity.
+       */
+      quantity: number;
     };
     /** TokenResponseSchema */
     TokenResponseSchema: {
@@ -2894,6 +3111,13 @@ export interface operations {
       };
       /** @description Character level is insufficient. */
       496: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Character inventory is full. */
+      497: {
         headers: {
           [name: string]: unknown;
         };
@@ -3912,7 +4136,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["TaskRewardResponseSchema"];
+          "application/json": components["schemas"]["TasksRewardResponseSchema"];
         };
       };
       /** @description An action is already in progress by your character. */
@@ -3984,7 +4208,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["TaskRewardResponseSchema"];
+          "application/json": components["schemas"]["TasksRewardResponseSchema"];
         };
       };
       /** @description Missing item or insufficient quantity. */
@@ -4003,6 +4227,82 @@ export interface operations {
       };
       /** @description Character inventory is full. */
       497: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Character not found. */
+      498: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Character in cooldown. */
+      499: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Tasks Master not found on this map. */
+      598: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  action_task_trade_my__name__action_task_trade_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description Name of your character. */
+        name: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SimpleItemSchema"];
+      };
+    };
+    responses: {
+      /** @description You have successfully trade items to a Tasks Master. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TaskTradeResponseSchema"];
+        };
+      };
+      /** @description Character does not have this task. */
+      474: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Character have already completed the task or are trying to trade too many items. */
+      475: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Missing item or insufficient quantity. */
+      478: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description An action is already in progress by your character. */
+      486: {
         headers: {
           [name: string]: unknown;
         };
@@ -4534,7 +4834,8 @@ export interface operations {
           | "shield"
           | "amulet"
           | "ring"
-          | "artifact";
+          | "artifact"
+          | "currency";
         /** @description Skill to craft items. */
         craft_skill?: "weaponcrafting" | "gearcrafting" | "jewelrycrafting" | "cooking" | "woodcutting" | "mining";
         /** @description Item code of items used as material for crafting. */
@@ -4796,6 +5097,131 @@ export interface operations {
         };
       };
       /** @description Item not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  get_all_tasks_tasks_list_get: {
+    parameters: {
+      query?: {
+        /** @description Minimum level. */
+        min_level?: number;
+        /** @description Maximum level. */
+        max_level?: number;
+        /** @description The code of the skill. */
+        skill?:
+          | "mining"
+          | "woodcutting"
+          | "fishing"
+          | "gearcrafting"
+          | "weaponcrafting"
+          | "jewelrycrafting"
+          | "cooking";
+        /** @description The type of tasks. */
+        type?: "items" | "monsters";
+        /** @description Page number */
+        page?: number;
+        /** @description Page size */
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successfully fetched tasks details. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DataPage_TaskFullSchema_"];
+        };
+      };
+    };
+  };
+  get_task_tasks_list__code__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The code of the task. */
+        code: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successfully fetched task. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TaskFullResponseSchema"];
+        };
+      };
+      /** @description Task not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  get_all_tasks_rewards_tasks_rewards_get: {
+    parameters: {
+      query?: {
+        /** @description Page number */
+        page?: number;
+        /** @description Page size */
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successfully fetched tasks rewards details. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DataPage_TasksRewardFullSchema_"];
+        };
+      };
+    };
+  };
+  get_tasks_reward_tasks_rewards__code__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The code of the tasks reward. */
+        code: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successfully fetched tasks reward. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TasksRewardFullResponseSchema"];
+        };
+      };
+      /** @description Tasks reward not found. */
       404: {
         headers: {
           [name: string]: unknown;

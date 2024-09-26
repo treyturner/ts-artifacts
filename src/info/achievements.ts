@@ -8,11 +8,12 @@ import type {
   CharacterAchievementsReq,
   DataPage,
   DataPageQuery,
+  DataPageReq,
   HasClient,
 } from "../types";
 import { getCallerName } from "../util";
 
-export const achievementsInfo = { get, getAll, getCharacterAchievements };
+export const achievementsInfo = { get, getAll, getCharacterAchievements, getCharacterAchievementsPage, getPage };
 
 async function get(this: HasClient, query: AchievementReq) {
   const method = "GET";
@@ -22,20 +23,27 @@ async function get(this: HasClient, query: AchievementReq) {
   return responseBody.data;
 }
 
-function getAll(this: HasClient, query?: DataPageQuery<AchievementsReq>) {
-  const getAchievementsPage = (query: AchievementsReq = {}) => {
-    const method = "GET";
-    const path = "/achievements";
-    const opts: CallOptions = { auth: false, method, path, query, client: this.client };
-    return pageCall<DataPage<BaseAchievement>>(getCallerName(), opts);
-  };
+function getPage(this: HasClient, query: AchievementsReq = {}) {
+  const method = "GET";
+  const path = "/achievements";
+  const opts: CallOptions = { auth: false, method, path, query, client: this.client };
+  return pageCall<DataPage<BaseAchievement>>(getCallerName(), opts);
+}
 
+function getAll(this: HasClient, query?: DataPageQuery<AchievementsReq>) {
   return handlePaging<BaseAchievement, AchievementsReq>(
     this.client.config,
     getCallerName(),
-    getAchievementsPage,
+    (fullQuery: AchievementsReq) => getPage.call(this, fullQuery),
     query,
   );
+}
+
+function getCharacterAchievementsPage(this: HasClient, characterName: string, query: CharacterAchievementsReq = {}) {
+  const method = "GET";
+  const path = `/characters/${characterName}/achievements`;
+  const opts: CallOptions = { auth: false, method, path, query, client: this.client };
+  return pageCall<DataPage<Achievement>>(getCallerName(), opts);
 }
 
 function getCharacterAchievements(
@@ -43,19 +51,10 @@ function getCharacterAchievements(
   characterName: string,
   query?: DataPageQuery<CharacterAchievementsReq>,
 ) {
-  const getCharacterAchievementsPage = (query: CharacterAchievementsReq = {}) => {
-    const method = "GET";
-    // Use the supplied name rather than the client's
-    // configured character via replacePathTokens
-    const path = `/characters/${characterName}/achievements`;
-    const opts: CallOptions = { auth: false, method, path, query, client: this.client };
-    return pageCall<DataPage<Achievement>>(getCallerName(), opts);
-  };
-
   return handlePaging<Achievement, CharacterAchievementsReq>(
     this.client.config,
     getCallerName(),
-    getCharacterAchievementsPage,
+    (fullQuery: DataPageReq) => getCharacterAchievementsPage.call(this, characterName, fullQuery),
     query,
   );
 }

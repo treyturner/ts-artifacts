@@ -2,7 +2,7 @@ import { handlePaging, infoCall, pageCall } from "../http";
 import type { CallOptions, DataPage, DataPageQuery, HasClient, Monster, MonsterReq, MonstersReq } from "../types";
 import { getCallerName } from "../util";
 
-export const monstersInfo = { get, getAll };
+export const monstersInfo = { get, getAll, getPage };
 
 async function get(this: HasClient, query: MonsterReq) {
   const method = "GET";
@@ -12,13 +12,18 @@ async function get(this: HasClient, query: MonsterReq) {
   return responseBody.data;
 }
 
-function getAll(this: HasClient, query?: DataPageQuery<MonstersReq>) {
-  const getMonstersPage = (query: MonstersReq = {}) => {
-    const method = "GET";
-    const path = "/monster";
-    const opts: CallOptions = { auth: false, method, path, query, client: this.client };
-    return pageCall<DataPage<Monster>>(getCallerName(), opts);
-  };
+function getPage(this: HasClient, query: MonstersReq = {}) {
+  const method = "GET";
+  const path = "/monster";
+  const opts: CallOptions = { auth: false, method, path, query, client: this.client };
+  return pageCall<DataPage<Monster>>(getCallerName(), opts);
+}
 
-  return handlePaging<Monster, MonstersReq>(this.client.config, getCallerName(), getMonstersPage, query);
+function getAll(this: HasClient, query?: DataPageQuery<MonstersReq>) {
+  return handlePaging<Monster, MonstersReq>(
+    this.client.config,
+    getCallerName(),
+    (fullQuery: MonstersReq) => getPage.call(this, fullQuery),
+    query,
+  );
 }

@@ -11,7 +11,7 @@ import type {
 } from "../types";
 import { getCallerName } from "../util";
 
-export const characters = { create, destroy, getAll, getLogs };
+export const characters = { create, destroy, getAll, getLogs, getLogsPage, getPage };
 
 async function create(this: HasClient, body: AddCharacterReq) {
   const method = "POST";
@@ -29,24 +29,28 @@ async function destroy(this: HasClient, body: DeleteCharacterReq) {
   return responseBody.data;
 }
 
-function getAll(this: HasClient) {
-  const getCharactersPage = (query: DataPageReq = {}) => {
-    const method = "GET";
-    const path = "/my/characters";
-    const opts: CallOptions = { auth: true, method, path, query, client: this.client };
-    return pageCall<DataPage<Character>>(getCallerName(), opts);
-  };
+function getPage(this: HasClient, query: DataPageReq = {}) {
+  const method = "GET";
+  const path = "/my/characters";
+  const opts: CallOptions = { auth: true, method, path, query, client: this.client };
+  return pageCall<DataPage<Character>>(getCallerName(), opts);
+}
 
-  return handlePaging<Character, undefined>(this.client.config, getCallerName(), getCharactersPage);
+function getAll(this: HasClient) {
+  return handlePaging<Character, never>(this.client.config, getCallerName(), (fullQuery: DataPageReq) =>
+    getPage.call(this, fullQuery),
+  );
+}
+
+function getLogsPage(this: HasClient, query: DataPageReq = {}) {
+  const method = "GET";
+  const path = "/my/logs";
+  const opts: CallOptions = { auth: true, method, path, query, client: this.client };
+  return pageCall<DataPage<Log>>(getCallerName(), opts);
 }
 
 function getLogs(this: HasClient) {
-  const getLogsPage = (query: DataPageReq = {}) => {
-    const method = "GET";
-    const path = "/my/logs";
-    const opts: CallOptions = { auth: true, method, path, query, client: this.client };
-    return pageCall<DataPage<Log>>(getCallerName(), opts);
-  };
-
-  return handlePaging<Log, undefined>(this.client.config, getCallerName(), getLogsPage);
+  return handlePaging<Log, never>(this.client.config, getCallerName(), (fullQuery: DataPageReq) =>
+    getLogsPage.call(this, fullQuery),
+  );
 }

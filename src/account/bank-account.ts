@@ -2,7 +2,7 @@ import { handlePaging, infoCall, pageCall } from "../http";
 import type { Bank, BankItemsReq, CallOptions, DataPage, DataPageQuery, HasClient, SimpleItem } from "../types";
 import { getCallerName } from "../util";
 
-export const accountBank = { getDetails, getItems };
+export const accountBank = { getDetails, getItems, getItemsPage };
 
 async function getDetails(this: HasClient) {
   const method = "GET";
@@ -12,13 +12,18 @@ async function getDetails(this: HasClient) {
   return responseBody.data;
 }
 
-function getItems(this: HasClient, query?: DataPageQuery<BankItemsReq>) {
-  const getItemsPage = (query: BankItemsReq) => {
-    const method = "GET";
-    const path = "/my/bank/items";
-    const opts: CallOptions = { auth: true, method, path, query, client: this.client };
-    return pageCall<DataPage<SimpleItem>>(getCallerName(), opts);
-  };
+function getItemsPage(this: HasClient, query: BankItemsReq) {
+  const method = "GET";
+  const path = "/my/bank/items";
+  const opts: CallOptions = { auth: true, method, path, query, client: this.client };
+  return pageCall<DataPage<SimpleItem>>(getCallerName(), opts);
+}
 
-  return handlePaging<SimpleItem, BankItemsReq>(this.client.config, getCallerName(), getItemsPage, query);
+function getItems(this: HasClient, query?: DataPageQuery<BankItemsReq>) {
+  return handlePaging<SimpleItem, BankItemsReq>(
+    this.client.config,
+    getCallerName(),
+    (fullQuery: BankItemsReq) => getItemsPage.call(this, fullQuery),
+    query,
+  );
 }

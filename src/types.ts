@@ -31,6 +31,8 @@ export type LeaderboardReq = Operations["get_leaderboard_leaderboard_get"]["para
 export type MapReq = Operations["get_map_maps__x___y__get"]["parameters"]["path"];
 export type MonsterReq = Operations["get_monster_monsters__code__get"]["parameters"]["path"];
 export type MoveReq = Schemas["DestinationSchema"];
+export type TaskReq = Operations["get_task_tasks_list__code__get"]["parameters"]["path"];
+export type TasksRewardReq = Operations["get_tasks_reward_tasks_rewards__code__get"]["parameters"]["path"];
 export type RecycleReq = Schemas["RecyclingSchema"];
 export type ResourceReq = Operations["get_resource_resources__code__get"]["parameters"]["path"];
 // Generated UnequipReq type doesn't set quantity as optional?
@@ -70,9 +72,15 @@ export type SimpleItem = Schemas["SimpleItemSchema"];
 export type SingleItem = Schemas["SingleItemSchema"];
 export type SkillData = Schemas["SkillDataSchema"];
 export type SkillInfo = Schemas["SkillInfoSchema"];
+export type Task = Schemas["TaskSchema"];
 export type TaskData = Schemas["TaskDataSchema"];
+export type TaskFull = Schemas["TaskFullSchema"];
+export type TaskTrade = Schemas["TaskTradeSchema"];
+export type TaskTradeData = Schemas["TaskTradeDataSchema"];
+export type TasksReward = Schemas["TasksRewardSchema"];
+export type TasksRewardData = Schemas["TasksRewardDataSchema"];
+export type TasksRewardFull = Schemas["TasksRewardFullSchema"];
 export type TaskCancelled = Schemas["TaskCancelledSchema"];
-export type TaskRewardData = Schemas["TaskRewardDataSchema"];
 export type TokenResponse = Schemas["TokenResponseSchema"];
 
 // top-level types found nested within response types
@@ -88,6 +96,8 @@ export type ItemsReq = Operations["get_all_items_items_get"]["parameters"]["quer
 export type MapsReq = Operations["get_all_maps_maps_get"]["parameters"]["query"];
 export type MonstersReq = Operations["get_all_monsters_monsters_get"]["parameters"]["query"];
 export type ResourcesReq = Operations["get_all_resources_resources_get"]["parameters"]["query"];
+export type TasksReq = Operations["get_all_tasks_tasks_list_get"]["parameters"]["query"];
+export type TasksRewardsReq = Operations["get_all_tasks_rewards_tasks_rewards_get"]["parameters"]["query"];
 
 // interesting enums
 export type CooldownReason = Cooldown["reason"];
@@ -169,7 +179,9 @@ export type DataPage<
     | Mapp
     | Monster
     | Resource
-    | SimpleItem,
+    | SimpleItem
+    | TaskFull
+    | TasksRewardFull,
 > = {
   data: T[];
   total: number | null;

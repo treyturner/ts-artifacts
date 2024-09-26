@@ -17,11 +17,10 @@
     "clean": "rm -rf dist",
     "format": "biome format src/ test/",
     "format:fix": "biome format --write src/ test/",
-    "generate": "openapi-typescript https://api.artifactsmmo.com/openapi.json -o ./src/lib/api.generated.ts",
+    "generate": "openapi-typescript https://api.artifactsmmo.com/openapi.json -o ./src/lib/api.generated.ts && biome format --write src/lib/api.generated.ts",
     "lint": "biome lint --error-on-warnings src/ test/",
     "lint:fix": "biome lint --error-on-warnings --fix src/ test/",
     "prepare": "husky",
-    "test": "bun test --timeout 15000",
     "typecheck": "tsc -p src/tsconfig.json && tsc --noEmit -p test/tsconfig.json"
   },
   "dependencies": {
