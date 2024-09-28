@@ -19,31 +19,14 @@ At this time, development is driven by the needs of my [CLI](https://github.com/
 
 Add as a dependency to your project's `package.json`:
 
-```json
-dependencies: {
-  "@trey.turner/artifacts-api-client": "^1.0.5"
-}
+```sh
+user@dev:~/ts-artifacts-api-client$ bun add @trey.turner/artifacts-api-client
 ```
 
 Then install using your package manager or runtime of choice, like [bun](https://bun.sh):
 
 ```sh
 user@dev:~/ts-artifacts-api-client$ bun i
-bun install v1.1.26 (0a37423b)
-
-$ husky
-
-+ typescript@5.5.4
-+ @biomejs/biome@1.8.3
-+ @commitlint/cli@19.4.1
-+ @commitlint/config-conventional@19.4.1
-+ @types/bun@1.1.8
-+ cz-conventional-changelog@3.3.0
-+ dotenv@16.4.5
-+ husky@9.1.5
-+ node-inspect-extracted@3.0.2
-
-225 packages installed [662.00ms]
 ```
 
 ## Configuration
