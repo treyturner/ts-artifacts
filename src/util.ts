@@ -73,7 +73,7 @@ export function log(
 }
 
 export function getCallerName() {
-  return new Error().stack?.split("\n")[3].trim().split(" ")[1] ?? "unknownCaller";
+  return new Error().stack?.split("\n")[3]?.trim().split(" ")[1] ?? "unknownCaller";
 }
 
 export function getLogTimestamp(date: Date = new Date()): string {
