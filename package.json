@@ -12,8 +12,8 @@
   "scripts": {
     "prebuild": "bun clean",
     "build": "tsc -p src/tsconfig.json",
-    "check": "bun --silent run lint && bun --silent run format && bun --silent run typecheck",
-    "check:fix": "bun --silent run lint:fix && bun --silent run format:fix && bun --silent run typecheck",
+    "check": "bun run --silent lint && bun run --silent format && bun run --silent typecheck",
+    "check:fix": "bun run --silent lint:fix && bun run --silent format:fix && bun run --silent typecheck",
     "clean": "rm -rf dist",
     "format": "biome format src/ test/",
     "format:fix": "biome format --write src/ test/",
@@ -38,5 +38,8 @@
   },
   "peerDependencies": {
     "typescript": "5.6.2"
-  }
+  },
+  "trustedDependencies": [
+    "@biomejs/biome"
+  ]
 }

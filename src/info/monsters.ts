@@ -6,7 +6,7 @@ export const monstersInfo = { get, getAll, getPage };
 
 async function get(this: HasClient, query: MonsterReq) {
   const method = "GET";
-  const path = `/monster/${query.code}`;
+  const path = `/monsters/${query.code}`;
   const opts: CallOptions = { auth: false, method, path, client: this.client };
   const responseBody = await infoCall<{ data: Monster }>(getCallerName(), opts);
   return responseBody.data;
@@ -14,7 +14,7 @@ async function get(this: HasClient, query: MonsterReq) {
 
 function getPage(this: HasClient, query: MonstersReq = {}) {
   const method = "GET";
-  const path = "/monster";
+  const path = "/monsters";
   const opts: CallOptions = { auth: false, method, path, query, client: this.client };
   return pageCall<DataPage<Monster>>(getCallerName(), opts);
 }

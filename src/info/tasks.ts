@@ -49,7 +49,7 @@ async function getReward(this: HasClient, query: TasksRewardReq) {
 
 function getRewardsPage(this: HasClient, query: TasksRewardsReq) {
   const method = "GET";
-  const path = "/tasks/rewards`";
+  const path = "/tasks/rewards";
   const opts: CallOptions = { auth: false, method, path, query, client: this.client };
   return pageCall<DataPage<TasksRewardFull>>(getCallerName(), opts);
 }
