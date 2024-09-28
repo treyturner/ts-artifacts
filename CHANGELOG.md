@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.9](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.8...v1.0.9) (2024-09-28)
+
+
+### Bug Fixes
+
+* auth no longer required in config ([#28](https://github.com/treyturner/ts-artifacts-api-client/issues/28)) ([fe6ad3c](https://github.com/treyturner/ts-artifacts-api-client/commit/fe6ad3ce2ba2e5eb702d11f3187202d58abc5549))
+* missed loading tasks info into client ([#27](https://github.com/treyturner/ts-artifacts-api-client/issues/27)) ([225532d](https://github.com/treyturner/ts-artifacts-api-client/commit/225532d16cdaa016d0ce5cf3ccc682c51fb28751))
+* typos affecting info.tasks.getRewardsPage and info.monsters.* ([#25](https://github.com/treyturner/ts-artifacts-api-client/issues/25)) ([aa9df7e](https://github.com/treyturner/ts-artifacts-api-client/commit/aa9df7e0276ba5455ac68259d42c096197c05e23))
+
 ## [1.0.8](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.7...v1.0.8) (2024-09-26)
 
 
