@@ -142,7 +142,7 @@ async function handlePageResponse<T extends DataPage>(callerName: string, respon
   try {
     const body = (await response.json()) as T;
     if (!body) throw new Error("Didn't receive a response body?");
-    if (!body.data) throw new Error("Didn't receive data property in response body?");
+    if (!Object.hasOwn(body, "data")) throw new Error("Didn't receive data property in response body?");
     return body;
   } catch (error: unknown) {
     throw new Error(getUnknownErrorText(error, "handling response"));

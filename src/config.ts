@@ -12,15 +12,6 @@ function meetsConfigMinimum(proposed?: Partial<Config>): proposed is Config {
     return false;
   }
 
-  if (!proposed.apiToken && (!proposed.username || !proposed.password)) {
-    log(
-      getCallerName(),
-      "API token (or username and password) are required. Set environment variables or pass constructor arguments",
-      { logFn: console.error },
-    );
-    return false;
-  }
-
   if (!/https?:\/\/.+\..+/.test(proposed.apiHost ?? "")) {
     log(getCallerName(), `Supplied apiHost '${proposed.apiHost}' is invalid`, { logFn: console.error });
     return false;
