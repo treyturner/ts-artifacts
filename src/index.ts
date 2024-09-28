@@ -18,6 +18,7 @@ import { mapsInfo } from "./info/maps";
 import { metaInfo } from "./info/meta";
 import { monstersInfo } from "./info/monsters";
 import { resourcesInfo } from "./info/resources";
+import { tasksInfo } from "./info/tasks";
 import type { Config, HasClient, Preferences } from "./types";
 
 export class ArtifactsApi {
@@ -42,6 +43,7 @@ export class ArtifactsApi {
     meta: HasClient & typeof metaInfo;
     monsters: HasClient & typeof monstersInfo;
     resources: HasClient & typeof resourcesInfo;
+    tasks: HasClient & typeof tasksInfo;
   };
   items: HasClient & typeof itemActions;
   move: HasClient & typeof moveActions;
@@ -70,6 +72,7 @@ export class ArtifactsApi {
       meta: { client: this, ...metaInfo },
       monsters: { client: this, ...monstersInfo },
       resources: { client: this, ...resourcesInfo },
+      tasks: { client: this, ...tasksInfo },
     };
     this.items = { client: this, ...itemActions };
     this.move = { client: this, ...moveActions };
