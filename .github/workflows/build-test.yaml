@@ -1,0 +1,59 @@
+name: Build & Test
+
+on:
+  workflow_call:
+  pull_request:
+
+concurrency:
+  group: ${{ github.event.pull_request.number || github.ref || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  check-and-test:
+    name: check-and-test-${{ matrix.package }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ${{ fromJson(vars.PACKAGES) }}
+    defaults:
+      run:
+        working-directory: packages/${{ matrix.package }}
+    env:
+      ARTIFACTS_API_TOKEN: ${{ secrets.ARTIFACTS_API_TOKEN }}
+      ARTIFACTS_USERNAME: ${{ secrets.ARTIFACTS_USERNAME }}
+      ARTIFACTS_PASSWORD: ${{ secrets.ARTIFACTS_PASSWORD }}
+      ARTIFACTS_CHARACTER: ${{ secrets.ARTIFACTS_CHARACTER }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: ".bun-version"
+      - run: bun install --frozen-lockfile
+      - run: bun check
+      - run: bun test
+
+  build:
+    name: build-${{ matrix.package }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ${{ fromJson(vars.PACKAGES) }}
+    defaults:
+      run:
+        working-directory: packages/${{ matrix.package }}
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: ".bun-version"
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.package }}-dist
+          path: packages/${{ matrix.package }}/dist
+          compression-level: 9
+          retention-days: 7
