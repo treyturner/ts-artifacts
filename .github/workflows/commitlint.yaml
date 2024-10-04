@@ -1,4 +1,5 @@
 name: Lint commits
+
 on: [push, pull_request]
 
 permissions:

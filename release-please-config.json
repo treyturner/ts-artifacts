@@ -7,7 +7,9 @@
   "plugins": ["node-workspace"],
   "separate-pull-requests": true,
   "packages": {
-    "packages/api-client": {}
+    "packages/api-client": {
+      "release-as": "1.0.12"
+    }
   },
   "changelog-sections": [
     { "type": "feat", "section": "Features" },
