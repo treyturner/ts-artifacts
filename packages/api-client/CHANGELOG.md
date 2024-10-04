@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.12](https://github.com/treyturner/ts-artifacts/compare/@trey.turner/artifacts-api-client-v1.0.11...@trey.turner/artifacts-api-client-v1.0.12) (2024-10-04)
+
+
+### Miscellaneous Chores
+
+* **main:** convert to monorepo ([#1](https://github.com/treyturner/ts-artifacts/issues/1)) ([ca34c6f](https://github.com/treyturner/ts-artifacts/commit/ca34c6febcfb059fa5354f1d5717e15e28f2408e))
+
 ## [1.0.10](https://github.com/treyturner/ts-artifacts-api-client/compare/v1.0.9...v1.0.10) (2024-10-01)
 
 
