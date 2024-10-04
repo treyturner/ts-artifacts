@@ -1,103 +1,97 @@
 import { ArtifactsApi } from ".";
-import type { components as Components, operations as Operations } from "./lib/api.generated";
+import type { components, operations } from "./lib/api.generated";
 
 /** Collect, organize, & re-export openapi-typescript generated types for convenience */
 
-// entrypoints
-export type {
-  components as Components,
-  operations as Operations,
-  paths as Paths,
-} from "./lib/api.generated";
-export type Schemas = Components["schemas"];
-
 // request types
-export type AchievementReq = Operations["get_achievement_achievements__code__get"]["parameters"]["path"];
-export type AddAccountReq = Schemas["AddAccountSchema"];
-export type AddCharacterReq = Schemas["AddCharacterSchema"];
-export type ChangePasswordReq = Schemas["ChangePassword"];
+export type AchievementReq = operations["get_achievement_achievements__code__get"]["parameters"]["path"];
+export type AddAccountReq = components["schemas"]["AddAccountSchema"];
+export type AddCharacterReq = components["schemas"]["AddCharacterSchema"];
+export type ChangePasswordReq = components["schemas"]["ChangePassword"];
 export type CharacterAchievementsReq =
-  Operations["get_character_achievements_characters__name__achievements_get"]["parameters"]["query"];
-export type CharacterReq = Operations["get_character_characters__name__get"]["parameters"]["path"];
-export type CraftReq = Schemas["CraftingSchema"];
-export type DeleteReq = Schemas["SimpleItemSchema"];
-export type DeleteCharacterReq = Schemas["DeleteCharacterSchema"];
+  operations["get_character_achievements_characters__name__achievements_get"]["parameters"]["query"];
+export type CharacterReq = operations["get_character_characters__name__get"]["parameters"]["path"];
+export type CraftReq = components["schemas"]["CraftingSchema"];
+export type DeleteReq = components["schemas"]["SimpleItemSchema"];
+export type DeleteCharacterReq = components["schemas"]["DeleteCharacterSchema"];
 // Generated EquipReq type doesn't set quantity as optional?
-export type EquipReq = Omit<Schemas["EquipSchema"], "quantity"> & Partial<Schemas["EquipSchema"]>;
-export type GEItemReq = Operations["get_ge_item_ge__code__get"]["parameters"]["path"];
-export type GoldReq = Schemas["DepositWithdrawGoldSchema"];
-export type ItemReq = Operations["get_item_items__code__get"]["parameters"]["path"];
-export type LeaderboardReq = Operations["get_leaderboard_leaderboard_get"]["parameters"]["query"];
-export type MapReq = Operations["get_map_maps__x___y__get"]["parameters"]["path"];
-export type MonsterReq = Operations["get_monster_monsters__code__get"]["parameters"]["path"];
-export type MoveReq = Schemas["DestinationSchema"];
-export type TaskReq = Operations["get_task_tasks_list__code__get"]["parameters"]["path"];
-export type TasksRewardReq = Operations["get_tasks_reward_tasks_rewards__code__get"]["parameters"]["path"];
-export type RecycleReq = Schemas["RecyclingSchema"];
-export type ResourceReq = Operations["get_resource_resources__code__get"]["parameters"]["path"];
+export type EquipReq = Omit<components["schemas"]["EquipSchema"], "quantity"> &
+  Partial<components["schemas"]["EquipSchema"]>;
+export type GEItemReq = operations["get_ge_item_ge__code__get"]["parameters"]["path"];
+export type GoldReq = components["schemas"]["DepositWithdrawGoldSchema"];
+export type ItemReq = operations["get_item_items__code__get"]["parameters"]["path"];
+export type LeaderboardReq = operations["get_leaderboard_leaderboard_get"]["parameters"]["query"];
+export type MapReq = operations["get_map_maps__x___y__get"]["parameters"]["path"];
+export type MonsterReq = operations["get_monster_monsters__code__get"]["parameters"]["path"];
+export type MoveReq = components["schemas"]["DestinationSchema"];
+export type TaskReq = operations["get_task_tasks_list__code__get"]["parameters"]["path"];
+export type TasksRewardReq = operations["get_tasks_reward_tasks_rewards__code__get"]["parameters"]["path"];
+export type RecycleReq = components["schemas"]["RecyclingSchema"];
+export type ResourceReq = operations["get_resource_resources__code__get"]["parameters"]["path"];
 // Generated UnequipReq type doesn't set quantity as optional?
-export type UnequipReq = Omit<Schemas["UnequipSchema"], "quantity"> & Partial<Schemas["UnequipSchema"]>;
+export type UnequipReq = Omit<components["schemas"]["UnequipSchema"], "quantity"> &
+  Partial<components["schemas"]["UnequipSchema"]>;
 
 // response types
-export type Achievement = Schemas["AchievementSchema"];
-export type ActiveEvent = Schemas["ActiveEventSchema"];
-export type ApiResponse = Schemas["ResponseSchema"];
-export type Bank = Schemas["BankSchema"];
-export type BankItem = Schemas["BankItemTransactionSchema"];
-export type BankExtensionTransaction = Schemas["BankExtensionTransactionSchema"];
-export type BaseAchievement = Schemas["BaseAchievementSchema"];
-export type Character = Schemas["CharacterSchema"];
-export type CharacterFightData = Schemas["CharacterFightDataSchema"];
-export type CharacterLeaderboard = Schemas["CharacterLeaderboardSchema"];
-export type CharacterMovementData = Schemas["CharacterMovementDataSchema"];
-export type Cooldown = Schemas["CooldownSchema"];
-export type DeleteItem = Schemas["DeleteItemSchema"];
-export type Equip = Schemas["EquipRequestSchema"];
-export type Fight = Schemas["FightSchema"];
-export type Gold = Schemas["GoldSchema"];
-export type GoldTransaction = Schemas["BankGoldTransactionSchema"];
-export type GEItem = Schemas["GEItemSchema"];
-export type GETransactionItem = Schemas["GETransactionItemSchema"];
-export type GETransactionList = Schemas["GETransactionListSchema"];
-export type InventorySlot = Schemas["InventorySlot"];
-export type Item = Schemas["ItemSchema"];
-export type ItemEffect = Schemas["ItemEffectSchema"];
-export type Log = Schemas["LogSchema"];
-export type Mapp = Schemas["MapSchema"];
-export type Monster = Schemas["MonsterSchema"];
-export type RecyclingData = Schemas["RecyclingDataSchema"];
-export type RecyclingItems = Schemas["RecyclingItemsSchema"];
-export type Resource = Schemas["ResourceSchema"];
-export type SimpleItem = Schemas["SimpleItemSchema"];
-export type SingleItem = Schemas["SingleItemSchema"];
-export type SkillData = Schemas["SkillDataSchema"];
-export type SkillInfo = Schemas["SkillInfoSchema"];
-export type Task = Schemas["TaskSchema"];
-export type TaskData = Schemas["TaskDataSchema"];
-export type TaskFull = Schemas["TaskFullSchema"];
-export type TaskTrade = Schemas["TaskTradeSchema"];
-export type TaskTradeData = Schemas["TaskTradeDataSchema"];
-export type TasksReward = Schemas["TasksRewardSchema"];
-export type TasksRewardData = Schemas["TasksRewardDataSchema"];
-export type TasksRewardFull = Schemas["TasksRewardFullSchema"];
-export type TaskCancelled = Schemas["TaskCancelledSchema"];
-export type TokenResponse = Schemas["TokenResponseSchema"];
+export type Achievement = components["schemas"]["AchievementSchema"];
+export type ActiveEvent = components["schemas"]["ActiveEventSchema"];
+export type ApiResponse = components["schemas"]["ResponseSchema"];
+export type Bank = components["schemas"]["BankSchema"];
+export type BankItem = components["schemas"]["BankItemTransactionSchema"];
+export type BankExtensionTransaction = components["schemas"]["BankExtensionTransactionSchema"];
+export type BaseAchievement = components["schemas"]["BaseAchievementSchema"];
+export type Character = components["schemas"]["CharacterSchema"];
+export type CharacterFightData = components["schemas"]["CharacterFightDataSchema"];
+export type CharacterLeaderboard = components["schemas"]["CharacterLeaderboardSchema"];
+export type CharacterMovementData = components["schemas"]["CharacterMovementDataSchema"];
+export type Cooldown = components["schemas"]["CooldownSchema"];
+export type DeleteItem = components["schemas"]["DeleteItemSchema"];
+export type Equip = components["schemas"]["EquipRequestSchema"];
+export type Fight = components["schemas"]["FightSchema"];
+export type Gold = components["schemas"]["GoldSchema"];
+export type GoldTransaction = components["schemas"]["BankGoldTransactionSchema"];
+export type GEItem = components["schemas"]["GEItemSchema"];
+export type GETransactionItem = components["schemas"]["GETransactionItemSchema"];
+export type GETransactionList = components["schemas"]["GETransactionListSchema"];
+export type InventorySlot = components["schemas"]["InventorySlot"];
+export type Item = components["schemas"]["ItemSchema"];
+export type ItemEffect = components["schemas"]["ItemEffectSchema"];
+export type Log = components["schemas"]["LogSchema"];
+export type Mapp = components["schemas"]["MapSchema"];
+export type Monster = components["schemas"]["MonsterSchema"];
+export type RecyclingData = components["schemas"]["RecyclingDataSchema"];
+export type RecyclingItems = components["schemas"]["RecyclingItemsSchema"];
+export type Resource = components["schemas"]["ResourceSchema"];
+export type SimpleItem = components["schemas"]["SimpleItemSchema"];
+export type SingleItem = components["schemas"]["SingleItemSchema"];
+export type SkillData = components["schemas"]["SkillDataSchema"];
+export type SkillInfo = components["schemas"]["SkillInfoSchema"];
+export type Task = components["schemas"]["TaskSchema"];
+export type TaskData = components["schemas"]["TaskDataSchema"];
+export type TaskFull = components["schemas"]["TaskFullSchema"];
+export type TaskTrade = components["schemas"]["TaskTradeSchema"];
+export type TaskTradeData = components["schemas"]["TaskTradeDataSchema"];
+export type TasksReward = components["schemas"]["TasksRewardSchema"];
+export type TasksRewardData = components["schemas"]["TasksRewardDataSchema"];
+export type TasksRewardFull = components["schemas"]["TasksRewardFullSchema"];
+export type TaskCancelled = components["schemas"]["TaskCancelledSchema"];
+export type TokenResponse = components["schemas"]["TokenResponseSchema"];
 
 // top-level types found nested within response types
-export type Craft = Schemas["CraftSchema"];
-export type Drop = Schemas["DropSchema"];
-export type MapContent = Schemas["MapContentSchema"];
+export type Craft = components["schemas"]["CraftSchema"];
+export type Drop = components["schemas"]["DropSchema"];
+export type MapContent = components["schemas"]["MapContentSchema"];
 
 // data page request types
-export type AchievementsReq = Operations["get_all_achievements_achievements_get"]["parameters"]["query"];
-export type BankItemsReq = Operations["get_bank_items_my_bank_items_get"]["parameters"]["query"];
-export type GEItemsReq = Operations["get_all_ge_items_ge_get"]["parameters"]["query"];
-export type ItemsReq = Operations["get_all_items_items_get"]["parameters"]["query"];
-export type MapsReq = Operations["get_all_maps_maps_get"]["parameters"]["query"];
-export type MonstersReq = Operations["get_all_monsters_monsters_get"]["parameters"]["query"];
-export type ResourcesReq = Operations["get_all_resources_resources_get"]["parameters"]["query"];
-export type TasksReq = Operations["get_all_tasks_tasks_list_get"]["parameters"]["query"];
-export type TasksRewardsReq = Operations["get_all_tasks_rewards_tasks_rewards_get"]["parameters"]["query"];
+export type AchievementsReq = operations["get_all_achievements_achievements_get"]["parameters"]["query"];
+export type BankItemsReq = operations["get_bank_items_my_bank_items_get"]["parameters"]["query"];
+export type GEItemsReq = operations["get_all_ge_items_ge_get"]["parameters"]["query"];
+export type ItemsReq = operations["get_all_items_items_get"]["parameters"]["query"];
+export type MapsReq = operations["get_all_maps_maps_get"]["parameters"]["query"];
+export type MonstersReq = operations["get_all_monsters_monsters_get"]["parameters"]["query"];
+export type ResourcesReq = operations["get_all_resources_resources_get"]["parameters"]["query"];
+export type TasksReq = operations["get_all_tasks_tasks_list_get"]["parameters"]["query"];
+export type TasksRewardsReq = operations["get_all_tasks_rewards_tasks_rewards_get"]["parameters"]["query"];
 
 // interesting enums
 export type CooldownReason = Cooldown["reason"];
@@ -106,19 +100,30 @@ export type EquipSlot = EquipReq["slot"];
 export type MapContentType = Pick<NonNullable<MapsReq>, "content_type">["content_type"];
 
 // meta
-export type ServerStatus = Schemas["StatusSchema"];
+export type ServerStatus = components["schemas"]["StatusSchema"];
 
 /**
  * custom types (not derived from openapi spec)
  **/
-
 export { ArtifactsApi };
-
 export type State = {
   party: Character[];
-  bank: {
-    meta: Bank;
-    items: BankItems;
+  bank: Partial<Bank> & { items: SimpleItem[] };
+  game: {
+    achievements: BaseAchievement[];
+    items: Item[];
+    maps: Mapp[];
+    monsters: Monster[];
+    resources: Resource[];
+    tasks: TaskFull[];
+    taskRewards: TasksRewardFull[];
+  };
+  world: {
+    characters: Character[];
+    events: ActiveEvent[];
+    exchange: GEItem[];
+    leaderboard: CharacterLeaderboard[];
+    serverStatus: RequireArraysOthersPartial<ServerStatus>;
   };
 };
 
@@ -192,7 +197,18 @@ export type DataPage<
 };
 
 /** Rolled up result of multiple bank item transactions */
-export type BankItems = Omit<Schemas["BankItemTransactionSchema"], "item"> & { items: Item[] };
+export type BankItems = Omit<components["schemas"]["BankItemTransactionSchema"], "item"> & { items: Item[] };
 
 /** Utility types */
 export type RecursivePartial<T> = { [P in keyof T]?: RecursivePartial<T[P]> };
+// biome-ignore lint/suspicious/noExplicitAny: array check
+export type ArrayKeys<T> = { [K in keyof T]: Array<any> extends T[K] ? K : never }[keyof T];
+export type RequireArrays<T extends object> = T & Pick<Required<T>, ArrayKeys<T>>;
+export type RequireArraysOthersPartial<T extends object> = Partial<T> & Pick<Required<T>, ArrayKeys<T>>;
+
+// greasy hack to enforce non-negative integer less than supplied value
+// WARNING: only good up to 768 or so, ymmv
+export type Length<T extends unknown[]> = T extends { length: infer L } ? L : never;
+export type LessThan<L extends number, T extends unknown[] = [], O = 0> = T extends { length: L }
+  ? O
+  : LessThan<L, [...T, unknown], O | Length<T>>;

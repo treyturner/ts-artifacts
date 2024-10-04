@@ -19,10 +19,11 @@ import { metaInfo } from "./info/meta";
 import { monstersInfo } from "./info/monsters";
 import { resourcesInfo } from "./info/resources";
 import { tasksInfo } from "./info/tasks";
-import type { Config, HasClient, Preferences } from "./types";
+import type { Config, HasClient, Preferences, State } from "./types";
 
 export class ArtifactsApi {
   config: Config;
+  state: State;
 
   account: HasClient &
     typeof account & {
@@ -51,6 +52,7 @@ export class ArtifactsApi {
 
   constructor(opts?: Omit<Partial<Config>, "prefs"> & { prefs?: Partial<Preferences> }) {
     this.config = getConfig(opts);
+    this.state = initState();
     this.account = {
       client: this,
       ...account,
@@ -82,4 +84,63 @@ export class ArtifactsApi {
   async setToken() {
     this.config.apiToken = await this.account.getToken();
   }
+
+  async syncGameInfo() {
+    this.state.game.achievements = await this.info.achievements.getAll();
+    this.state.game.items = await this.info.items.getAll();
+    this.state.game.maps = await this.info.maps.getAll();
+    this.state.game.monsters = await this.info.monsters.getAll();
+    this.state.game.resources = await this.info.resources.getAll();
+    this.state.game.taskRewards = await this.info.tasks.getAllRewards();
+    this.state.game.tasks = await this.info.tasks.getAll();
+  }
+
+  async syncWorldInfo() {
+    this.state.world.characters = await this.info.characters.getAll();
+    this.state.world.events = await this.info.meta.getEvents();
+    this.state.world.exchange = await this.info.exchangeItems.getAll();
+    this.state.world.leaderboard = await this.info.meta.getLeaderboard();
+    this.state.world.serverStatus = await this.info.meta.getServerStatus();
+  }
+
+  async syncAccountInfo() {
+    if (this.config.apiToken || (this.config.username && this.config.password)) {
+      this.state.party = await this.account.characters.getAll();
+      this.state.bank = {
+        ...(await this.account.bank.getDetails()),
+        ...{ items: await this.account.bank.getItems() },
+      };
+    }
+  }
+
+  async sync() {
+    return Promise.all([this.syncGameInfo(), this.syncWorldInfo(), this.syncAccountInfo()]);
+  }
+}
+
+function initState(): State {
+  return {
+    party: [],
+    bank: {
+      items: [],
+    },
+    game: {
+      achievements: [],
+      items: [],
+      maps: [],
+      monsters: [],
+      resources: [],
+      tasks: [],
+      taskRewards: [],
+    },
+    world: {
+      characters: [],
+      events: [],
+      exchange: [],
+      leaderboard: [],
+      serverStatus: {
+        announcements: [],
+      },
+    },
+  };
 }
