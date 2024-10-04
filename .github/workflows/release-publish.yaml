@@ -36,7 +36,7 @@ jobs:
       packages-released: ${{ steps.get-packages-released.outputs.result }}
 
   publish:
-    name: Publish ${{ matrix.package }}
+    name: Publish
     if: ${{ needs.release-please.outputs.packages-released != '[]' }}
     runs-on: ubuntu-latest
     needs: [release-please]
