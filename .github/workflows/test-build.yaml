@@ -1,8 +1,6 @@
-name: Build & Test
+name: Test & Build PR
 
-on:
-  workflow_call:
-  pull_request:
+on: [workflow_call, pull_request]
 
 concurrency:
   group: ${{ github.event.pull_request.number || github.ref || github.sha }}
@@ -10,7 +8,7 @@ concurrency:
 
 jobs:
   check-and-test:
-    name: check-and-test-${{ matrix.package }}
+    name: Check & Test ${{ matrix.package }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -33,7 +31,7 @@ jobs:
       - run: bun test
 
   build:
-    name: build-${{ matrix.package }}
+    name: Build ${{ matrix.package }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
