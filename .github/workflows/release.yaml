@@ -1,9 +1,10 @@
 name: Last successful build published to npm registry
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
 
 permissions:
   contents: write
