@@ -2,13 +2,18 @@
   "name": "@trey.turner/ts-artifacts",
   "private": "true",
   "type": "module",
-  "workspaces": ["packages/api-client"],
-  "respository": {
+  "workspaces": ["packages/*"],
+  "repository": {
     "type": "git",
     "url": "https://github.com/treyturner/ts-artifacts.git"
   },
   "scripts": {
-    "clean": "rm -rf node_modules bun.lockb && bun run --filter \"*\" clean",
+    "build": "bun run --silent --filter \"*\" build",
+    "check": "bun run --silent --filter \"*\" check",
+    "check:fix": "bun run --silent --filter \"*\" check:fix",
+    "clean": "bun run --silent clean:build && bun run --silent clean:deps",
+    "clean:build": "bun run --silent --filter \"*\" clean:build",
+    "clean:deps": "rm -rf node_modules bun.lockb && bun run --silent --filter \"*\" clean:deps",
     "prepare": "husky"
   },
   "devDependencies": {
