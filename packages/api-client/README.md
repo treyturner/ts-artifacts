@@ -1,6 +1,6 @@
-# ts-artifacts-api-client
+# artifacts-api-client
 
-A typed and promisified API client for [Artifacts MMO](https://artifactsmmo.com).
+A typed and promisified API client for Artifacts MMO in ESM.
 
 ## Status
 
@@ -8,22 +8,12 @@ This is a new project in early development. Pull requests, issues, and suggestio
 
 API coverage is believed to be complete. Some amount of automated E2E testing passed against the game's production API at the time of last release, but changes to the game may cause breakage until this client can be updated.
 
-Automated test coverage will be expanded in the future but isn't a priority at this time.
-
-At this time, development is driven by the needs of my [CLI](https://github.com/treyturner/ts-artifacts-cli). I'm currently exploring approaches to game and client state management.
-
 ## Installation
 
 Add as a dependency to your project's `package.json`:
 
 ```sh
-user@dev:~/ts-artifacts-api-client$ bun add @trey.turner/artifacts-api-client
-```
-
-Then install using your package manager or runtime of choice, like [bun](https://bun.sh):
-
-```sh
-user@dev:~/ts-artifacts-api-client$ bun i
+user@dev:~/some-project$ bun add @trey.turner/artifacts-api-client
 ```
 
 ## Configuration
@@ -58,7 +48,7 @@ When your required configuration is set into environment variables, you can use 
 import { ArtifactsApi } from '@trey.turner/artifacts-api-client';
 
 const api = new ArtifactsApi();
-// will logs response to console if configured as such
+// will log response to console if configured as such
 await api.info.meta.getServerStatus();
 ```
 

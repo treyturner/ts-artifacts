@@ -1,0 +1,22 @@
+export type CharacterLeaderboardSchema = {
+  name: string;
+  skin: string;
+  achievements_points: number;
+  level: number;
+  total_xp: number;
+  mining_level: number;
+  mining_total_xp: number;
+  woodcutting_level: number;
+  woodcutting_total_xp: number;
+  fishing_level: number;
+  fishing_total_xp: number;
+  weaponcrafting_level: number;
+  weaponcrafting_total_xp: number;
+  gearcrafting_level: number;
+  gearcrafting_total_xp: number;
+  jewelrycrafting_level: number;
+  jewelrycrafting_total_xp: number;
+  cooking_level: number;
+  cooking_total_xp: number;
+  gold: number;
+};
