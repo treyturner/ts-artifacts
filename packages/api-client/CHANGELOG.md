@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/treyturner/ts-artifacts/compare/@trey.turner/artifacts-api-client-v1.0.12...@trey.turner/artifacts-api-client-v1.1.0) (2024-10-06)
+
+
+### Features
+
+* **api-client:** experimental state management ([#6](https://github.com/treyturner/ts-artifacts/issues/6)) ([82ee529](https://github.com/treyturner/ts-artifacts/commit/82ee529b2e07e9815f4de80ecf6a899eec000c9e))
+
 ## [1.0.12](https://github.com/treyturner/ts-artifacts/compare/@trey.turner/artifacts-api-client-v1.0.11...@trey.turner/artifacts-api-client-v1.0.12) (2024-10-04)
 
 
