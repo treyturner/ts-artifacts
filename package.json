@@ -14,7 +14,8 @@
     "clean": "bun run --silent clean:build && bun run --silent clean:deps",
     "clean:build": "bun run --silent --filter \"*\" clean:build",
     "clean:deps": "rm -rf node_modules bun.lockb && bun run --silent --filter \"*\" clean:deps",
-    "prepare": "husky"
+    "prepare": "husky",
+    "watch": "bun run --filter \"*\" watch"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.2",

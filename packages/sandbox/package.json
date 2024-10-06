@@ -1,6 +1,7 @@
 {
-  "name": "@trey.turner/artifacts-api-client",
-  "version": "1.0.12",
+  "name": "@trey.turner/artifacts-sandbox",
+  "private": true,
+  "version": "0.0.1",
   "module": "index.ts",
   "main": "dist/index.js",
   "types": "dist/types.d.ts",
@@ -18,20 +19,18 @@
     "clean:deps": "rm -rf node_modules bun.lockb",
     "format": "biome format src/ test/",
     "format:fix": "biome format --write src/ test/",
-    "generate": "openapi-typescript https://api.artifactsmmo.com/openapi.json -o ./src/lib/api.generated.ts && biome format --write src/lib/api.generated.ts",
     "lint": "biome lint --error-on-warnings src/ test/",
     "lint:fix": "biome lint --error-on-warnings --fix src/ test/",
+    "start": "bun run src/index.ts",
     "typecheck": "tsc -p src/tsconfig.json && tsc --noEmit -p test/tsconfig.json",
     "watch": "tsc -w -p src/tsconfig.json"
   },
   "dependencies": {
-    "node-inspect-extracted": "3.0.2"
+    "node-inspect-extracted": "3.0.2",
+    "@trey.turner/artifacts-api-client": "workspace:*"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "bun-bagel": "1.1.0",
-    "dotenv": "16.4.5",
-    "openapi-typescript": "7.4.1",
     "typescript": "5.6.2"
   },
   "peerDependencies": {
