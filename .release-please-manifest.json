@@ -1,4 +1,4 @@
 {
-  "packages/api-client": "1.0.12",
+  "packages/api-client": "1.1.0",
   "packages/mocks-counterfact": "0.0.1"
 }
