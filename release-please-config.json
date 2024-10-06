@@ -1,19 +1,20 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "plugins": ["node-workspace"],
+  "separate-pull-requests": true,
   "include-v-in-tag": true,
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
-  "plugins": ["node-workspace"],
-  "separate-pull-requests": true,
   "packages": {
-    "packages/api-client": {}
+    "packages/api-client": {},
+    "packages/mocks-counterfact": {}
   },
   "changelog-sections": [
-    { "type": "feat", "section": "Features" },
-    { "type": "feature", "section": "Features" },
-    { "type": "fix", "section": "Bug Fixes" },
-    { "type": "perf", "section": "Performance Improvements" },
-    { "type": "revert", "section": "Reverts" },
+    { "type": "feat", "section": "Features", "hidden": false },
+    { "type": "feature", "section": "Features", "hidden": false },
+    { "type": "fix", "section": "Bug Fixes", "hidden": false },
+    { "type": "perf", "section": "Performance Improvements", "hidden": false },
+    { "type": "revert", "section": "Reverts", "hidden": false },
     { "type": "docs", "section": "Documentation", "hidden": false },
     { "type": "style", "section": "Styles", "hidden": false },
     { "type": "chore", "section": "Miscellaneous Chores", "hidden": false },

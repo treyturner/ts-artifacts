@@ -1,0 +1,40 @@
+{
+  "name": "@trey.turner/artifacts-mocks-counterfact",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "main": "dist/index.js",
+  "types": "dist/types.d.ts",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/treyturner/ts-artifacts.git"
+  },
+  "scripts": {
+    "build": "tsc -p src/tsconfig.json",
+    "check": "bun run --silent lint && bun run --silent format && bun run --silent typecheck",
+    "check:fix": "bun run --silent lint:fix && bun run --silent format:fix && bun run --silent typecheck",
+    "clean": "bun run --silent clean:build && bun run --silent clean:deps",
+    "clean:build": "rm -rf dist",
+    "clean:deps": "rm -rf node_modules bun.lockb",
+    "format": "biome format src/ test/",
+    "format:fix": "biome format --write src/ test/",
+    "generate": "bun run counterfact -g https://api.artifactsmmo.com/openapi.json src",
+    "lint": "biome lint --error-on-warnings src/ test/",
+    "lint:fix": "biome lint --error-on-warnings --fix src/ test/",
+    "open": "bun run counterfact -o https://api.artifactsmmo.com/openapi.json src",
+    "repl": "bun run counterfact -wrs https://api.artifactsmmo.com/openapi.json src",
+    "start": "bun run watch",
+    "typecheck": "tsc -p src/tsconfig.json && tsc --noEmit -p test/tsconfig.json",
+    "watch": "bun run counterfact -ws https://api.artifactsmmo.com/openapi.json src"
+  },
+  "dependencies": {
+    "counterfact": "1.1.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "5.6.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
