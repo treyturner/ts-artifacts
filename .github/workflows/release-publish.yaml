@@ -7,26 +7,25 @@ on:
 
 jobs:
   test-and-build:
-    name: main
     uses: ./.github/workflows/test-build.yaml
     secrets: inherit
     permissions:
       contents: read
       id-token: write
 
-  release-please:
+  release:
     name: Maintenance
     runs-on: ubuntu-latest
     needs: [test-and-build]
     steps:
       - uses: googleapis/release-please-action@v4
-        id: release
+        id: release-please
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
       - uses: actions/github-script@v7
         id: get-released-pkgs
         env:
-          PATHS_RELEASED: ${{ steps.release.outputs.paths_released }}
+          PATHS_RELEASED: ${{ steps.release-please.outputs.paths_released }}
           PUBLISHABLE_PKGS: ${{ vars.PUBLISHABLE_PKGS }}
         with:
           script: |
@@ -39,13 +38,13 @@ jobs:
       pkgs-released: ${{ steps.get-released-pkgs.outputs.result }}
 
   publish:
-    name: Publish ${{ matrix.package }}
-    if: ${{ needs.release-please.outputs.pkgs-released != '[]' }}
+    name: Publish
+    if: ${{ needs.release.outputs.pkgs-released != '[]' }}
     runs-on: ubuntu-latest
-    needs: [release-please]
+    needs: [release]
     strategy:
       matrix:
-        package: ${{ fromJson(needs.release-please.outputs.pkgs-released) }}
+        package: ${{ fromJson(needs.release.outputs.pkgs-released) }}
     defaults:
       run:
         working-directory: packages/${{ matrix.package }}
