@@ -15,7 +15,7 @@ jobs:
       id-token: write
 
   release-please:
-    name: Release Automation
+    name: Maintenance
     runs-on: ubuntu-latest
     needs: [test-and-build]
     steps:
@@ -39,7 +39,7 @@ jobs:
       pkgs-released: ${{ steps.get-released-pkgs.outputs.result }}
 
   publish:
-    name: Publish
+    name: Publish ${{ matrix.package }}
     if: ${{ needs.release-please.outputs.pkgs-released != '[]' }}
     runs-on: ubuntu-latest
     needs: [release-please]
