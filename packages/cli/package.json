@@ -1,0 +1,38 @@
+{
+  "name": "@trey.turner/artifacts-cli",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "main": "dist/index.js",
+  "types": "dist/types.d.ts",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/treyturner/ts-artifacts.git"
+  },
+  "scripts": {
+    "build": "tsc -p src/tsconfig.json",
+    "check": "bun run --silent lint && bun run --silent format && bun run --silent typecheck",
+    "check:fix": "bun run --silent lint:fix && bun run --silent format:fix && bun run --silent typecheck",
+    "clean": "bun run --silent clean:build && bun run --silent clean:deps",
+    "clean:build": "rm -rf dist",
+    "clean:deps": "rm -rf node_modules bun.lockb",
+    "format": "biome format src/ test/",
+    "format:fix": "biome format --write src/ test/",
+    "lint": "biome lint --error-on-warnings src/ test/",
+    "lint:fix": "biome lint --error-on-warnings --fix src/ test/",
+    "start": "bun run src/index.ts",
+    "typecheck": "tsc -p src/tsconfig.json && tsc --noEmit -p test/tsconfig.json"
+  },
+  "dependencies": {
+    "@trey.turner/artifacts-api-client": "workspace:*",
+    "node-inspect-extracted": "3.0.2"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "dotenv": "16.4.5",
+    "typescript": "5.6.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
