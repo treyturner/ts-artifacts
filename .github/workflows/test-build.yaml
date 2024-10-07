@@ -1,4 +1,4 @@
-name: Test & Build PR
+name: PR
 
 on: [workflow_call, pull_request]
 
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: ${{ fromJson(vars.PACKAGES) }}
+        package: ${{ fromJson(vars.TESTABLE_PKGS) }}
     defaults:
       run:
         working-directory: packages/${{ matrix.package }}
@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: ${{ fromJson(vars.PACKAGES) }}
+        package: ${{ fromJson(vars.BUILDABLE_PKGS) }}
     defaults:
       run:
         working-directory: packages/${{ matrix.package }}

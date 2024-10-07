@@ -1,4 +1,4 @@
-name: Release & Publish
+name: Release
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   test-and-build:
-    name: Test & Build main
+    name: main
     uses: ./.github/workflows/test-build.yaml
     secrets: inherit
     permissions:
@@ -24,25 +24,28 @@ jobs:
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
       - uses: actions/github-script@v7
-        id: get-packages-released
+        id: get-released-pkgs
         env:
           PATHS_RELEASED: ${{ steps.release.outputs.paths_released }}
+          PUBLISHABLE_PKGS: ${{ vars.PUBLISHABLE_PKGS }}
         with:
           script: |
-            const paths = JSON.parse(process.env.PATHS_RELEASED);
-            const result = paths.map(path => path.split('/')[1]);
-            return result;
+            const { PATHS_RELEASED, PUBLISHABLE_PKGS } = process.env;
+            const paths = JSON.parse(PATHS_RELEASED);
+            const pubs = JSON.parse(PUBLISHABLE_PKGS);
+            const pkgs = paths.map(path => path.split('/').at(1));
+            return pkgs.filter(pkg => pubs.includes(pkg));
     outputs:
-      packages-released: ${{ steps.get-packages-released.outputs.result }}
+      pkgs-released: ${{ steps.get-released-pkgs.outputs.result }}
 
   publish:
     name: Publish
-    if: ${{ needs.release-please.outputs.packages-released != '[]' }}
+    if: ${{ needs.release-please.outputs.pkgs-released != '[]' }}
     runs-on: ubuntu-latest
     needs: [release-please]
     strategy:
       matrix:
-        package: ${{ fromJson(needs.release-please.outputs.packages-released) }}
+        package: ${{ fromJson(needs.release-please.outputs.pkgs-released) }}
     defaults:
       run:
         working-directory: packages/${{ matrix.package }}
