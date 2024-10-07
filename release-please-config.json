@@ -8,6 +8,9 @@
   "bump-patch-for-minor-pre-major": true,
   "packages": {
     "packages/api-client": {},
+    "packages/cli": {
+      "release-as": "0.0.1"
+    },
     "packages/mocks-counterfact": {}
   },
   "changelog-sections": [
