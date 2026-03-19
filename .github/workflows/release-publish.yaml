@@ -17,11 +17,14 @@ jobs:
     name: Maintenance
     runs-on: ubuntu-latest
     needs: [test-and-build]
+    outputs:
+      pkgs-released: ${{ steps.get-released-pkgs.outputs.result }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release-please
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+
       - uses: actions/github-script@v7
         id: get-released-pkgs
         env:
@@ -34,8 +37,6 @@ jobs:
             const pubs = JSON.parse(PUBLISHABLE_PKGS);
             const pkgs = paths.map(path => path.split('/').at(1));
             return pkgs.filter(pkg => pubs.includes(pkg));
-    outputs:
-      pkgs-released: ${{ steps.get-released-pkgs.outputs.result }}
 
   publish:
     name: Publish
@@ -53,18 +54,23 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version-file: ".bun-version"
+
       - run: bun install --frozen-lockfile
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
+
       - uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.package }}-dist
           path: packages/${{ matrix.package }}/dist
+
       - name: publish ${{ matrix.package }}
         run: npm publish --provenance --access public
         env:
