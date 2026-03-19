@@ -72,7 +72,7 @@ export async function actionCall<T extends MayHaveCooldown & MayHaveCharacter>(c
 /** Make a request and return a Response */
 export async function request(callerName: string, opts: CallOptions) {
   if (opts.auth && !opts.client.config.apiToken) await opts.client.setToken();
-  const fullOpts: Omit<FetchRequestInit, "body"> & { body?: string } = {
+  const fullOpts: Omit<BunFetchRequestInit, "body"> & { body?: string } = {
     method: opts.method,
     headers: stripUndefined({ ...getDefaultHeaders(opts.client.config), ...opts.headers }),
     body: opts?.body ? JSON.stringify(opts.body) : undefined,
