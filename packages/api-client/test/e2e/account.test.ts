@@ -1,4 +1,4 @@
-import { beforeEach, describe/*, expect, it*/ } from "bun:test";
+import { beforeEach, describe /*, expect, it*/ } from "bun:test";
 import { ArtifactsApi } from "../../src";
 // import { getUnknownErrorText } from "../../src/util";
 // import { timeout } from "../config.e2e";
@@ -16,33 +16,33 @@ describe("account", () => {
     });
   });
 
-  describe("anonymous user", () => {
-    // it(
-    //   "can make unauthenticated requests",
-    //   async () => {
-    //     // given account information is completely unset
-    //     c.config.apiToken = undefined;
-    //     c.config.username = undefined;
-    //     c.config.password = undefined;
+  // describe("anonymous user", () => {
+  //   it(
+  //     "can make unauthenticated requests",
+  //     async () => {
+  //       // given account information is completely unset
+  //       c.config.apiToken = undefined;
+  //       c.config.username = undefined;
+  //       c.config.password = undefined;
 
-    //     // when a request is made to an unauthenticated endpoint
-    //     // then an error shouldn't be thrown
-    //     let data: unknown;
-    //     try {
-    //       data = await c.info.maps.get({ x: 0, y: 0 });
-    //     } catch (err) {
-    //       expect(
-    //         err,
-    //         `Couldn't call unauthenticated endpoint without auth?\n${getUnknownErrorText(err)}`,
-    //       ).toBeUndefined();
-    //     }
+  //       // when a request is made to an unauthenticated endpoint
+  //       // then an error shouldn't be thrown
+  //       let data: unknown;
+  //       try {
+  //         data = await c.info.maps.get({ x: 0, y: 0 });
+  //       } catch (err) {
+  //         expect(
+  //           err,
+  //           `Couldn't call unauthenticated endpoint without auth?\n${getUnknownErrorText(err)}`,
+  //         ).toBeUndefined();
+  //       }
 
-    //     // and the response should be valid
-    //     validate.map(data);
-    //   },
-    //   { timeout },
-    // );
-  });
+  //       // and the response should be valid
+  //       validate.map(data);
+  //     },
+  //     { timeout },
+  //   );
+  // });
 
   describe("token", () => {
     // it(
