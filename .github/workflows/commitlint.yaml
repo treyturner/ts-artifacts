@@ -1,6 +1,10 @@
 name: Lint commits
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, reopened, synchronize]
 
 permissions:
   contents: read
