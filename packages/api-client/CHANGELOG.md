@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/treyturner/ts-artifacts/compare/@trey.turner/artifacts-api-client-v1.1.0...@trey.turner/artifacts-api-client-v1.1.1) (2026-03-19)
+
+
+### Continuous Integration
+
+* temp. disable broken e2e tests ([#20](https://github.com/treyturner/ts-artifacts/issues/20)) ([22f104e](https://github.com/treyturner/ts-artifacts/commit/22f104e51c1fd0eee7ae1757cd8435993a38ff0c))
+
 ## [1.1.0](https://github.com/treyturner/ts-artifacts/compare/@trey.turner/artifacts-api-client-v1.0.12...@trey.turner/artifacts-api-client-v1.1.0) (2024-10-06)
 
 
